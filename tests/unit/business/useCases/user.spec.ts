@@ -42,6 +42,8 @@ describe('User use cases', () => {
 
 			expect.assertions(4)
 		})
+
+		test.todo('Should not create an user if dont have some informations')
 	})
 
 	describe('FindUserBy', () => {
