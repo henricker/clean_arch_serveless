@@ -1,15 +1,17 @@
 import { container } from '@shared/ioc/container'
+import '@framework/ioc/inversify.config'
 import { middyfy } from 'src/framework/utility/lamba'
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
 import { httpResponse } from '../../utility/httpResponse'
 import { IError } from '@shared/IError'
+import { connectTypeorm } from '@framework/utility/database'
+import { HandlerInput, HandlerResult } from '@framework/utility/types'
 
-const create = async (
-	event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
+const create = async (event: HandlerInput): Promise<HandlerResult> => {
 	try {
+		await connectTypeorm()
+
 		const input = new InputCreateUser(event.body as Object)
 
 		const operator = container.get(CreateUserOperator)
@@ -25,6 +27,8 @@ const create = async (
 		if (error instanceof IError) {
 			return httpResponse(error.statusCode, error.body)
 		}
+
+		console.error(error)
 
 		return httpResponse(
 			'internalError',
