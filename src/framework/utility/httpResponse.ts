@@ -20,6 +20,6 @@ export const httpResponse = (
 	responseType: keyof typeof types | number,
 	body: unknown
 ) => ({
-	statusCode: types[responseType].statusCode,
-	body: JSON.stringify(body),
+	statusCode: types[responseType]?.statusCode || responseType,
+	body: body,
 })
