@@ -5,7 +5,7 @@ const config: Config.InitialOptions = {
 	verbose: true,
 	clearMocks: true,
 	coverageDirectory: 'coverage',
-	collectCoverageFrom: ['src/**/*.ts', '!src/frameworks/**'],
+	collectCoverageFrom: ['src/**/*.ts', '!src/framework/**/*.ts'],
 	coveragePathIgnorePatterns: ['/node_modules/'],
 	testEnvironment: 'node',
 	coverageProvider: 'v8',
