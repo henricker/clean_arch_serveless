@@ -1,4 +1,4 @@
-import { rolesTable } from '@root/src/framework/migrations/1631809366060-roles'
+import { rolesTable } from '@framework/migrations/tables/roles'
 import { MigrationInterface, QueryRunner, Table } from 'typeorm'
 import { removeDefaultValues } from '../typeorm/removeDefaultValue'
 

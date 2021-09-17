@@ -1,4 +1,4 @@
-import { usersTable } from '@root/src/framework/migrations/1631809366061-users'
+import { usersTable } from '@framework/migrations/tables/users'
 import { MigrationInterface, QueryRunner, Table } from 'typeorm'
 import { removeDefaultValues } from '../typeorm/removeDefaultValue'
 
