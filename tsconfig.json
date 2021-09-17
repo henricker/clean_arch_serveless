@@ -11,18 +11,7 @@
 		"outDir": "lib",
 		"esModuleInterop": true,
 		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"baseUrl": ".",
-		"paths": {
-			"@business/*": ["src/business/*"],
-			"@controller/*": ["src/controller/*"],
-			"@domain/*": ["src/domain/*"],
-			"@framework/*": ["src/framework/*"],
-			"@shared/*": ["src/shared/*"],
-			"@tests/*": ["tests/*"],
-			"@utility/*": ["src/utility/*"],
-			"@root/*": ["./*"]
-		}
+		"experimentalDecorators": true
 	},
 	"include": ["src/**/*.ts", "tests/**/*.ts"],
 	"exclude": [
