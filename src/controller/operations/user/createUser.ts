@@ -23,7 +23,7 @@ export class CreateUserOperator extends AbstractOperator<
 	}
 
 	async run(input: InputCreateUser): Promise<OutputCreateUserDto> {
-		await input.validate()
+		await this.exec(input)
 
 		const isUserAlreadyRegistered = await this.findUserUseCase.exec({
 			key: 'email',

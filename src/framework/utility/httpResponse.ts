@@ -21,5 +21,5 @@ export const httpResponse = (
 	body: unknown
 ) => ({
 	statusCode: types[responseType]?.statusCode || responseType,
-	body: body,
+	body: JSON.stringify(body),
 })
