@@ -1,20 +1,21 @@
 import '@framework/ioc/inversify.config'
 import { httpResponse } from '@framework/utility/httpResponse'
-import { AuthMiddyMiddleware } from '@framework/middlewares/auth'
 import { middyfy } from '@framework/utility/lamba'
 import { IHandlerInput, IHandlerResult } from '@framework/utility/types'
 import { container } from '@shared/ioc/container'
-import { ShowUserOperator } from '@controller/operations/user/showUser'
-import { InputShowUser } from '@controller/serializers/user/inputShowUser'
 import { IError } from '@shared/IError'
+import { RecoverPasswordOperator } from '@controller/operations/user/recoverPassword'
+import { InputRecoverPassword } from '@controller/serializers/user/inputRecoverPassword'
 
-const show = async (event: IHandlerInput): Promise<IHandlerResult> => {
+const forgotPassword = async (
+  event: IHandlerInput
+): Promise<IHandlerResult> => {
   try {
-    const operator = container.get(ShowUserOperator)
+    const operator = container.get(RecoverPasswordOperator)
 
-    const input = new InputShowUser({
-      current_logged_user_id: event.auth?.user_id,
-      user_uuid: event.pathParameters.uuid,
+    const input = new InputRecoverPassword({
+      userEmail: event.body.userEmail,
+      redirectUrl: event.body.redirectUrl,
     })
 
     const userResult = await operator.run(input)
@@ -35,4 +36,4 @@ const show = async (event: IHandlerInput): Promise<IHandlerResult> => {
   }
 }
 
-export const handler = middyfy(show).use(AuthMiddyMiddleware())
+export const handler = middyfy(forgotPassword)

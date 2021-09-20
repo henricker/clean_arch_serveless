@@ -1,50 +1,48 @@
 import { Relation } from '@business/repositories/relation'
 import {
-	IUserRepository,
-	UserEntityKeys,
+  InputUpdateUser,
+  IUserRepository,
+  UserEntityKeys,
 } from '@business/repositories/user/iUserRepository'
 import { IUserEntity } from '@domain/entities/userEntity'
-import { Database } from '@framework/utility/database'
-import { injectable } from 'inversify'
+import { UserModel } from '@framework/models/users/userModel'
+import { inject, injectable } from 'inversify'
 
 @injectable()
 export class UserRepository implements IUserRepository {
-	async create(
-		inputUserEntity: Omit<IUserEntity, 'id'>,
-		role_id: number
-	): Promise<IUserEntity> {
-		const userId = (
-			await Database('users').insert({ ...inputUserEntity, role_id })
-		)[0] as unknown as number
+  constructor(@inject(UserModel) private userModel: typeof UserModel) {}
 
-		const user = { ...inputUserEntity, id: userId }
+  async create(
+    inputUserEntity: Omit<IUserEntity, 'id'>,
+    role_id: number
+  ): Promise<IUserEntity> {
+    const user = await this.userModel.create({
+      ...inputUserEntity,
+      role_id: role_id,
+    })
 
-		return user
-	}
-	async findBy(
-		type: UserEntityKeys,
-		key: IUserEntity[UserEntityKeys],
-		relations?: Relation<string, UserEntityKeys>[]
-	): Promise<void | IUserEntity> {
-		const query = Database('users').select('*').where(`users.${type}`, key)
+    return user
+  }
+  async findBy(
+    type: UserEntityKeys,
+    key: IUserEntity[UserEntityKeys],
+    relations?: Relation<string, UserEntityKeys>[]
+  ): Promise<void | IUserEntity> {
+    const user = await this.userModel.findOne({
+      where: { [type]: key },
+      include:
+        relations &&
+        relations.map((relation) => ({
+          association: relation.tableName,
+        })),
+    })
 
-		if (relations) {
-			relations.forEach(
-				({ tableName, currentTableColumn, foreignJoinColumn }) => {
-					query.join(
-						`${tableName} as ${tableName}_map`,
-						`users.${currentTableColumn}`,
-						foreignJoinColumn.replace(`${tableName}`, `${tableName}_map`)
-					)
-				}
-			)
-		}
-
-		console.log(query.toSQL())
-
-		const user = await query
-		console.log(user)
-
-		return void 0
-	}
+    return user
+  }
+  async update(input: InputUpdateUser): Promise<IUserEntity | void> {
+    const user = await this.userModel.update(input.newData, {
+      where: { id: input.user.id },
+    })
+    return user[1][0]
+  }
 }

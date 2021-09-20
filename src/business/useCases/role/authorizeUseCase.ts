@@ -1,12 +1,12 @@
 import {
-	InputAuthorizeUseCase,
-	OutputAuthorizeUseCase,
+  InputAuthorizeUseCase,
+  OutputAuthorizeUseCase,
 } from '@business/dto/role/authorize'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import {
-	IUserRepository,
-	IUserRepositoryToken,
+  IUserRepository,
+  IUserRepositoryToken,
 } from '@business/repositories/user/iUserRepository'
 import { IUserEntity } from '@domain/entities/userEntity'
 import { left, right } from '@shared/either'
@@ -15,39 +15,41 @@ import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class AuthorizeUseCase
-	implements AbstractUseCase<InputAuthorizeUseCase, OutputAuthorizeUseCase>
+  implements AbstractUseCase<InputAuthorizeUseCase, OutputAuthorizeUseCase>
 {
-	constructor(
-		@inject(IUserRepositoryToken) private userRepository: IUserRepository
-	) {}
+  constructor(
+    @inject(IUserRepositoryToken) private userRepository: IUserRepository
+  ) {}
 
-	async exec(input: InputAuthorizeUseCase): Promise<OutputAuthorizeUseCase> {
-		const user = (await this.userRepository.findBy(
-			input.authorizeBy,
-			input.key,
-			[
-				{
-					tableName: 'roles',
-					currentTableColumn: 'role_id',
-					foreignJoinColumn: 'roles.id',
-				},
-			]
-		)) as Required<IUserEntity>
+  async exec(input: InputAuthorizeUseCase): Promise<OutputAuthorizeUseCase> {
+    const user = (await this.userRepository.findBy(
+      input.authorizeBy,
+      input.key,
+      [
+        {
+          tableName: 'role',
+          currentTableColumn: 'role_id',
+          foreignJoinColumn: 'roles.id',
+        },
+      ]
+    )) as Required<IUserEntity>
 
-		if (!user) {
-			return left(UsersErrors.userNotFound())
-		}
+    if (!user) {
+      return left(UsersErrors.userNotFound())
+    }
 
-		if (!user.role) {
-			return left(UsersErrors.userNotLoadedCorrectly())
-		}
+    if (!user.role) {
+      return left(UsersErrors.userNotLoadedCorrectly())
+    }
 
-		const allowedProfiles = [...input.allowedProfiles, 'admin']
+    const allowedProfiles = [...input.allowedProfiles, 'admin']
 
-		if (!allowedProfiles.includes(user.role.profile)) {
-			return left(RolesErrors.roleNotAllowed())
-		}
+    if (!allowedProfiles.includes(user.role.profile)) {
+      const lastChance = input.lastChance && input.lastChance(user)
 
-		return right(user)
-	}
+      return lastChance ? right(user) : left(RolesErrors.roleNotAllowed())
+    }
+
+    return right(user)
+  }
 }

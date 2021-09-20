@@ -1,4 +1,15 @@
-import knexconfig from '@root/knexfile'
-import knex from 'knex'
+import { Sequelize, Options } from 'sequelize'
+import sequelizeConfig from '@root/sequelize.config.js'
 
-export const Database = knex(knexconfig)
+const connectionOptions: Options = {
+	...sequelizeConfig,
+	pool: {
+		max: 5,
+		min: 0,
+	},
+	dialectOptions: {
+		connectTimeout: 60000,
+	},
+}
+
+export const sequelize = new Sequelize(connectionOptions)

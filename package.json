@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest",
 		"test:watch": "jest --watchAll --verbose",
-		"knex": "knex --knexfile knexfile.ts"
+		"sql": "sequelize-cli"
 	},
 	"engines": {
 		"node": ">=14.17.0"
@@ -19,13 +19,16 @@
 		"bcrypt": "^5.0.1",
 		"class-validator": "^0.13.1",
 		"dotenv": "^10.0.0",
+		"edge.js": "^5.3.2",
 		"http-errors": "^1.8.0",
 		"inversify": "^5.1.1",
 		"jsonwebtoken": "^8.5.1",
-		"knex": "^0.95.11",
 		"middy-middleware-jwt-auth": "^4.0.6",
 		"mysql2": "^2.3.0",
-		"reflect-metadata": "^0.1.13"
+		"nodemailer": "^6.6.3",
+		"reflect-metadata": "^0.1.13",
+		"sequelize": "^6.6.5",
+		"sequelize-cli": "^6.2.0"
 	},
 	"devDependencies": {
 		"@serverless/typescript": "^2.23.0",
@@ -34,9 +37,11 @@
 		"@types/jest": "^27.0.1",
 		"@types/jsonwebtoken": "^8.5.5",
 		"@types/node": "^14.14.25",
+		"@types/nodemailer": "^6.4.4",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
 		"babel-eslint": "^10.1.0",
+		"copy-webpack-plugin": "^9.0.1",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-import-helpers": "^1.1.0",

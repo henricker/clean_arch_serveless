@@ -10,45 +10,45 @@ import { AbstractOperator } from '../abstractOperator'
 
 @injectable()
 export class ShowUserOperator extends AbstractOperator<
-	InputShowUser,
-	Either<IError, IUserEntity>
+  InputShowUser,
+  Either<IError, IUserEntity>
 > {
-	constructor(
-		@inject(AuthorizeUseCase) private authorizeUseCase: AuthorizeUseCase,
-		@inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase
-	) {
-		super()
-	}
+  constructor(
+    @inject(AuthorizeUseCase) private authorizeUseCase: AuthorizeUseCase,
+    @inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase
+  ) {
+    super()
+  }
 
-	async run(input: InputShowUser): Promise<Either<IError, IUserEntity>> {
-		await this.exec(input)
+  async run(input: InputShowUser): Promise<Either<IError, IUserEntity>> {
+    await this.exec(input)
 
-		const allowedResult = await this.authorizeUseCase.exec({
-			authorizeBy: 'id',
-			key: input.current_logged_user_id,
-			allowedProfiles: [],
-		})
+    const allowedResult = await this.authorizeUseCase.exec({
+      authorizeBy: 'id',
+      key: input.current_logged_user_id,
+      allowedProfiles: [],
+      lastChance: (user) => user.uuid === input.user_uuid,
+    })
 
-		if (allowedResult.isLeft()) {
-			return left(allowedResult.value)
-		}
+    if (allowedResult.isLeft()) {
+      return left(allowedResult.value)
+    }
 
-		const currentLoggedUser = allowedResult.value
+    const currentLoggedUser = allowedResult.value
 
-		if (currentLoggedUser.uuid === input.user_uuid) {
-			delete currentLoggedUser.role
-			return right(currentLoggedUser)
-		}
+    if (currentLoggedUser.uuid === input.user_uuid) {
+      return right(currentLoggedUser)
+    }
 
-		const user = await this.findUserByUseCase.exec({
-			key: 'uuid',
-			value: input.user_uuid,
-		})
+    const user = await this.findUserByUseCase.exec({
+      key: 'uuid',
+      value: input.user_uuid,
+    })
 
-		if (user.isLeft()) {
-			return left(UsersErrors.userNotFound())
-		}
+    if (user.isLeft()) {
+      return left(UsersErrors.userNotFound())
+    }
 
-		return right(user.value)
-	}
+    return right(user.value)
+  }
 }
