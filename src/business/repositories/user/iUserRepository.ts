@@ -4,7 +4,7 @@ export const IUserRepositoryToken = Symbol.for('IUserRepositoryToken')
 
 export type UserEntityKeys = keyof Omit<
 	IUserEntity,
-	'created_at' | 'updated_at'
+	'password' | 'created_at' | 'updated_at'
 >
 
 export interface IUserRepository {
@@ -15,6 +15,6 @@ export interface IUserRepository {
 	findBy(
 		type: UserEntityKeys,
 		key: IUserEntity[UserEntityKeys],
-		relations?: (keyof IUserEntityRelations)[]
+		relations?: (keyof IUserEntityRelations)[] | string[]
 	): Promise<void | IUserEntity>
 }

@@ -1,7 +1,7 @@
 import { AbstractOperator } from '@controller/operations/abstractOperator'
 import { AbstractSerializer } from '@controller/serializers/abstractSerializer'
 import { IsEmail, IsString, MinLength } from 'class-validator'
-import { validationError } from '@business/module/errors/validationErrors'
+import { IError } from '@shared/IError'
 
 describe('Abstract Operator', () => {
 	describe('Exec', () => {
@@ -22,10 +22,12 @@ describe('Abstract Operator', () => {
 			}
 
 			class FakeExtendedAbstractOperator extends AbstractOperator<
-				InputFake,
+				FakeAbstractSerializer,
 				void
 			> {
-				async run(_i: InputFake) {}
+				async run(i: FakeAbstractSerializer) {
+					await this.exec(i)
+				}
 			}
 
 			const serializer = new FakeAbstractSerializer({
@@ -34,16 +36,16 @@ describe('Abstract Operator', () => {
 			})
 
 			try {
-				await new FakeExtendedAbstractOperator().exec(serializer)
+				await new FakeExtendedAbstractOperator().run(serializer)
 			} catch (error) {
-				const err = error as unknown as ReturnType<typeof validationError>
-
-				const body = JSON.parse(err.body)
+				const err = error as unknown as IError
 
 				expect(err.statusCode).toBe(400)
-				expect(body.message).toBe('ValidationError')
+				expect(err.body.code).toBeDefined()
+				expect(err.body.message).toBeDefined()
+				expect(err.body.shortMessage).toBeDefined()
 			}
-			expect.assertions(2)
+			expect.assertions(4)
 		})
 	})
 })

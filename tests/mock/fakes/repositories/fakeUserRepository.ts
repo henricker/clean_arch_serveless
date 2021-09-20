@@ -4,6 +4,7 @@ import {
 } from '@business/repositories/user/iUserRepository'
 import { InputCreateUserEntity, IUserEntity } from '@domain/entities/userEntity'
 import { injectable } from 'inversify'
+import { fakeUserEntity } from '../entities/fakeUserEntity'
 
 @injectable()
 export class FakeUserRepository implements IUserRepository {
@@ -17,9 +18,13 @@ export class FakeUserRepository implements IUserRepository {
 		}
 	}
 	async findBy(
-		_t: UserEntityKeys,
-		_v: IUserEntity[UserEntityKeys]
+		t: UserEntityKeys,
+		v: IUserEntity[UserEntityKeys]
 	): Promise<IUserEntity | void> {
-		return void 0
+		const users: IUserEntity[] = [fakeUserEntity]
+
+		const user = users.find((user) => user[t] === v)
+
+		return user
 	}
 }

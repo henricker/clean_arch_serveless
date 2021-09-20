@@ -1,4 +1,4 @@
-import {
+import type {
 	InputFindUserByDto,
 	OutputFindUserByDto,
 } from '@business/dto/user/findBy'

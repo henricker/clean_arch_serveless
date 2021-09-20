@@ -8,6 +8,8 @@ import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
 import { InputCreateUserDto } from '@business/dto/user/create'
+import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
+import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 
 describe('User use cases', () => {
 	const fakeNewUser: InputCreateUserDto = {
@@ -19,11 +21,16 @@ describe('User use cases', () => {
 
 	beforeAll(() => {
 		container.bind(CreateUserUseCase).to(CreateUserUseCase)
+		container.bind(FindUserByUseCase).to(FindUserByUseCase)
 		container.bind(IHasherServiceToken).to(FakeHasherService)
 		container.bind(IUserRepositoryToken).to(FakeUserRepository)
 		container
 			.bind(IUniqueIdentifierServiceToken)
 			.to(FakeUniqueIdentifierService)
+	})
+
+	afterAll(() => {
+		container.unbindAll()
 	})
 
 	describe('CreateUser', () => {
@@ -45,17 +52,28 @@ describe('User use cases', () => {
 	})
 
 	describe('FindUserBy', () => {
+		test('Should return user if it exists', async () => {
+			const userRepository = container.get(FindUserByUseCase)
+
+			const userResult = await userRepository.exec({
+				key: 'email',
+				value: fakeUserEntity.email,
+			})
+
+			expect(userResult.isLeft()).toBeFalsy()
+			expect(userResult.isRight()).toBeTruthy()
+		})
+
 		test('Should not find user if it does not exists', async () => {
-			const userRepository =
-				container.get<FakeUserRepository>(IUserRepositoryToken)
+			const userRepository = container.get(FindUserByUseCase)
 
-			const user = await userRepository.findBy('id', fakeNewUser.email)
+			const userResult = await userRepository.exec({
+				key: 'email',
+				value: 'nonexistent@email.com',
+			})
 
-			if (!user) {
-				expect(user).toBeFalsy()
-			}
-
-			expect.assertions(1)
+			expect(userResult.isLeft()).toBeTruthy()
+			expect(userResult.isRight()).toBeFalsy()
 		})
 	})
 })

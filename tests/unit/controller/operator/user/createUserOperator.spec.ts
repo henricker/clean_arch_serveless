@@ -12,6 +12,7 @@ import { CreateUserOperator } from '@controller/operations/user/createUser'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
+import { IError } from '@shared/IError'
 
 describe('Create user operator', () => {
 	beforeAll(() => {
@@ -27,6 +28,10 @@ describe('Create user operator', () => {
 		container.bind(CreateUserOperator).to(CreateUserOperator)
 	})
 
+	afterAll(() => {
+		container.unbindAll()
+	})
+
 	test('Should create a user', async () => {
 		const inputCreateUser = new InputCreateUser({
 			email: 'fake@mail.com',
@@ -40,5 +45,53 @@ describe('Create user operator', () => {
 
 		expect(user.isLeft()).toBeFalsy()
 		expect(user.isRight()).toBeTruthy()
+	})
+
+	test('Should not create a user with invalid email', async () => {
+		const inputCreateUser = new InputCreateUser({
+			email: 'fakemail.com',
+			full_name: 'Fake Full_Name',
+			password: 'test_12345',
+		})
+
+		try {
+			const operator = container.get(CreateUserOperator)
+			await operator.run(inputCreateUser)
+		} catch (error) {
+			expect(error).toBeInstanceOf(IError)
+		}
+		expect.assertions(1)
+	})
+
+	test('Should not create a user with invalid name', async () => {
+		const inputCreateUser = new InputCreateUser({
+			email: 'fakemail.com',
+			full_name: 'F',
+			password: 'test_12345',
+		})
+
+		try {
+			const operator = container.get(CreateUserOperator)
+			await operator.run(inputCreateUser)
+		} catch (error) {
+			expect(error).toBeInstanceOf(IError)
+		}
+		expect.assertions(1)
+	})
+
+	test('Should not create a user with invalid password', async () => {
+		const inputCreateUser = new InputCreateUser({
+			email: 'fakemail.com',
+			full_name: 'Fake Full_Name',
+			password: '12345',
+		})
+
+		try {
+			const operator = container.get(CreateUserOperator)
+			await operator.run(inputCreateUser)
+		} catch (error) {
+			expect(error).toBeInstanceOf(IError)
+		}
+		expect.assertions(1)
 	})
 })

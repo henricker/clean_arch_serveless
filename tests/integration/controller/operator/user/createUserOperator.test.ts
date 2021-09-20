@@ -7,7 +7,7 @@ import {
 import '@framework/ioc/inversify.config'
 import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
-import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
+import { fakeCreatedUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 
 describe('Create user operator', () => {
 	beforeAll(async () => {
@@ -20,10 +20,12 @@ describe('Create user operator', () => {
 
 	afterAll(async () => {
 		await typeormAfterAllConfig()
+
+		container.unbindAll()
 	})
 
 	test('Should create a user if email is avaible', async () => {
-		const input = new InputCreateUser(fakeUserEntity)
+		const input = new InputCreateUser(fakeCreatedUserEntity)
 
 		const operator = container.get(CreateUserOperator)
 
@@ -37,7 +39,7 @@ describe('Create user operator', () => {
 	})
 
 	test('Should not create user if email is not avaible', async () => {
-		const input = new InputCreateUser(fakeUserEntity)
+		const input = new InputCreateUser(fakeCreatedUserEntity)
 
 		const operator = container.get(CreateUserOperator)
 

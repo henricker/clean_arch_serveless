@@ -7,7 +7,7 @@ import { injectable } from 'inversify'
 export abstract class AbstractOperator<I, O> {
 	abstract run(input: I): Promise<O>
 
-	public async exec(input: AbstractSerializer<I>): Promise<void> {
+	protected async exec(input: AbstractSerializer<I>): Promise<void> {
 		try {
 			await input.validate()
 		} catch (error) {

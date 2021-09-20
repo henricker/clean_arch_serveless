@@ -1,4 +1,7 @@
-import { InputFindRoleBy, OutputFindRoleBy } from '@business/dto/role/findBy'
+import type {
+	InputFindRoleBy,
+	OutputFindRoleBy,
+} from '@business/dto/role/findBy'
 import {
 	IRoleRepository,
 	IRoleRepositoryToken,

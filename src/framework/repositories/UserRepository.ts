@@ -25,7 +25,7 @@ export class UserRepository implements IUserRepository {
 	async findBy(
 		type: UserEntityKeys,
 		key: IUserEntity[UserEntityKeys],
-		relations?: (keyof IUserEntityRelations)[]
+		relations?: (keyof IUserEntityRelations)[] | string[]
 	): Promise<void | IUserEntity> {
 		const userRepository = getRepository(UserModel)
 

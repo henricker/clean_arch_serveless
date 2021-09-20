@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify'
-import {
+import type {
 	InputCreateUserDto,
 	OutputCreateUserDto,
 } from '@business/dto/user/create'
