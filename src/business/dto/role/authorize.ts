@@ -7,7 +7,7 @@ export interface InputAuthorizeUseCase {
   authorizeBy: UserEntityKeys
   key: string | number
   allowedProfiles: string[]
-  lastChance?: (user: Required<IUserEntity>) => boolean
+  lastChance?: (user: Required<IUserEntity>) => Promise<boolean>
 }
 
 export type OutputAuthorizeUseCase = Either<IError, Required<IUserEntity>>

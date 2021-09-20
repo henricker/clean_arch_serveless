@@ -27,7 +27,7 @@ export class ShowUserOperator extends AbstractOperator<
       authorizeBy: 'id',
       key: input.current_logged_user_id,
       allowedProfiles: [],
-      lastChance: (user) => user.uuid === input.user_uuid,
+      lastChance: async (user) => user.uuid === input.user_uuid,
     })
 
     if (allowedResult.isLeft()) {
