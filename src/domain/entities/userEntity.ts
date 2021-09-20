@@ -1,6 +1,5 @@
 import { AbstractEntity } from '@domain/abstractEntity'
-import { Either, right } from '@shared/either'
-import { IError } from '@shared/IError'
+import { Right, right } from '@shared/either'
 import { ITimestamps } from '../timestamps'
 import { IRoleEntity } from './roleEntity'
 
@@ -31,7 +30,7 @@ export type OutputCreateUserEntity = Omit<
 >
 
 export class UserEntity extends AbstractEntity<OutputCreateUserEntity> {
-  static create(props: InputCreateUserEntity): Either<IError, UserEntity> {
+  static create(props: InputCreateUserEntity): Right<void, UserEntity> {
     const currentDate = new Date()
 
     const user = new UserEntity({
