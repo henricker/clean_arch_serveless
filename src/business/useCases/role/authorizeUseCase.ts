@@ -25,7 +25,13 @@ export class AuthorizeUseCase
 		const user = (await this.userRepository.findBy(
 			input.authorizeBy,
 			input.key,
-			['role']
+			[
+				{
+					tableName: 'roles',
+					currentTableColumn: 'role_id',
+					foreignJoinColumn: 'roles.id',
+				},
+			]
 		)) as Required<IUserEntity>
 
 		if (!user) {

@@ -1,10 +1,11 @@
-import { IUserEntity, IUserEntityRelations } from '@domain/entities/userEntity'
+import { IUserEntity } from '@domain/entities/userEntity'
+import { Relation } from '../relation'
 
 export const IUserRepositoryToken = Symbol.for('IUserRepositoryToken')
 
 export type UserEntityKeys = keyof Omit<
 	IUserEntity,
-	'password' | 'created_at' | 'updated_at'
+	'role' | 'password' | 'created_at' | 'updated_at'
 >
 
 export interface IUserRepository {
@@ -15,6 +16,6 @@ export interface IUserRepository {
 	findBy(
 		type: UserEntityKeys,
 		key: IUserEntity[UserEntityKeys],
-		relations?: (keyof IUserEntityRelations)[] | string[]
+		relations?: Relation<string, UserEntityKeys>[]
 	): Promise<void | IUserEntity>
 }

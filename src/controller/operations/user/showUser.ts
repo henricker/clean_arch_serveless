@@ -9,7 +9,7 @@ import { inject, injectable } from 'inversify'
 import { AbstractOperator } from '../abstractOperator'
 
 @injectable()
-export class CreateUserOperator extends AbstractOperator<
+export class ShowUserOperator extends AbstractOperator<
 	InputShowUser,
 	Either<IError, IUserEntity>
 > {
@@ -26,7 +26,7 @@ export class CreateUserOperator extends AbstractOperator<
 		const allowedResult = await this.authorizeUseCase.exec({
 			authorizeBy: 'id',
 			key: input.current_logged_user_id,
-			allowedProfiles: ['manager'],
+			allowedProfiles: [],
 		})
 
 		if (allowedResult.isLeft()) {

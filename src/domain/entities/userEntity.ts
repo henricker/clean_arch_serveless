@@ -13,6 +13,7 @@ export interface IUserEntity
 		Partial<IUserEntityRelations> {
 	id: number
 	uuid: string
+	role_id: number
 	full_name: string
 	email: string
 	password: string
@@ -23,7 +24,10 @@ export type InputCreateUserEntity = Pick<
 	'email' | 'full_name' | 'password'
 >
 
-export type OutputCreateUserEntity = Omit<IUserEntity, 'id' | 'uuid'>
+export type OutputCreateUserEntity = Omit<
+	IUserEntity,
+	'id' | 'uuid' | 'role_id'
+>
 
 export class UserEntity extends AbstractEntity<OutputCreateUserEntity> {
 	static create(props: InputCreateUserEntity): Either<IError, UserEntity> {

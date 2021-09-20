@@ -1,4 +1,4 @@
-import { IsNumber, Min } from 'class-validator'
+import { IsNumber, IsString, Min, MinLength } from 'class-validator'
 import { AbstractSerializer } from '../abstractSerializer'
 
 export interface InputShowUserProps {
@@ -7,8 +7,8 @@ export interface InputShowUserProps {
 }
 
 export class InputShowUser extends AbstractSerializer<InputShowUserProps> {
-	@IsNumber()
-	@Min(0)
+	@IsString()
+	@MinLength(36)
 	user_uuid: string
 
 	@IsNumber()

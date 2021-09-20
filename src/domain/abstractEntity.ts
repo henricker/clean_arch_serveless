@@ -6,6 +6,10 @@ export abstract class AbstractEntity<I> {
 	}
 
 	export(): I {
+		Object.defineProperty(this, 'id', {
+			enumerable: false,
+			writable: true,
+		})
 		return { ...this.props }
 	}
 }

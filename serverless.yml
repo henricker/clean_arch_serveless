@@ -37,3 +37,10 @@ functions:
           path: /sessions
           method: post
           cors: true
+  showUser:
+    handler: ${self:custom.functionsDir}/users/show.handler
+    events:
+      - http:
+          path: /users/{uuid}
+          method: get
+          cors: true
