@@ -39,10 +39,6 @@ export class CreateUserUseCase
 			password: hashPassword,
 		})
 
-		if (createUser.isLeft()) {
-			return left(UsersErrors.entityCreationError())
-		}
-
 		try {
 			const userEntity = await this.userRepository.create(
 				{
