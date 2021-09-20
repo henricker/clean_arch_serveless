@@ -14,7 +14,7 @@ class Left<L, R> {
 	}
 }
 
-class Right<L, R> {
+export class Right<L, R> {
 	readonly value: R
 
 	constructor(value: R) {
