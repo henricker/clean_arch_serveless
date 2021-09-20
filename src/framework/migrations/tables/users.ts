@@ -1,6 +1,4 @@
-import { TableOptions } from 'typeorm/schema-builder/options/TableOptions'
-
-export const usersTable = (tableName: string): TableOptions => ({
+export const usersTable = (tableName: string) => ({
 	name: tableName,
 	columns: [
 		{
