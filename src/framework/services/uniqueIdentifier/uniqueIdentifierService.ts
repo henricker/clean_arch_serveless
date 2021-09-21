@@ -4,7 +4,7 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class UniqueIdentifierService implements IUniqueIdentifierService {
-	create(): string {
-		return randomUUID()
-	}
+  create(): string {
+    return randomUUID()
+  }
 }

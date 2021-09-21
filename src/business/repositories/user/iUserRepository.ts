@@ -1,5 +1,5 @@
 import { IUserEntity } from '@domain/entities/userEntity'
-import { Relation } from '../relation'
+import { IRelation } from '../relation'
 
 export const IUserRepositoryToken = Symbol.for('IUserRepositoryToken')
 
@@ -21,7 +21,7 @@ export interface IUserRepository {
   findBy(
     type: UserEntityKeys,
     key: IUserEntity[UserEntityKeys],
-    relations?: Relation<string, UserEntityKeys>[]
+    relations?: IRelation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity>
   update(input: IInputUpdateUser): Promise<IUserEntity | void>
 }

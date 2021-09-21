@@ -1,3 +1,3 @@
-export interface AbstractUseCase<I, O> {
-	exec(props: I): Promise<O>
+export interface IAbstractUseCase<I, O> {
+  exec(props: I): Promise<O>
 }

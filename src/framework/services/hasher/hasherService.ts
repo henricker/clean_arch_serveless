@@ -4,12 +4,12 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class HasherService implements IHasherService {
-	async create(s: string): Promise<string> {
-		const salt = await genSalt(6)
+  async create(s: string): Promise<string> {
+    const salt = await genSalt(6)
 
-		return bcrypt.hash(s, salt)
-	}
-	async compare(value: string, hashed: string): Promise<boolean> {
-		return bcrypt.compare(value, hashed)
-	}
+    return bcrypt.hash(s, salt)
+  }
+  async compare(value: string, hashed: string): Promise<boolean> {
+    return bcrypt.compare(value, hashed)
+  }
 }

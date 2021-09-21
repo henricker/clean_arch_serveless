@@ -48,7 +48,10 @@
     "@typescript-eslint/no-unused-vars": [
       "warn",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
-    ]
+    ],
+    "max-classes-per-file": "off",
+    "no-use-before-define": ["error", { "classes": false }],
+    "strict": "off"
   },
   "settings": {
     "import/parsers": {

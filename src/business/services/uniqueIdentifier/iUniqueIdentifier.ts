@@ -1,7 +1,7 @@
 export const IUniqueIdentifierServiceToken = Symbol.for(
-	'IUniqueIdentifierServiceToken'
+  'IUniqueIdentifierServiceToken'
 )
 
 export interface IUniqueIdentifierService {
-	create(): string
+  create(): string
 }

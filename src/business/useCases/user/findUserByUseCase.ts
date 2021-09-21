@@ -9,11 +9,11 @@ import {
 } from '@business/repositories/user/iUserRepository'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class FindUserByUseCase
-  implements AbstractUseCase<IInputFindUserByDto, IOutputFindUserByDto>
+  implements IAbstractUseCase<IInputFindUserByDto, IOutputFindUserByDto>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository

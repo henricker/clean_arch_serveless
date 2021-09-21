@@ -18,11 +18,11 @@ import {
   IUniqueIdentifierServiceToken,
 } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class CreateUserUseCase
-  implements AbstractUseCase<IInputCreateUserDto, IOutputCreateUserDto>
+  implements IAbstractUseCase<IInputCreateUserDto, IOutputCreateUserDto>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository,

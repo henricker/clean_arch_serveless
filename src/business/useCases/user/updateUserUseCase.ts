@@ -10,11 +10,11 @@ import {
 import { UserEntity } from '@domain/entities/userEntity'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class UpdateUserUseCase
-  implements AbstractUseCase<InputUpdateUserDto, IOutputUpdateUserDto>
+  implements IAbstractUseCase<InputUpdateUserDto, IOutputUpdateUserDto>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository
