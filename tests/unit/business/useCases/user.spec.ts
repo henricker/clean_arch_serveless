@@ -13,7 +13,7 @@ import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
 import { IMailServiceToken } from '@business/services/mail/iMail'
-import { FakeMailRepository } from '@tests/mock/fakes/repositories/fakeMailRepository'
+import { FakeMailService } from '@tests/mock/fakes/services/fakeMailService'
 import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
 
 describe('User use cases', () => {
@@ -42,7 +42,7 @@ describe('User use cases', () => {
     container.bind(UpdateUserUseCase).to(UpdateUserUseCase)
     container.bind(IHasherServiceToken).to(FakeHasherService)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
-    container.bind(IMailServiceToken).to(FakeMailRepository)
+    container.bind(IMailServiceToken).to(FakeMailService)
     container
       .bind(IUniqueIdentifierServiceToken)
       .to(FakeUniqueIdentifierService)
@@ -132,10 +132,7 @@ describe('User use cases', () => {
   })
 
   describe('sendMail', () => {
-    const mockRepositorySendMail = jest.spyOn(
-      FakeMailRepository.prototype,
-      'send'
-    )
+    const mockRepositorySendMail = jest.spyOn(FakeMailService.prototype, 'send')
 
     test('Should return right if mailService succeeded', async () => {
       const mailRepository = container.get(SendMailUseCase)
@@ -177,21 +174,21 @@ describe('User use cases', () => {
       expect.assertions(4)
     })
   })
-  
+
   describe('updateUser', () => {
     const mockUserUpdate = jest.spyOn(FakeUserRepository.prototype, 'update')
 
     test('Should return user updated if repository.update returns user', async () => {
       const updateRepository = container.get(UpdateUserUseCase)
-      mockUserUpdate.mockImplementationOnce(async () => (fakeUserEntity))
+      mockUserUpdate.mockImplementationOnce(async () => fakeUserEntity)
       const userUpdated = await updateRepository.exec(fakeUserEntity)
       expect(userUpdated.isLeft()).toBeFalsy()
 
-      if(userUpdated.isRight()) {
+      if (userUpdated.isRight()) {
         expect(userUpdated.value).toBe(fakeUserEntity)
       }
 
-      expect.assertions(2);
+      expect.assertions(2)
     })
 
     test('Should throws user not found error if repository.update returns void', async () => {
@@ -199,30 +196,38 @@ describe('User use cases', () => {
       const userUpdated = await updateRepository.exec(fakeUserEntity)
       expect(userUpdated.isRight()).toBeFalsy()
 
-      if(userUpdated.isLeft()) {
-        expect(userUpdated.value.statusCode).toBe(UsersErrors.userNotFound().statusCode)
-        expect(userUpdated.value.body).toStrictEqual(UsersErrors.userNotFound().body)
+      if (userUpdated.isLeft()) {
+        expect(userUpdated.value.statusCode).toBe(
+          UsersErrors.userNotFound().statusCode
+        )
+        expect(userUpdated.value.body).toStrictEqual(
+          UsersErrors.userNotFound().body
+        )
       }
 
-      expect.assertions(3);
+      expect.assertions(3)
     })
 
     test('Should throws user not found error if repository.update returns void', async () => {
       const updateRepository = container.get(UpdateUserUseCase)
 
-      mockUserUpdate.mockImplementationOnce(async () => {throw new Error()})
+      mockUserUpdate.mockImplementationOnce(async () => {
+        throw new Error()
+      })
 
       const userUpdated = await updateRepository.exec(fakeUserEntity)
       expect(userUpdated.isRight()).toBeFalsy()
 
-      if(userUpdated.isLeft()) {
-        expect(userUpdated.value.statusCode).toBe(UsersErrors.userFailedToUpdate().statusCode)
-        expect(userUpdated.value.body).toStrictEqual(UsersErrors.userFailedToUpdate().body)
+      if (userUpdated.isLeft()) {
+        expect(userUpdated.value.statusCode).toBe(
+          UsersErrors.userFailedToUpdate().statusCode
+        )
+        expect(userUpdated.value.body).toStrictEqual(
+          UsersErrors.userFailedToUpdate().body
+        )
       }
 
-      expect.assertions(3);
+      expect.assertions(3)
     })
-
-
   })
 })
