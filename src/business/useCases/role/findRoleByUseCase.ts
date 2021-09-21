@@ -8,11 +8,11 @@ import {
 } from '@business/repositories/role/iRoleRepository'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class FindRoleByUseCase
-  implements AbstractUseCase<IInputFindRoleBy, IOutputFindRoleBy>
+  implements IAbstractUseCase<IInputFindRoleBy, IOutputFindRoleBy>
 {
   constructor(
     @inject(IRoleRepositoryToken) private roleRepository: IRoleRepository

@@ -7,7 +7,7 @@ export interface IRoleEntity extends ITimestamps {
   profile: string
 }
 
-type InputCreateRoleEntity = Pick<IRoleEntity, 'profile'>
+export type InputCreateRoleEntity = Pick<IRoleEntity, 'profile'>
 
 type OutputCreateRoleEntity = Omit<IRoleEntity, 'id'>
 

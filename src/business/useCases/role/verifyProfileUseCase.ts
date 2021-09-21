@@ -11,11 +11,11 @@ import {
 import { IUserEntity } from '@domain/entities/userEntity'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class VerifyProfileUseCase
-  implements AbstractUseCase<IInputAuthorizeUseCase, IOutputAuthorizeUseCase>
+  implements IAbstractUseCase<IInputAuthorizeUseCase, IOutputAuthorizeUseCase>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository

@@ -1,5 +1,8 @@
 import { RoleEntityKeys } from '@business/dto/role/findBy'
-import { IRoleRepository } from '@business/repositories/role/iRoleRepository'
+import {
+  IInputUpdateRole,
+  IRoleRepository,
+} from '@business/repositories/role/iRoleRepository'
 import { IRoleEntity } from '@domain/entities/roleEntity'
 import { injectable } from 'inversify'
 
@@ -9,6 +12,10 @@ export class FakeRoleRepository implements IRoleRepository {
     _key: RoleEntityKeys,
     _value: IRoleEntity[RoleEntityKeys]
   ): Promise<void | IRoleEntity> {
+    return void 0
+  }
+
+  async update(_input: IInputUpdateRole): Promise<IRoleEntity | void> {
     return void 0
   }
 }

@@ -8,12 +8,12 @@ import {
 } from '@business/services/authenticator/iAuthenticator'
 import { right } from '@shared/either'
 import { inject, injectable } from 'inversify'
-import { AbstractUseCase } from '../abstractUseCase'
+import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class CreateTokenUseCase
   implements
-    AbstractUseCase<IInputAuthenticateUseCase, IOutputAuthenticateUseCase>
+    IAbstractUseCase<IInputAuthenticateUseCase, IOutputAuthenticateUseCase>
 {
   constructor(
     @inject(IAuthenticatorServiceToken)
