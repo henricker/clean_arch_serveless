@@ -10,70 +10,166 @@ import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniq
 import { InputCreateUserDto } from '@business/dto/user/create'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
+import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
+import { IMailServiceToken } from '@business/services/mail/iMail'
+import { FakeMailRepository } from '@tests/mock/fakes/repositories/fakeMailRepository'
+import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
 
 describe('User use cases', () => {
-	const fakeNewUser: InputCreateUserDto = {
-		email: 'fake@email',
-		full_name: 'fake full name',
-		password: 'fake_password',
-		role_id: 0,
-	}
+  const fakeNewUser: InputCreateUserDto = {
+    email: 'fake@email',
+    full_name: 'fake full name',
+    password: 'fake_password',
+    role_id: 0,
+  }
 
-	beforeAll(() => {
-		container.bind(CreateUserUseCase).to(CreateUserUseCase)
-		container.bind(FindUserByUseCase).to(FindUserByUseCase)
-		container.bind(IHasherServiceToken).to(FakeHasherService)
-		container.bind(IUserRepositoryToken).to(FakeUserRepository)
-		container
-			.bind(IUniqueIdentifierServiceToken)
-			.to(FakeUniqueIdentifierService)
-	})
+  jest.spyOn(console, 'error').mockImplementation(() => ({}))
 
-	afterAll(() => {
-		container.unbindAll()
-	})
+  const createUserError = UsersErrors.entityCreationError()
+  const sendMailError = UsersErrors.userEmailNotSent()
 
-	describe('CreateUser', () => {
-		test('Should create an user', async () => {
-			const operator = container.get(CreateUserUseCase)
+  beforeAll(() => {
+    container.bind(CreateUserUseCase).to(CreateUserUseCase)
+    container.bind(FindUserByUseCase).to(FindUserByUseCase)
+    container.bind(SendMailUseCase).to(SendMailUseCase)
+    container.bind(UpdateUserUseCase).to(UpdateUserUseCase)
+    container.bind(IHasherServiceToken).to(FakeHasherService)
+    container.bind(IUserRepositoryToken).to(FakeUserRepository)
+    container.bind(IMailServiceToken).to(FakeMailRepository)
+    container
+      .bind(IUniqueIdentifierServiceToken)
+      .to(FakeUniqueIdentifierService)
+  })
 
-			const userEntity = await operator.exec(fakeNewUser)
+  afterAll(() => {
+    container.unbindAll()
+  })
 
-			expect(userEntity.isLeft()).toBeFalsy()
-			expect(userEntity.isRight()).toBeTruthy()
+  describe('CreateUser', () => {
+    const mockRepositoryCreateUser = jest.spyOn(
+      FakeUserRepository.prototype,
+      'create'
+    )
 
-			if (userEntity.isRight()) {
-				expect(userEntity.value.email).toBe(fakeNewUser.email)
-				expect(userEntity.value.full_name).toBe(fakeNewUser.full_name)
-			}
+    test('Should create an user', async () => {
+      const operator = container.get(CreateUserUseCase)
 
-			expect.assertions(4)
-		})
-	})
+      const userEntity = await operator.exec(fakeNewUser)
 
-	describe('FindUserBy', () => {
-		test('Should return user if it exists', async () => {
-			const userRepository = container.get(FindUserByUseCase)
+      expect(userEntity.isLeft()).toBeFalsy()
+      expect(userEntity.isRight()).toBeTruthy()
 
-			const userResult = await userRepository.exec({
-				key: 'email',
-				value: fakeUserEntity.email,
-			})
+      if (userEntity.isRight()) {
+        expect(userEntity.value.email).toBe(fakeNewUser.email)
+        expect(userEntity.value.full_name).toBe(fakeNewUser.full_name)
+      }
 
-			expect(userResult.isLeft()).toBeFalsy()
-			expect(userResult.isRight()).toBeTruthy()
-		})
+      expect.assertions(4)
+    })
 
-		test('Should not find user if it does not exists', async () => {
-			const userRepository = container.get(FindUserByUseCase)
+    test('Should throws an error', async () => {
+      const operator = container.get(CreateUserUseCase)
 
-			const userResult = await userRepository.exec({
-				key: 'email',
-				value: 'nonexistent@email.com',
-			})
+      mockRepositoryCreateUser.mockImplementation(() => {
+        throw new Error()
+      })
+      const userEntity = await operator.exec(fakeNewUser)
 
-			expect(userResult.isLeft()).toBeTruthy()
-			expect(userResult.isRight()).toBeFalsy()
-		})
-	})
+      expect(userEntity.isLeft()).toBeTruthy()
+      expect(userEntity.isRight()).toBeFalsy()
+
+      if (userEntity.isLeft()) {
+        expect(userEntity.value.statusCode).toBe(createUserError.statusCode)
+        expect(userEntity.value.body).toStrictEqual(createUserError.body)
+      }
+
+      expect.assertions(4)
+    })
+  })
+
+  describe('FindUserBy', () => {
+    test('Should return user if it exists', async () => {
+      const userRepository = container.get(FindUserByUseCase)
+
+      const userResult = await userRepository.exec({
+        key: 'email',
+        value: fakeUserEntity.email,
+      })
+
+      expect(userResult.isLeft()).toBeFalsy()
+      expect(userResult.isRight()).toBeTruthy()
+    })
+
+    test('Should not find user if it does not exists', async () => {
+      const userRepository = container.get(FindUserByUseCase)
+
+      const userResult = await userRepository.exec({
+        key: 'email',
+        value: 'nonexistent@email.com',
+      })
+
+      expect(userResult.isLeft()).toBeTruthy()
+      expect(userResult.isRight()).toBeFalsy()
+    })
+  })
+
+  describe('sendMail', () => {
+    const mockRepositorySendMail = jest.spyOn(
+      FakeMailRepository.prototype,
+      'send'
+    )
+
+    test('Should return right if mailService succeeded', async () => {
+      const mailRepository = container.get(SendMailUseCase)
+
+      const mailSend = await mailRepository.exec({
+        to: 'string',
+        subject: 'string',
+        payload: { string: 'string' },
+        templatePath: 'string',
+      })
+
+      expect(mailSend.isLeft()).toBeFalsy()
+      expect(mailSend.isRight()).toBeTruthy()
+      expect(mockRepositorySendMail).toBeCalledTimes(1)
+    })
+
+    test('Should return left if mailService failed', async () => {
+      const mailRepository = container.get(SendMailUseCase)
+
+      mockRepositorySendMail.mockImplementation(() => {
+        throw new Error()
+      })
+
+      const mailSend = await mailRepository.exec({
+        to: 'string',
+        subject: 'string',
+        payload: { string: 'string' },
+        templatePath: 'string',
+      })
+
+      expect(mailSend.isRight()).toBeFalsy()
+      expect(mockRepositorySendMail).toBeCalledTimes(1)
+
+      if(mailSend.isLeft()) {
+        expect(mailSend.value.statusCode).toBe(sendMailError.statusCode)
+        expect(mailSend.value.body).toStrictEqual(sendMailError.body)
+      }
+
+      expect.assertions(4)
+    })
+    // describe('updateUser', () => {
+    //   const userUpdate = {
+    //     full_name: 'Modify Name'
+    //   }
+    //   const mockUserUpdate = jest.spyOn(FakeUserRepository.prototype, 'update')
+    //   test('Should return user updated if repository.update returns user', () => {
+    //     const updateRepository = container.get(UpdateUserUseCase)
+
+    //     // updateRepository.exec(userUpdate)
+    //   })
+
+    // })
+  })
 })

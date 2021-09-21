@@ -14,7 +14,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    const password = await bcrypt.hash('admin', 6)
+    const password = await bcrypt.hash('admin_password', 6)
 
     await queryInterface.bulkInsert('users', [
       {

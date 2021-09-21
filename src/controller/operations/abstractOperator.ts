@@ -18,10 +18,10 @@ export abstract class AbstractOperator<I, O> {
 			) {
 				const validationErrors = error as ValidationError[]
 
-				const details = validationErrors.map((x) => ({
-					property: x.property,
-					value: `value <${x.value}> did not pass validation`,
-					errors: Object.entries(x.constraints).map(([, value]) => value),
+				const details = validationErrors.map((error) => ({
+					property: error.property,
+					value: `value <${error.value}> did not pass validation`,
+					errors: Object.entries(error.constraints).map(([, value]) => value),
 				}))
 
 				throw validationError(details)
