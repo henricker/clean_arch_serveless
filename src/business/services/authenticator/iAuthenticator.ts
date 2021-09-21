@@ -9,6 +9,6 @@ export interface ITokenVerifyFormat {
 }
 
 export interface IAuthenticatorService {
-  sing(payload: { [k: string]: string | number }): Promise<string>
+  sing(payload: { [k: string]: string | number | boolean }): Promise<string>
   verify(token: string): Promise<ITokenVerifyFormat | IError>
 }
