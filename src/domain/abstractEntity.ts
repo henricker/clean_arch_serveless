@@ -1,11 +1,11 @@
 export abstract class AbstractEntity<I> {
-	private props: I
+  private props: I
 
-	constructor(props: I) {
-		this.props = props
-	}
+  constructor(props: I) {
+    this.props = props
+  }
 
-	export(): I {
-		return { ...this.props }
-	}
+  export(): I {
+    return { ...this.props }
+  }
 }

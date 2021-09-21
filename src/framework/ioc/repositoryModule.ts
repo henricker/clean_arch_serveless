@@ -7,8 +7,8 @@ import {
 	IUserRepositoryToken,
 } from '@business/repositories/user/iUserRepository'
 import { RoleRepository } from '@framework/repositories/RoleRepository'
+import { UserRepository } from '@framework/repositories/UserRepository'
 import { ContainerModule, interfaces } from 'inversify'
-import { UserRepository } from '../repositories/UserRepository'
 
 export const repositoryModule = new ContainerModule((bind: interfaces.Bind) => {
 	bind<IUserRepository>(IUserRepositoryToken).to(UserRepository)

@@ -5,13 +5,10 @@ import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
 import { httpResponse } from '../../utility/httpResponse'
 import { IError } from '@shared/IError'
-import { connectTypeorm } from '@framework/utility/database'
-import { HandlerInput, HandlerResult } from '@framework/utility/types'
+import { IHandlerInput, IHandlerResult } from '@framework/utility/types'
 
-const create = async (event: HandlerInput): Promise<HandlerResult> => {
+const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
 	try {
-		await connectTypeorm()
-
 		const input = new InputCreateUser(event.body as Object)
 
 		const operator = container.get(CreateUserOperator)

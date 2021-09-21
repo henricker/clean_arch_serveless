@@ -1,43 +1,49 @@
+import { Relation } from '@business/repositories/relation'
 import {
-	IUserRepository,
-	UserEntityKeys,
+  IInputUpdateUser,
+  IUserRepository,
+  UserEntityKeys,
 } from '@business/repositories/user/iUserRepository'
-import { IUserEntity, IUserEntityRelations } from '@domain/entities/userEntity'
-import { injectable } from 'inversify'
-import { getRepository } from 'typeorm'
-import { UserModel } from '../models/User'
+import { IUserEntity } from '@domain/entities/userEntity'
+import { UserModel } from '@framework/models/users/userModel'
+import { inject, injectable } from 'inversify'
 
 @injectable()
 export class UserRepository implements IUserRepository {
-	async create(
-		inputUserEntity: Omit<IUserEntity, 'id'>,
-		role_id: number
-	): Promise<IUserEntity> {
-		const userRepository = getRepository(UserModel)
+  constructor(@inject(UserModel) private userModel: typeof UserModel) {}
 
-		const user = userRepository.create({ ...inputUserEntity, role_id })
+  async create(
+    inputUserEntity: Omit<IUserEntity, 'id'>,
+    role_id: number
+  ): Promise<IUserEntity> {
+    const user = await this.userModel.create({
+      ...inputUserEntity,
+      role_id,
+    })
 
-		await userRepository.save(user)
+    return user
+  }
+  async findBy(
+    type: UserEntityKeys,
+    key: IUserEntity[UserEntityKeys],
+    relations?: Relation<string, UserEntityKeys>[]
+  ): Promise<void | IUserEntity> {
+    const user = await this.userModel.findOne({
+      where: { [type]: key },
+      include:
+        relations &&
+        relations.map((relation) => ({
+          association: relation.tableName,
+        })),
+    })
 
-		return user
-	}
+    return user.get({ plain: true })
+  }
+  async update(input: IInputUpdateUser): Promise<IUserEntity | void> {
+    await this.userModel.update(input.newData, {
+      where: { [input.updateWhere.type]: input.updateWhere.key },
+    })
 
-	async findBy(
-		type: UserEntityKeys,
-		key: IUserEntity[UserEntityKeys],
-		relations?: (keyof IUserEntityRelations)[]
-	): Promise<void | IUserEntity> {
-		const userRepository = getRepository(UserModel)
-
-		const user = await userRepository.findOne({
-			where: { [type]: key },
-			relations,
-		})
-
-		if (!user) {
-			return void 0
-		}
-
-		return user
-	}
+    return input.newData
+  }
 }

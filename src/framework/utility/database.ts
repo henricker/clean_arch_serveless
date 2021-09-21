@@ -1,12 +1,15 @@
-import { createConnection } from 'typeorm'
-import typeormConfig from '@root/ormconfig'
-import { UserModel } from '@framework/models/User'
-import { RoleModel } from '@framework/models/Role'
+import { Sequelize, Options } from 'sequelize'
+import sequelizeConfig from '@root/sequelize.config.js'
 
-/**
- * This assumes that the tyeormConfig[0] is the default configuration
- * All the entities must be registered in the connection, this is a
- * workaround for blob patterns that dont work well with webpack
- */
-export const connectTypeorm = () =>
-	createConnection({ ...typeormConfig[0], entities: [UserModel, RoleModel] })
+const connectionOptions: Options = {
+	...sequelizeConfig,
+	pool: {
+		max: 5,
+		min: 0,
+	},
+	dialectOptions: {
+		connectTimeout: 60000,
+	},
+}
+
+export const sequelize = new Sequelize(connectionOptions)

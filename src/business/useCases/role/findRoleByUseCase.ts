@@ -1,7 +1,10 @@
-import { InputFindRoleBy, OutputFindRoleBy } from '@business/dto/role/findBy'
+import type {
+  IInputFindRoleBy,
+  IOutputFindRoleBy,
+} from '@business/dto/role/findBy'
 import {
-	IRoleRepository,
-	IRoleRepositoryToken,
+  IRoleRepository,
+  IRoleRepositoryToken,
 } from '@business/repositories/role/iRoleRepository'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
@@ -9,19 +12,19 @@ import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class FindRoleByUseCase
-	implements AbstractUseCase<InputFindRoleBy, OutputFindRoleBy>
+  implements AbstractUseCase<IInputFindRoleBy, IOutputFindRoleBy>
 {
-	constructor(
-		@inject(IRoleRepositoryToken) private roleRepository: IRoleRepository
-	) {}
+  constructor(
+    @inject(IRoleRepositoryToken) private roleRepository: IRoleRepository
+  ) {}
 
-	async exec(props: InputFindRoleBy): Promise<OutputFindRoleBy> {
-		const role = await this.roleRepository.findBy(props.key, props.value)
+  async exec(props: IInputFindRoleBy): Promise<IOutputFindRoleBy> {
+    const role = await this.roleRepository.findBy(props.key, props.value)
 
-		if (!role) {
-			return left(void 0)
-		}
+    if (!role) {
+      return left(void 0)
+    }
 
-		return right(role)
-	}
+    return right(role)
+  }
 }

@@ -1,32 +1,13 @@
-import { TableOptions } from 'typeorm/schema-builder/options/TableOptions'
+import { Knex } from 'knex'
 
-export const rolesTable = (tableName: string): TableOptions => ({
-	name: tableName,
-	columns: [
-		{
-			type: 'bigint',
-			unsigned: true,
-			name: 'id',
-			isPrimary: true,
-			isGenerated: true,
-			generationStrategy: 'increment',
-		},
-		{
-			type: 'varchar',
-			name: 'profile',
-			length: '100',
-			isUnique: true,
-			isNullable: false,
-		},
-		{
-			type: 'timestamp',
-			name: 'created_at',
-			default: 'now()',
-		},
-		{
-			type: 'timestamp',
-			name: 'updated_at',
-			default: 'now()',
-		},
-	],
-})
+export const rolesTable = (
+	table: Knex.TableBuilder,
+	aditionalConfigs?: (table: Knex.TableBuilder) => void
+) => {
+	table.increments('id').primary().unsigned()
+	table.string('profile').notNullable().unique()
+	table.timestamp('created_at').notNullable()
+	table.timestamp('updated_at').notNullable()
+
+	aditionalConfigs && aditionalConfigs(table)
+}

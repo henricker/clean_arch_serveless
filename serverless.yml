@@ -30,3 +30,24 @@ functions:
           path: /users
           method: post
           cors: true
+  createSession:
+    handler: ${self:custom.functionsDir}/authentication/create.handler
+    events:
+      - http:
+          path: /sessions
+          method: post
+          cors: true
+  showUser:
+    handler: ${self:custom.functionsDir}/users/show.handler
+    events:
+      - http:
+          path: /users/{uuid}
+          method: get
+          cors: true
+  forgotPassword:
+    handler: ${self:custom.functionsDir}/users/forgotPassword.handler
+    events:
+      - http:
+          path: /users/forgot-password
+          method: post
+          cors: true
