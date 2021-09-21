@@ -7,7 +7,7 @@ import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
-import { InputCreateUserDto } from '@business/dto/user/create'
+import { IInputCreateUserDto } from '@business/dto/user/create'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
@@ -18,17 +18,23 @@ import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
 import { IUserEntity } from '@domain/entities/userEntity'
 
 describe('User use cases', () => {
-  const fakeNewUser: InputCreateUserDto = {
+  const fakeNewUser: IInputCreateUserDto = {
     email: 'fake@email',
     full_name: 'fake full name',
     password: 'fake_password',
     role_id: 0,
   }
 
+  const fakeUserRepositoryFindBy = jest.spyOn(
+    FakeUserRepository.prototype,
+    'findBy'
+  )
+
   jest.spyOn(console, 'error').mockImplementation(() => ({}))
 
   const createUserError = UsersErrors.entityCreationError()
   const sendMailError = UsersErrors.userEmailNotSent()
+  const userNotFoundError = UsersErrors.userNotFound()
 
   beforeAll(() => {
     container.bind(CreateUserUseCase).to(CreateUserUseCase)
@@ -69,7 +75,7 @@ describe('User use cases', () => {
       expect.assertions(4)
     })
 
-    test('Should throws an error', async () => {
+    test('Should throw an error if repository fails in its process', async () => {
       const operator = container.get(CreateUserUseCase)
 
       mockRepositoryCreateUser.mockImplementation(() => {
@@ -91,9 +97,11 @@ describe('User use cases', () => {
 
   describe('FindUserBy', () => {
     test('Should return user if it exists', async () => {
-      const userRepository = container.get(FindUserByUseCase)
+      const userFindByUseCase = container.get(FindUserByUseCase)
 
-      const userResult = await userRepository.exec({
+      fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
+
+      const userResult = await userFindByUseCase.exec({
         key: 'email',
         value: fakeUserEntity.email,
       })
@@ -105,6 +113,8 @@ describe('User use cases', () => {
     test('Should not find user if it does not exists', async () => {
       const userRepository = container.get(FindUserByUseCase)
 
+      fakeUserRepositoryFindBy.mockImplementation(async () => void 0)
+
       const userResult = await userRepository.exec({
         key: 'email',
         value: 'nonexistent@email.com',
@@ -112,6 +122,13 @@ describe('User use cases', () => {
 
       expect(userResult.isLeft()).toBeTruthy()
       expect(userResult.isRight()).toBeFalsy()
+
+      if (userResult.isLeft()) {
+        expect(userResult.value.statusCode).toBe(userNotFoundError.statusCode)
+        expect(userResult.value.body).toStrictEqual(userNotFoundError.body)
+      }
+
+      expect.assertions(4)
     })
   })
 
@@ -153,7 +170,7 @@ describe('User use cases', () => {
       expect(mailSend.isRight()).toBeFalsy()
       expect(mockRepositorySendMail).toBeCalledTimes(1)
 
-      if(mailSend.isLeft()) {
+      if (mailSend.isLeft()) {
         expect(mailSend.value.statusCode).toBe(sendMailError.statusCode)
         expect(mailSend.value.body).toStrictEqual(sendMailError.body)
       }

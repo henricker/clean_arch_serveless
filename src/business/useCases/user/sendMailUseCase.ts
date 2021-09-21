@@ -1,6 +1,6 @@
 import {
-  InputSendMailDto,
-  OutputSendMailDto,
+  IInputSendMailDto,
+  IOutputSendMailDto,
 } from '@business/dto/user/sendMail'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { IMailService, IMailServiceToken } from '@business/services/mail/iMail'
@@ -10,11 +10,11 @@ import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class SendMailUseCase
-  implements AbstractUseCase<InputSendMailDto, OutputSendMailDto>
+  implements AbstractUseCase<IInputSendMailDto, IOutputSendMailDto>
 {
   constructor(@inject(IMailServiceToken) private mailService: IMailService) {}
 
-  async exec(input: InputSendMailDto): Promise<OutputSendMailDto> {
+  async exec(input: IInputSendMailDto): Promise<IOutputSendMailDto> {
     try {
       await this.mailService.send(input)
 

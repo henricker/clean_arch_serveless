@@ -13,85 +13,103 @@ import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { IError } from '@shared/IError'
+import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 
 describe('Create user operator', () => {
-	beforeAll(() => {
-		container.bind(IHasherServiceToken).to(FakeHasherService)
-		container.bind(IUserRepositoryToken).to(FakeUserRepository)
-		container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
-		container
-			.bind(IUniqueIdentifierServiceToken)
-			.to(FakeUniqueIdentifierService)
-		container.bind(CreateUserUseCase).to(CreateUserUseCase)
-		container.bind(FindUserByUseCase).to(FindUserByUseCase)
-		container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
-		container.bind(CreateUserOperator).to(CreateUserOperator)
-	})
+  const fakeUserRepositoryCreate = jest.spyOn(
+    FakeUserRepository.prototype,
+    'create'
+  )
 
-	afterAll(() => {
-		container.unbindAll()
-	})
+  const fakeRoleRepositoryFindBy = jest.spyOn(
+    FakeRoleRepository.prototype,
+    'findBy'
+  )
 
-	test('Should create a user', async () => {
-		const inputCreateUser = new InputCreateUser({
-			email: 'fake@mail.com',
-			full_name: 'Fake Full_Name',
-			password: 'test_12345',
-		})
+  beforeAll(() => {
+    container.bind(IHasherServiceToken).to(FakeHasherService)
+    container.bind(IUserRepositoryToken).to(FakeUserRepository)
+    container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
+    container
+      .bind(IUniqueIdentifierServiceToken)
+      .to(FakeUniqueIdentifierService)
+    container.bind(CreateUserUseCase).to(CreateUserUseCase)
+    container.bind(FindUserByUseCase).to(FindUserByUseCase)
+    container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
+    container.bind(CreateUserOperator).to(CreateUserOperator)
+  })
 
-		const operator = container.get(CreateUserOperator)
+  afterAll(() => {
+    container.unbindAll()
+  })
 
-		const user = await operator.run(inputCreateUser)
+  test('Should create a user', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fake@mail.com',
+      full_name: 'Fake Full_Name',
+      password: 'test_12345',
+    })
 
-		expect(user.isLeft()).toBeFalsy()
-		expect(user.isRight()).toBeTruthy()
-	})
+    fakeUserRepositoryCreate.mockImplementation(async () => fakeUserEntity)
+    fakeRoleRepositoryFindBy.mockImplementation(async () => ({
+      id: 1,
+      profile: 'manager',
+      created_at: new Date(),
+      updated_at: new Date(),
+    }))
+    const operator = container.get(CreateUserOperator)
 
-	test('Should not create a user with invalid email', async () => {
-		const inputCreateUser = new InputCreateUser({
-			email: 'fakemail.com',
-			full_name: 'Fake Full_Name',
-			password: 'test_12345',
-		})
+    const user = await operator.run(inputCreateUser)
 
-		try {
-			const operator = container.get(CreateUserOperator)
-			await operator.run(inputCreateUser)
-		} catch (error) {
-			expect(error).toBeInstanceOf(IError)
-		}
-		expect.assertions(1)
-	})
+    expect(user.isLeft()).toBeFalsy()
+    expect(user.isRight()).toBeTruthy()
+  })
 
-	test('Should not create a user with invalid name', async () => {
-		const inputCreateUser = new InputCreateUser({
-			email: 'fakemail.com',
-			full_name: 'F',
-			password: 'test_12345',
-		})
+  test('Should not create a user with invalid email', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fakemail.com',
+      full_name: 'Fake Full_Name',
+      password: 'test_12345',
+    })
 
-		try {
-			const operator = container.get(CreateUserOperator)
-			await operator.run(inputCreateUser)
-		} catch (error) {
-			expect(error).toBeInstanceOf(IError)
-		}
-		expect.assertions(1)
-	})
+    try {
+      const operator = container.get(CreateUserOperator)
+      await operator.run(inputCreateUser)
+    } catch (error) {
+      expect(error).toBeInstanceOf(IError)
+    }
+    expect.assertions(1)
+  })
 
-	test('Should not create a user with invalid password', async () => {
-		const inputCreateUser = new InputCreateUser({
-			email: 'fakemail.com',
-			full_name: 'Fake Full_Name',
-			password: '12345',
-		})
+  test('Should not create a user with invalid name', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fakemail.com',
+      full_name: 'F',
+      password: 'test_12345',
+    })
 
-		try {
-			const operator = container.get(CreateUserOperator)
-			await operator.run(inputCreateUser)
-		} catch (error) {
-			expect(error).toBeInstanceOf(IError)
-		}
-		expect.assertions(1)
-	})
+    try {
+      const operator = container.get(CreateUserOperator)
+      await operator.run(inputCreateUser)
+    } catch (error) {
+      expect(error).toBeInstanceOf(IError)
+    }
+    expect.assertions(1)
+  })
+
+  test('Should not create a user with invalid password', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fakemail.com',
+      full_name: 'Fake Full_Name',
+      password: '12345',
+    })
+
+    try {
+      const operator = container.get(CreateUserOperator)
+      await operator.run(inputCreateUser)
+    } catch (error) {
+      expect(error).toBeInstanceOf(IError)
+    }
+    expect.assertions(1)
+  })
 })

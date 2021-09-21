@@ -8,9 +8,9 @@ export type UserEntityKeys = keyof Omit<
   'role' | 'password' | 'created_at' | 'updated_at'
 >
 
-export interface InputUpdateUser {
+export interface IInputUpdateUser {
   updateWhere: { type: UserEntityKeys; key: string | number }
-  newData: { [index in keyof Partial<IUserEntity>]: string | number }
+  newData: IUserEntity
 }
 
 export interface IUserRepository {
@@ -23,5 +23,5 @@ export interface IUserRepository {
     key: IUserEntity[UserEntityKeys],
     relations?: Relation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity>
-  update(input: InputUpdateUser): Promise<IUserEntity | void>
+  update(input: IInputUpdateUser): Promise<IUserEntity | void>
 }

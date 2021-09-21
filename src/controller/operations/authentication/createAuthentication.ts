@@ -1,4 +1,4 @@
-import type { OutputAuthenticateUseCase } from '@business/dto/authentication/authenticate'
+import type { IOutputAuthenticateUseCase } from '@business/dto/authentication/authenticate'
 import { AuthenticationErrors } from '@business/module/errors/authentication/authenticationErrors'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import {
@@ -16,7 +16,7 @@ import { AbstractOperator } from '../abstractOperator'
 @injectable()
 export class CreateAuthenticationOperator extends AbstractOperator<
   InputCreateAuthentication,
-  OutputAuthenticateUseCase
+  IOutputAuthenticateUseCase
 > {
   constructor(
     @inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase,
@@ -29,7 +29,7 @@ export class CreateAuthenticationOperator extends AbstractOperator<
 
   async run(
     input: InputCreateAuthentication
-  ): Promise<OutputAuthenticateUseCase> {
+  ): Promise<IOutputAuthenticateUseCase> {
     await this.exec(input)
 
     const userResult = await this.findUserByUseCase.exec({

@@ -1,6 +1,6 @@
 import {
-  InputAuthorizeUseCase,
-  OutputAuthorizeUseCase,
+  IInputAuthorizeUseCase,
+  IOutputAuthorizeUseCase,
 } from '@business/dto/role/authorize'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
@@ -14,14 +14,14 @@ import { inject, injectable } from 'inversify'
 import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
-export class AuthorizeUseCase
-  implements AbstractUseCase<InputAuthorizeUseCase, OutputAuthorizeUseCase>
+export class VerifyProfileUseCase
+  implements AbstractUseCase<IInputAuthorizeUseCase, IOutputAuthorizeUseCase>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository
   ) {}
 
-  async exec(input: InputAuthorizeUseCase): Promise<OutputAuthorizeUseCase> {
+  async exec(input: IInputAuthorizeUseCase): Promise<IOutputAuthorizeUseCase> {
     const user = (await this.userRepository.findBy(
       input.authorizeBy,
       input.key,

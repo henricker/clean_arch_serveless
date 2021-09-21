@@ -1,6 +1,6 @@
 import { Relation } from '@business/repositories/relation'
 import {
-  InputUpdateUser,
+  IInputUpdateUser,
   IUserRepository,
   UserEntityKeys,
 } from '@business/repositories/user/iUserRepository'
@@ -18,7 +18,7 @@ export class UserRepository implements IUserRepository {
   ): Promise<IUserEntity> {
     const user = await this.userModel.create({
       ...inputUserEntity,
-      role_id: role_id,
+      role_id,
     })
 
     return user
@@ -37,12 +37,13 @@ export class UserRepository implements IUserRepository {
         })),
     })
 
-    return user
+    return user.get({ plain: true })
   }
-  async update(input: InputUpdateUser): Promise<IUserEntity | void> {
-    const user = await this.userModel.update(input.newData, {
-      where: { id: input.user.id },
+  async update(input: IInputUpdateUser): Promise<IUserEntity | void> {
+    await this.userModel.update(input.newData, {
+      where: { [input.updateWhere.type]: input.updateWhere.key },
     })
-    return user[1][0]
+
+    return input.newData
   }
 }
