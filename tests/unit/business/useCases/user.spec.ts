@@ -1,6 +1,6 @@
 // Make sure that container is first called, reflect-metada is important for decorators which are used in subsequent imports
 import { container } from '@shared/ioc/container'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
+import { InputUpdateUser, IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { IHasherServiceToken } from '@business/services/hasher/iHasher'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
@@ -15,6 +15,7 @@ import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
 import { IMailServiceToken } from '@business/services/mail/iMail'
 import { FakeMailRepository } from '@tests/mock/fakes/repositories/fakeMailRepository'
 import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
+import { IUserEntity } from '@domain/entities/userEntity'
 
 describe('User use cases', () => {
   const fakeNewUser: InputCreateUserDto = {
@@ -159,17 +160,65 @@ describe('User use cases', () => {
 
       expect.assertions(4)
     })
-    // describe('updateUser', () => {
-    //   const userUpdate = {
-    //     full_name: 'Modify Name'
-    //   }
-    //   const mockUserUpdate = jest.spyOn(FakeUserRepository.prototype, 'update')
-    //   test('Should return user updated if repository.update returns user', () => {
-    //     const updateRepository = container.get(UpdateUserUseCase)
+  })
+  
+  describe('updateUser', () => {
+    const fakeUserUpdated: IUserEntity = {
+      ...fakeNewUser,
+      id: 0,
+      uuid: 'uuid-uuid-123-456',
+      created_at: new Date(),
+      updated_at: new Date()
+    }
 
-    //     // updateRepository.exec(userUpdate)
-    //   })
+    const updateData: InputUpdateUser = {
+      updateWhere: { type: 'id', key: '0' },
+      newData: { full_name: 'Any Name'}
+    }
+    const mockUserUpdate = jest.spyOn(FakeUserRepository.prototype, 'update')
 
-    // })
+    test('Should return user updated if repository.update returns user', async () => {
+      const updateRepository = container.get(UpdateUserUseCase)
+      mockUserUpdate.mockImplementationOnce(async () => (fakeUserUpdated))
+      const userUpdated = await updateRepository.exec(updateData)
+      expect(userUpdated.isLeft()).toBeFalsy()
+
+      if(userUpdated.isRight()) {
+        expect(userUpdated.value).toBe(fakeUserUpdated)
+      }
+
+      expect.assertions(2);
+    })
+
+    test('Should throws user not found error if repository.update returns void', async () => {
+      const updateRepository = container.get(UpdateUserUseCase)
+      const userUpdated = await updateRepository.exec(updateData)
+      expect(userUpdated.isRight()).toBeFalsy()
+
+      if(userUpdated.isLeft()) {
+        expect(userUpdated.value.statusCode).toBe(UsersErrors.userNotFound().statusCode)
+        expect(userUpdated.value.body).toStrictEqual(UsersErrors.userNotFound().body)
+      }
+
+      expect.assertions(3);
+    })
+
+    test('Should throws user not found error if repository.update returns void', async () => {
+      const updateRepository = container.get(UpdateUserUseCase)
+
+      mockUserUpdate.mockImplementationOnce(async () => {throw new Error()})
+
+      const userUpdated = await updateRepository.exec(updateData)
+      expect(userUpdated.isRight()).toBeFalsy()
+
+      if(userUpdated.isLeft()) {
+        expect(userUpdated.value.statusCode).toBe(UsersErrors.userFailedToUpdate().statusCode)
+        expect(userUpdated.value.body).toStrictEqual(UsersErrors.userFailedToUpdate().body)
+      }
+
+      expect.assertions(3);
+    })
+
+
   })
 })
