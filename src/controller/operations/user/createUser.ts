@@ -1,5 +1,4 @@
-import { AbstractOperator } from '../abstractOperator'
-import { OutputCreateUserDto } from '@business/dto/user/create'
+import { IOutputCreateUserDto } from '@business/dto/user/create'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
@@ -8,11 +7,12 @@ import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
+import { AbstractOperator } from '../abstractOperator'
 
 @injectable()
 export class CreateUserOperator extends AbstractOperator<
   InputCreateUser,
-  OutputCreateUserDto
+  IOutputCreateUserDto
 > {
   constructor(
     @inject(CreateUserUseCase) private createUserUseCase: CreateUserUseCase,
@@ -22,7 +22,7 @@ export class CreateUserOperator extends AbstractOperator<
     super()
   }
 
-  async run(input: InputCreateUser): Promise<OutputCreateUserDto> {
+  async run(input: InputCreateUser): Promise<IOutputCreateUserDto> {
     await this.exec(input)
 
     const isUserAlreadyRegistered = await this.findUserUseCase.exec({

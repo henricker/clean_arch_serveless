@@ -1,10 +1,10 @@
 import type {
-	InputAuthenticateUseCase,
-	OutputAuthenticateUseCase,
+  IInputAuthenticateUseCase,
+  IOutputAuthenticateUseCase,
 } from '@business/dto/authentication/authenticate'
 import {
-	IAuthenticatorService,
-	IAuthenticatorServiceToken,
+  IAuthenticatorService,
+  IAuthenticatorServiceToken,
 } from '@business/services/authenticator/iAuthenticator'
 import { right } from '@shared/either'
 import { inject, injectable } from 'inversify'
@@ -12,19 +12,19 @@ import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class CreateTokenUseCase
-	implements
-		AbstractUseCase<InputAuthenticateUseCase, OutputAuthenticateUseCase>
+  implements
+    AbstractUseCase<IInputAuthenticateUseCase, IOutputAuthenticateUseCase>
 {
-	constructor(
-		@inject(IAuthenticatorServiceToken)
-		private authenticatorService: IAuthenticatorService
-	) {}
+  constructor(
+    @inject(IAuthenticatorServiceToken)
+    private authenticatorService: IAuthenticatorService
+  ) {}
 
-	async exec(
-		input: InputAuthenticateUseCase
-	): Promise<OutputAuthenticateUseCase> {
-		const token = await this.authenticatorService.sing(input.payload)
+  async exec(
+    input: IInputAuthenticateUseCase
+  ): Promise<IOutputAuthenticateUseCase> {
+    const token = await this.authenticatorService.sing(input.payload)
 
-		return right({ token })
-	}
+    return right({ token })
+  }
 }

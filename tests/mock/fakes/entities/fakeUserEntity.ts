@@ -1,6 +1,6 @@
-import { InputCreateUserEntity, IUserEntity } from '@domain/entities/userEntity'
+import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
 
-export const fakeCreatedUserEntity: InputCreateUserEntity = {
+export const fakeCreatedUserEntity: InputUserEntity = {
   full_name: 'João Pedro',
   email: 'pedrobarros2010@gmail.com',
   password: 'fake_password',

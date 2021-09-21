@@ -19,7 +19,7 @@ export interface IUserEntity
   forgot_password_token?: string
 }
 
-export type InputCreateUserEntity = Pick<
+export type InputUserEntity = Pick<
   IUserEntity,
   'email' | 'full_name' | 'password'
 >
@@ -29,13 +29,29 @@ export type OutputCreateUserEntity = Omit<
   'id' | 'uuid' | 'role_id'
 >
 
-export class UserEntity extends AbstractEntity<OutputCreateUserEntity> {
-  static create(props: InputCreateUserEntity): Right<void, UserEntity> {
+export class UserEntity extends AbstractEntity<IUserEntity> {
+  static create(props: InputUserEntity): Right<void, UserEntity> {
     const currentDate = new Date()
 
     const user = new UserEntity({
       ...props,
+      id: undefined,
+      role_id: undefined,
+      uuid: undefined,
       created_at: currentDate,
+      updated_at: currentDate,
+    })
+
+    return right(user)
+  }
+
+  static update(props: IUserEntity): Right<void, UserEntity> {
+    const currentDate = new Date()
+
+    console.log(props)
+
+    const user = new UserEntity({
+      ...props,
       updated_at: currentDate,
     })
 

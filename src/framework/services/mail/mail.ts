@@ -3,7 +3,7 @@ import { IMailService } from '@business/services/mail/iMail'
 import { injectable } from 'inversify'
 import nodemailer from 'nodemailer'
 import edge from 'edge.js'
-import { InputSendMailDto } from '@business/dto/user/sendMail'
+import { IInputSendMailDto } from '@business/dto/user/sendMail'
 
 @injectable()
 export class MailService implements IMailService {
@@ -17,7 +17,7 @@ export class MailService implements IMailService {
     },
   })
 
-  async send(input: InputSendMailDto): Promise<void> {
+  async send(input: IInputSendMailDto): Promise<void> {
     edge.mount(path.join(__dirname, '..', '..', 'services', 'mail', 'views'))
 
     const html = await edge.render(input.templatePath, input.payload)

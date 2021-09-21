@@ -1,4 +1,4 @@
-import { OutputSendMailDto } from '@business/dto/user/sendMail'
+import { IOutputSendMailDto } from '@business/dto/user/sendMail'
 import {
   IUniqueIdentifierService,
   IUniqueIdentifierServiceToken,
@@ -14,7 +14,7 @@ import { AbstractOperator } from '../abstractOperator'
 @injectable()
 export class RecoverPasswordOperator extends AbstractOperator<
   InputRecoverPassword,
-  OutputSendMailDto
+  IOutputSendMailDto
 > {
   constructor(
     @inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase,
@@ -26,7 +26,7 @@ export class RecoverPasswordOperator extends AbstractOperator<
     super()
   }
 
-  async run(input: InputRecoverPassword): Promise<OutputSendMailDto> {
+  async run(input: InputRecoverPassword): Promise<IOutputSendMailDto> {
     await this.exec(input)
 
     const userExists = await this.findUserByUseCase.exec({
@@ -40,14 +40,18 @@ export class RecoverPasswordOperator extends AbstractOperator<
 
     const forgot_password_token = this.uniqueIdentifier.create()
 
-    await this.updateUserUseCase.exec({
-      newData: { forgot_password_token },
-      updateWhere: { type: 'id', key: userExists.value.id },
+    const userIsUpdated = await this.updateUserUseCase.exec({
+      ...userExists.value,
+      forgot_password_token,
     })
+
+    if (userIsUpdated.isLeft()) {
+      return left(userIsUpdated.value)
+    }
 
     const formatedRedirectURL = input.redirectUrl.endsWith('/')
       ? input.redirectUrl
-      : input.redirectUrl + '/'
+      : `${input.redirectUrl}/`
 
     return this.sendMailuseCase.exec({
       to: input.userEmail,

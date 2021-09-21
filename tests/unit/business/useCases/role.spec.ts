@@ -1,7 +1,7 @@
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { AuthorizeUseCase } from '@business/useCases/role/authorizeUseCase'
+import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { container } from '@shared/ioc/container'
 import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
@@ -24,7 +24,7 @@ describe('Roles use case', () => {
 
   beforeAll(() => {
     container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
-    container.bind(AuthorizeUseCase).to(AuthorizeUseCase)
+    container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
   })
@@ -64,7 +64,7 @@ describe('Roles use case', () => {
 
   describe('Authorize use case', () => {
     test('Should not find user', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       fakeUserRepositoryFindBy.mockImplementation(() => void 0)
 
@@ -87,7 +87,7 @@ describe('Roles use case', () => {
     })
 
     test('Should throw if user not loaded correctly', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       fakeUserRepositoryFindBy.mockImplementation(async () => ({
         ...fakeUserEntity,
@@ -112,7 +112,7 @@ describe('Roles use case', () => {
       expect.assertions(3)
     })
     test('Should authorize user', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
 
@@ -127,14 +127,14 @@ describe('Roles use case', () => {
     })
 
     test('Should not authorize user', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
 
       const userAuthorizerResult = await operator.exec({
         allowedProfiles: [],
         authorizeBy: 'email',
-        key: fakeCreatedUserEntity.email + '.br',
+        key: `${fakeCreatedUserEntity.email}.br`,
       })
 
       expect(userAuthorizerResult.isLeft()).toBeTruthy()
@@ -142,14 +142,14 @@ describe('Roles use case', () => {
     })
 
     test('Should not authorize user with unsuficient permissions', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
 
       const userAuthorizerResult = await operator.exec({
         allowedProfiles: [],
         authorizeBy: 'email',
-        key: fakeCreatedUserEntity.email + '.br',
+        key: `${fakeCreatedUserEntity.email}.br`,
       })
 
       expect(userAuthorizerResult.isLeft()).toBeTruthy()
@@ -157,12 +157,12 @@ describe('Roles use case', () => {
     })
 
     test('Should authorize user not by role but by last chance', async () => {
-      const operator = container.get(AuthorizeUseCase)
+      const operator = container.get(VerifyProfileUseCase)
 
       const userAuthorizerResult = await operator.exec({
         allowedProfiles: [],
         authorizeBy: 'email',
-        key: fakeCreatedUserEntity.email + '.br',
+        key: `${fakeCreatedUserEntity.email}.br`,
         lastChance: async (user) => user.id === fakeUserEntity.id,
       })
 

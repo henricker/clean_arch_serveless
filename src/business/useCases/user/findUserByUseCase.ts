@@ -1,6 +1,6 @@
 import type {
-  InputFindUserByDto,
-  OutputFindUserByDto,
+  IInputFindUserByDto,
+  IOutputFindUserByDto,
 } from '@business/dto/user/findBy'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import {
@@ -13,13 +13,13 @@ import { AbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class FindUserByUseCase
-  implements AbstractUseCase<InputFindUserByDto, OutputFindUserByDto>
+  implements AbstractUseCase<IInputFindUserByDto, IOutputFindUserByDto>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository
   ) {}
 
-  async exec(input: InputFindUserByDto): Promise<OutputFindUserByDto> {
+  async exec(input: IInputFindUserByDto): Promise<IOutputFindUserByDto> {
     const user = await this.userRepository.findBy(input.key, input.value)
 
     if (!user) {

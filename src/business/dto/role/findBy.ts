@@ -3,9 +3,9 @@ import { Either } from '@shared/either'
 
 export type RoleEntityKeys = keyof Pick<IRoleEntity, 'id' | 'profile'>
 
-export interface InputFindRoleBy {
-	key: RoleEntityKeys
-	value: IRoleEntity[RoleEntityKeys]
+export interface IInputFindRoleBy {
+  key: RoleEntityKeys
+  value: IRoleEntity[RoleEntityKeys]
 }
 
-export type OutputFindRoleBy = Either<void, IRoleEntity>
+export type IOutputFindRoleBy = Either<void, IRoleEntity>

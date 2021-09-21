@@ -1,13 +1,13 @@
 import { Either } from '@shared/either'
 import { IError } from '@shared/IError'
 
-export interface InputAuthenticateUseCase {
-	payload: { [index: string]: string | number }
+export interface IInputAuthenticateUseCase {
+  payload: { [index: string]: string | number }
 }
 
-export type OutputAuthenticateUseCase = Either<
-	IError,
-	{
-		token: string
-	}
+export type IOutputAuthenticateUseCase = Either<
+  IError,
+  {
+    token: string
+  }
 >

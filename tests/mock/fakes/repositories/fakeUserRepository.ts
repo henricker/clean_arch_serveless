@@ -1,15 +1,14 @@
 import {
-  InputUpdateUser,
+  IInputUpdateUser,
   IUserRepository,
   UserEntityKeys,
 } from '@business/repositories/user/iUserRepository'
-import { InputCreateUserEntity, IUserEntity } from '@domain/entities/userEntity'
+import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
 import { injectable } from 'inversify'
-import { fakeUserEntity } from '../entities/fakeUserEntity'
 
 @injectable()
 export class FakeUserRepository implements IUserRepository {
-  async create(i: InputCreateUserEntity, role_id: number) {
+  async create(i: InputUserEntity, role_id: number): Promise<IUserEntity> {
     return {
       ...i,
       id: 1,
@@ -20,17 +19,13 @@ export class FakeUserRepository implements IUserRepository {
     }
   }
   async findBy(
-    t: UserEntityKeys,
-    v: IUserEntity[UserEntityKeys]
+    _t: UserEntityKeys,
+    _v: IUserEntity[UserEntityKeys]
   ): Promise<IUserEntity | void> {
-    const users: IUserEntity[] = [fakeUserEntity]
-
-    const user = users.find((user) => user[t] === v)
-
-    return user
+    return void 0
   }
 
-  async update(_input: InputUpdateUser): Promise<IUserEntity | void> {
+  async update(_input: IInputUpdateUser): Promise<IUserEntity | void> {
     return void 0
   }
 }

@@ -1,5 +1,5 @@
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { AuthorizeUseCase } from '@business/useCases/role/authorizeUseCase'
+import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { InputShowUser } from '@controller/serializers/user/inputShowUser'
 import { IUserEntity } from '@domain/entities/userEntity'
@@ -14,20 +14,24 @@ export class ShowUserOperator extends AbstractOperator<
   Either<IError, IUserEntity>
 > {
   constructor(
-    @inject(AuthorizeUseCase) private authorizeUseCase: AuthorizeUseCase,
+    @inject(VerifyProfileUseCase)
+    private verifyProfileUseCase: VerifyProfileUseCase,
     @inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase
   ) {
     super()
   }
 
-  async run(input: InputShowUser): Promise<Either<IError, IUserEntity>> {
+  async run(
+    input: InputShowUser,
+    user_id: number
+  ): Promise<Either<IError, IUserEntity>> {
     await this.exec(input)
 
-    const allowedResult = await this.authorizeUseCase.exec({
+    const allowedResult = await this.verifyProfileUseCase.exec({
       authorizeBy: 'id',
-      key: input.current_logged_user_id,
+      key: user_id,
       allowedProfiles: [],
-      lastChance: async (user) => user.uuid === input.user_uuid,
+      lastChance: async (user) => user.id === user_id,
     })
 
     if (allowedResult.isLeft()) {
@@ -48,6 +52,10 @@ export class ShowUserOperator extends AbstractOperator<
     if (user.isLeft()) {
       return left(UsersErrors.userNotFound())
     }
+
+    Object.defineProperty(user.value, 'id', {
+      enumerable: false,
+    })
 
     return right(user.value)
   }

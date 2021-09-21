@@ -1,8 +1,7 @@
 import { IUserEntity } from '@domain/entities/userEntity'
 import { Either } from '@shared/either'
 import { IError } from '@shared/IError'
-import { InputUpdateUser } from '@business/repositories/user/iUserRepository'
 
-export type InputUpdateUserDto = InputUpdateUser
+export type InputUpdateUserDto = IUserEntity
 
-export type OutputUpdateUserDto = Either<IError, IUserEntity>
+export type IOutputUpdateUserDto = Either<IError, IUserEntity>

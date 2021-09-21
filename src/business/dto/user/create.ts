@@ -1,11 +1,11 @@
-import { InputCreateUserEntity, IUserEntity } from '@domain/entities/userEntity'
+import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
 import { Either } from '@shared/either'
 import { IError } from '@shared/IError'
 
-export type InputCreateUserOperator = InputCreateUserEntity
+export { InputUserEntity as InputCreateUserOperator }
 
-export interface InputCreateUserDto extends InputCreateUserEntity {
-	role_id: number
+export interface IInputCreateUserDto extends InputUserEntity {
+  role_id: number
 }
 
-export type OutputCreateUserDto = Either<IError, IUserEntity>
+export type IOutputCreateUserDto = Either<IError, IUserEntity>

@@ -13,11 +13,10 @@ const show = async (event: IHandlerInput): Promise<IHandlerResult> => {
     const operator = container.get(ShowUserOperator)
 
     const input = new InputShowUser({
-      current_logged_user_id: event.auth?.user_id,
       user_uuid: event.pathParameters.uuid,
     })
 
-    const userResult = await operator.run(input)
+    const userResult = await operator.run(input, event.auth?.user_id)
 
     if (userResult.isLeft()) {
       throw userResult.value
