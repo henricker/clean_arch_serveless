@@ -4,7 +4,7 @@ import { IUserRepositoryToken } from '@business/repositories/user/iUserRepositor
 import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { container } from '@shared/ioc/container'
-import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import {
   fakeCreatedUserEntity,
   fakeUserEntity,
@@ -37,9 +37,7 @@ describe('Roles use case', () => {
     test('Should find a existent role', async () => {
       const operator = container.get(FindRoleByUseCase)
 
-      fakeRoleRepositoryFindBy.mockImplementation(
-        async () => fakeCreatedRoleEntity
-      )
+      fakeRoleRepositoryFindBy.mockImplementation(async () => fakeRoleEntity)
 
       const roleResult = await operator.exec({ key: 'profile', value: 'admin' })
 
