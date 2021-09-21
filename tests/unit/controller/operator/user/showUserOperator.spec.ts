@@ -29,6 +29,10 @@ describe('Show user operator', () => {
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
   })
 
+  afterAll(() => {
+    container.unbindAll()
+  })
+
   test('Should show an user', async () => {
     const input = new InputShowUser({
       user_uuid: fakeUserEntity.uuid,
