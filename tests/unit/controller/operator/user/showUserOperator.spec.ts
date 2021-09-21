@@ -81,8 +81,6 @@ describe('Show user operator', () => {
 
     const userResult = await operator.run(input, fakeUserEntity.id + 1)
 
-    console.log(userResult)
-
     expect(userResult.isLeft()).toBeTruthy()
     expect(userResult.isRight()).toBeFalsy()
 
