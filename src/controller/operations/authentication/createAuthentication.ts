@@ -60,7 +60,7 @@ export class CreateAuthenticationOperator extends AbstractOperator<
     })
 
     if (tokenResult.isLeft()) {
-      return left(AuthenticationErrors.tokenCreationError())
+      return left(tokenResult.value)
     }
 
     return right(tokenResult.value)

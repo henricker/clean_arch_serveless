@@ -29,7 +29,7 @@ export class CreateTokenUseCase
 
       return right({ token })
     } catch (error) {
-      return left(AuthenticationErrors.tokenCreationFailed())
+      return left(AuthenticationErrors.tokenCreationError())
     }
   }
 }

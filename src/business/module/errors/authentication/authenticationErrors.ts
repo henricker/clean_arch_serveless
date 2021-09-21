@@ -52,17 +52,4 @@ export class AuthenticationErrors extends IError {
 
     return authenticationError
   }
-
-  static tokenCreationFailed(): IError {
-    const authenticationError = new AuthenticationErrors({
-      statusCode: 401,
-      body: {
-        code: 'AE-005',
-        message: 'Error while creating your token',
-        shortMessage: 'tokenCreationFailed',
-      },
-    })
-
-    return authenticationError
-  }
 }
