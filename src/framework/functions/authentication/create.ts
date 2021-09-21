@@ -8,30 +8,30 @@ import { CreateAuthenticationOperator } from '@controller/operations/authenticat
 import { InputCreateAuthentication } from '@controller/serializers/authenticator/inputCreateAuthetication'
 
 const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
-	try {
-		const operator = container.get(CreateAuthenticationOperator)
+  try {
+    const operator = container.get(CreateAuthenticationOperator)
 
-		const input = new InputCreateAuthentication(event.body)
+    const input = new InputCreateAuthentication(event.body)
 
-		const authenticationResult = await operator.run(input)
+    const authenticationResult = await operator.run(input)
 
-		if (authenticationResult.isLeft()) {
-			throw authenticationResult.value
-		}
+    if (authenticationResult.isLeft()) {
+      throw authenticationResult.value
+    }
 
-		return httpResponse('ok', authenticationResult.value)
-	} catch (error) {
-		if (error instanceof IError) {
-			return httpResponse(error.statusCode, error.body)
-		}
+    return httpResponse('ok', authenticationResult.value)
+  } catch (error) {
+    if (error instanceof IError) {
+      return httpResponse(error.statusCode, error.body)
+    }
 
-		console.error(error)
+    console.error(error)
 
-		return httpResponse(
-			'internalError',
-			'Internal server error in user creation'
-		)
-	}
+    return httpResponse(
+      'internalError',
+      'Internal server error in user creation'
+    )
+  }
 }
 
 export const handler = middyfy(create)
