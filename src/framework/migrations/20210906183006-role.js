@@ -7,18 +7,18 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
       },
       profile: {
         type: Sequelize.STRING(30),
-        unique: true
+        unique: true,
       },
       created_at: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     })
   },
 
@@ -30,5 +30,5 @@ module.exports = {
      * await queryInterface.dropTable('role');
      */
     await queryInterface.dropTable('roles')
-  }
+  },
 }

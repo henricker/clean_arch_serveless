@@ -11,41 +11,41 @@ import { IAuthenticatorServiceToken } from '@business/services/authenticator/iAu
  * This middleware must be used with @middy/http-error-handler
  */
 export const AuthMiddyMiddleware = (): middy.MiddlewareObject<
-	IHandlerInput,
-	IHandlerResult,
-	Context
+  IHandlerInput,
+  IHandlerResult,
+  Context
 > => ({
-	before: async ({ event }, next) => {
-		const authHeader = event.headers.Authorization
+  before: async ({ event }, next) => {
+    const authHeader = event.headers.Authorization
 
-		if (!authHeader) {
-			throw createHttpError(
-				401,
-				JSON.stringify({ message: 'Authorization header required' })
-			)
-		}
+    if (!authHeader) {
+      throw createHttpError(
+        401,
+        JSON.stringify({ message: 'Authorization header required' })
+      )
+    }
 
-		const token = authHeader.split(' ')[1]
+    const token = authHeader.split(' ')[1]
 
-		if (!token) {
-			throw createHttpError(401, JSON.stringify({ message: 'missing token' }))
-		}
+    if (!token) {
+      throw createHttpError(401, JSON.stringify({ message: 'missing token' }))
+    }
 
-		const authenticatorService = container.get<AuthenticatorService>(
-			IAuthenticatorServiceToken
-		)
+    const authenticatorService = container.get<AuthenticatorService>(
+      IAuthenticatorServiceToken
+    )
 
-		const tokenPayload = await authenticatorService.verify(token)
+    const tokenPayload = await authenticatorService.verify(token)
 
-		if (tokenPayload instanceof IError) {
-			throw createHttpError(401, JSON.stringify(tokenPayload.body))
-		}
+    if (tokenPayload instanceof IError) {
+      throw createHttpError(401, JSON.stringify(tokenPayload.body))
+    }
 
-		Object.defineProperty(event, 'auth', {
-			value: tokenPayload,
-			enumerable: true,
-		})
+    Object.defineProperty(event, 'auth', {
+      value: tokenPayload,
+      enumerable: true,
+    })
 
-		next()
-	},
+    next()
+  },
 })

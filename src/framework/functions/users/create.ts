@@ -8,30 +8,30 @@ import { IError } from '@shared/IError'
 import { IHandlerInput, IHandlerResult } from '@framework/utility/types'
 
 const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
-	try {
-		const input = new InputCreateUser(event.body as Object)
+  try {
+    const input = new InputCreateUser(event.body as Object)
 
-		const operator = container.get(CreateUserOperator)
+    const operator = container.get(CreateUserOperator)
 
-		const userResult = await operator.run(input)
+    const userResult = await operator.run(input)
 
-		if (userResult.isLeft()) {
-			throw userResult.value
-		}
+    if (userResult.isLeft()) {
+      throw userResult.value
+    }
 
-		return httpResponse('created', userResult.value)
-	} catch (error) {
-		if (error instanceof IError) {
-			return httpResponse(error.statusCode, error.body)
-		}
+    return httpResponse('created', userResult.value)
+  } catch (error) {
+    if (error instanceof IError) {
+      return httpResponse(error.statusCode, error.body)
+    }
 
-		console.error(error)
+    console.error(error)
 
-		return httpResponse(
-			'internalError',
-			'Internal server error in user creation'
-		)
-	}
+    return httpResponse(
+      'internalError',
+      'Internal server error in user creation'
+    )
+  }
 }
 
 export const handler = middyfy(create)
