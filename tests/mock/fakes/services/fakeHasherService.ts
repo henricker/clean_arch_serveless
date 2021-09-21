@@ -3,11 +3,11 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class FakeHasherService implements IHasherService {
-	async compare(s: string, h: string) {
-		return s !== h
-	}
+  async compare(_s: string, _h: string): Promise<boolean> {
+    return false
+  }
 
-	async create(s: string) {
-		return s
-	}
+  async create(s: string): Promise<string> {
+    return s
+  }
 }
