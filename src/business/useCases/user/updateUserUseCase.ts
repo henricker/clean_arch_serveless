@@ -38,7 +38,6 @@ export class UpdateUserUseCase
 
       return right(userUpdate)
     } catch (error) {
-      console.error(error)
       return left(UsersErrors.userFailedToUpdate())
     }
   }
