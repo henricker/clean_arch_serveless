@@ -48,8 +48,6 @@ export class UserEntity extends AbstractEntity<IUserEntity> {
   static update(props: IUserEntity): Right<void, UserEntity> {
     const currentDate = new Date()
 
-    console.log(props)
-
     const user = new UserEntity({
       ...props,
       updated_at: currentDate,

@@ -32,8 +32,6 @@ export class UpdateUserUseCase
         },
       })
 
-      console.log(userUpdate)
-
       if (!userUpdate) {
         return left(UsersErrors.userNotFound())
       }
