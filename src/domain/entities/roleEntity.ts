@@ -9,12 +9,11 @@ export interface IRoleEntity extends ITimestamps {
 
 export type InputCreateRoleEntity = Pick<IRoleEntity, 'profile'>
 
-type OutputCreateRoleEntity = Omit<IRoleEntity, 'id'>
-
-export class RoleEntity extends AbstractEntity<OutputCreateRoleEntity> {
+export class RoleEntity extends AbstractEntity<IRoleEntity> {
   static create(input: InputCreateRoleEntity): Right<void, RoleEntity> {
     const role = new RoleEntity({
       ...input,
+      id: undefined,
       created_at: new Date(),
       updated_at: new Date(),
     })

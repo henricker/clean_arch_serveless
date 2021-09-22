@@ -25,4 +25,17 @@ export class RolesErrors extends IError {
 
     return roleError
   }
+
+  static roleFailedToUpdate(): IError {
+    const roleError = new RolesErrors({
+      statusCode: 500,
+      body: {
+        code: 'RE-003',
+        message: 'Role could not be updated',
+        shortMessage: 'roleNotUpdated',
+      },
+    })
+
+    return roleError
+  }
 }

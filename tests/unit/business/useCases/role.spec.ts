@@ -11,12 +11,19 @@ import {
 } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 
 describe('Roles use case', () => {
   const fakeRoleRepositoryFindBy = jest.spyOn(
     FakeRoleRepository.prototype,
     'findBy'
   )
+
+  const fakeRoleRepositoryUpdate = jest.spyOn(
+    FakeRoleRepository.prototype,
+    'update'
+  )
+
   const fakeUserRepositoryFindBy = jest.spyOn(
     FakeUserRepository.prototype,
     'findBy'
@@ -25,6 +32,7 @@ describe('Roles use case', () => {
   beforeAll(() => {
     container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
+    container.bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
   })
@@ -166,6 +174,28 @@ describe('Roles use case', () => {
 
       expect(userAuthorizerResult.isLeft()).toBeFalsy()
       expect(userAuthorizerResult.isRight()).toBeTruthy()
+    })
+  })
+
+  describe('Update use case', () => {
+    test('Should update role', async () => {
+      const operator = container.get(UpdateRoleUseCase)
+
+      fakeRoleRepositoryUpdate.mockImplementationOnce(
+        async ({ newData }) => newData
+      )
+
+      const updatedRole = await operator.exec(fakeRoleEntity)
+
+      expect(updatedRole.isLeft()).toBeFalsy()
+
+      if (updatedRole.isRight()) {
+        expect(updatedRole.value.updated_at).not.toStrictEqual(
+          fakeRoleEntity.updated_at
+        )
+      }
+
+      expect.assertions(2)
     })
   })
 })

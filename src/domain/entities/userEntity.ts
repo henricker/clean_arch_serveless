@@ -24,11 +24,6 @@ export type InputUserEntity = Pick<
   'email' | 'full_name' | 'password'
 >
 
-export type OutputCreateUserEntity = Omit<
-  IUserEntity,
-  'id' | 'uuid' | 'role_id'
->
-
 export class UserEntity extends AbstractEntity<IUserEntity> {
   static create(props: InputUserEntity): Right<void, UserEntity> {
     const currentDate = new Date()

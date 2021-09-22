@@ -1,6 +1,6 @@
 import {
   InputUpdateUserDto,
-  IOutputUpdateUserDto,
+  OutputUpdateUserDto,
 } from '@business/dto/user/update'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import {
@@ -14,13 +14,13 @@ import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class UpdateUserUseCase
-  implements IAbstractUseCase<InputUpdateUserDto, IOutputUpdateUserDto>
+  implements IAbstractUseCase<InputUpdateUserDto, OutputUpdateUserDto>
 {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository
   ) {}
 
-  async exec(input: InputUpdateUserDto): Promise<IOutputUpdateUserDto> {
+  async exec(input: InputUpdateUserDto): Promise<OutputUpdateUserDto> {
     try {
       const newUserEntity = UserEntity.update(input)
 
