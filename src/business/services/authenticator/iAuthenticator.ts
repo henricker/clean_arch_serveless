@@ -4,11 +4,11 @@ export const IAuthenticatorServiceToken = Symbol.for(
   'IAuthenticatorServiceToken'
 )
 
-export interface TokenVerifyFormat {
+export interface ITokenVerifyFormat {
   [index: string]: number | string
 }
 
 export interface IAuthenticatorService {
-  sing(payload: { [k: string]: string | number }): Promise<string>
-  verify(token: string): Promise<TokenVerifyFormat | IError>
+  sing(payload: { [k: string]: string | number | boolean }): Promise<string>
+  verify(token: string): Promise<ITokenVerifyFormat | IError>
 }

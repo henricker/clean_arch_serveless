@@ -19,7 +19,7 @@ const types = {
 export const httpResponse = (
   responseType: keyof typeof types | number,
   body: unknown
-) => ({
+): { statusCode: number; body: string } => ({
   statusCode: types[responseType]?.statusCode || responseType,
   body: JSON.stringify(body),
 })

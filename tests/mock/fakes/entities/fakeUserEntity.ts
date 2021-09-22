@@ -11,7 +11,7 @@ export const fakeUserEntity: Required<IUserEntity> = {
   id: 1,
   role_id: 1,
   forgot_password_token: '',
-  uuid: 'fake-uuid-128-bits',
+  uuid: '7b1f3001-6a4b-4bdd-90e9-8a280fff017d',
   role: {
     id: 1,
     profile: 'manager',
@@ -20,4 +20,14 @@ export const fakeUserEntity: Required<IUserEntity> = {
   },
   created_at: new Date(),
   updated_at: new Date(),
+}
+
+export const fakeUserAdminEntity: Required<IUserEntity> = {
+  ...fakeUserEntity,
+  id: 2,
+  uuid: 'f9116615-36a4-4b67-80c1-dc208ba86ae1',
+  role: {
+    ...fakeUserEntity.role,
+    profile: 'admin',
+  },
 }

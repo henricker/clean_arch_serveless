@@ -12,6 +12,5 @@ export interface IRoleRepository {
     key: RoleEntityKeys,
     value: IRoleEntity[RoleEntityKeys]
   ): Promise<void | IRoleEntity>
-
   update(input: IInputUpdateRole): Promise<IRoleEntity | void>
 }

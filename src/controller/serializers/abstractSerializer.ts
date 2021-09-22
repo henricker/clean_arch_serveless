@@ -5,7 +5,7 @@ export abstract class AbstractSerializer<I> {
     Object.assign(this, value)
   }
 
-  async validate() {
+  async validate(): Promise<void> {
     const errors = await exec(this)
     if (errors.length > 0) {
       throw errors

@@ -1,7 +1,7 @@
 import { AuthenticationErrors } from '@business/module/errors/authentication/authenticationErrors'
 import {
   IAuthenticatorService,
-  TokenVerifyFormat,
+  ITokenVerifyFormat,
 } from '@business/services/authenticator/iAuthenticator'
 import { IError } from '@shared/IError'
 import { injectable } from 'inversify'
@@ -24,9 +24,9 @@ export class AuthenticatorService implements IAuthenticatorService {
     return token
   }
 
-  async verify(token: string): Promise<TokenVerifyFormat | IError> {
+  async verify(token: string): Promise<ITokenVerifyFormat | IError> {
     try {
-      const tokenPayload = JWT.verify(token, secret) as TokenVerifyFormat
+      const tokenPayload = JWT.verify(token, secret) as ITokenVerifyFormat
 
       return tokenPayload
     } catch (error) {

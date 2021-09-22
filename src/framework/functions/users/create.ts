@@ -3,13 +3,13 @@ import '@framework/ioc/inversify.config'
 import { middyfy } from 'src/framework/utility/lamba'
 import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
-import { httpResponse } from '../../utility/httpResponse'
 import { IError } from '@shared/IError'
 import { IHandlerInput, IHandlerResult } from '@framework/utility/types'
+import { httpResponse } from '../../utility/httpResponse'
 
 const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
   try {
-    const input = new InputCreateUser(event.body as Object)
+    const input = new InputCreateUser(event.body)
 
     const operator = container.get(CreateUserOperator)
 

@@ -13,5 +13,5 @@ export interface IHandlerInput<T = ITokenPayload>
 }
 
 export interface IHandlerResult extends Omit<APIGatewayProxyResult, 'body'> {
-  body: Object
+  body: unknown
 }

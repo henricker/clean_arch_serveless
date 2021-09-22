@@ -50,7 +50,6 @@ export class CreateUserUseCase
 
       return right(userEntity)
     } catch (error) {
-      console.error(error)
       return left(UsersErrors.entityCreationError())
     }
   }

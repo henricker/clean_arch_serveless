@@ -14,10 +14,13 @@
     "node": ">=14.17.0"
   },
   "dependencies": {
+    "@jest/types": "^27.1.1",
     "@middy/core": "^1.5.2",
     "@middy/http-cors": "^2.5.1",
     "@middy/http-error-handler": "^2.5.1",
     "@middy/http-json-body-parser": "^1.5.2",
+    "@types/aws-lambda": "^8.10.83",
+    "@types/jest": "^27.0.2",
     "bcrypt": "^5.0.1",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
@@ -34,9 +37,7 @@
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
-    "@types/aws-lambda": "^8.10.71",
     "@types/bcrypt": "^5.0.0",
-    "@types/jest": "^27.0.1",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/node": "^14.14.25",
     "@types/nodemailer": "^6.4.4",
