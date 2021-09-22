@@ -1,28 +1,31 @@
 'use strict'
 
+// eslint-disable-next-line
+const { DataTypes, QueryInterface } = require('sequelize')
+
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (/** @type {QueryInterface} */ queryInterface, _Sequelize) => {
     await queryInterface.createTable('roles', {
       id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
       profile: {
-        type: Sequelize.STRING(30),
+        type: DataTypes.STRING(30),
         unique: true,
       },
       created_at: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
       updated_at: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
     })
   },
 
-  down: async (queryInterface, _Sequelize) => {
+  down: async (/** @type {QueryInterface} */ queryInterface, _Sequelize) => {
     /**
      * Add reverting commands here.
      *

@@ -51,7 +51,8 @@
     ],
     "max-classes-per-file": "off",
     "no-use-before-define": ["error", { "classes": false }],
-    "strict": "off"
+    "strict": "off",
+    "@typescript-eslint/no-var-requires": "off"
   },
   "settings": {
     "import/parsers": {
