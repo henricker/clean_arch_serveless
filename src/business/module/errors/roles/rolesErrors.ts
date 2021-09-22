@@ -15,7 +15,7 @@ export class RolesErrors extends IError {
   }
   static roleNotAllowed(): IError {
     const roleError = new RolesErrors({
-      statusCode: 401,
+      statusCode: 403,
       body: {
         code: 'RE-002',
         message: 'Your role does not have acess to this functionality',
