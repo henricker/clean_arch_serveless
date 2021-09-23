@@ -1,10 +1,11 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@framework/utility/database'
-import { RoleModel } from '../roles/roleModel'
 import { IUserEntity } from '@domain/entities/userEntity'
+import { RoleModel } from '../roles/roleModel'
 
 export class UserModel extends Model {}
 
+// eslint-disable-next-line
 export interface UserModel extends IUserEntity {}
 
 UserModel.init(
@@ -31,6 +32,10 @@ UserModel.init(
     },
     forgot_password_token: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    forgot_password_token_expires_in: {
+      type: DataTypes.DATE,
       allowNull: true,
     },
   },
