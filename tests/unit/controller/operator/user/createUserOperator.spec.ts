@@ -14,17 +14,26 @@ import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepositor
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { IError } from '@shared/IError'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
+import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 
 describe('Create user operator', () => {
   const fakeUserRepositoryCreate = jest.spyOn(
     FakeUserRepository.prototype,
     'create'
   )
-
+  const fakeUserRepositoryFindBy = jest.spyOn(
+    FakeUserRepository.prototype,
+    'findBy'
+  )
   const fakeRoleRepositoryFindBy = jest.spyOn(
     FakeRoleRepository.prototype,
     'findBy'
   )
+
+  const userEmailAlreadyInUseError = UsersErrors.userEmailAlreadyInUse()
+  const roleNotFoundError = RolesErrors.roleNotFound()
+  const userEntityCreationError = UsersErrors.entityCreationError()
 
   beforeAll(() => {
     container.bind(IHasherServiceToken).to(FakeHasherService)
@@ -111,5 +120,83 @@ describe('Create user operator', () => {
       expect(error).toBeInstanceOf(IError)
     }
     expect.assertions(1)
+  })
+
+  test('Should not create a user with an already existent e-mail', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fake@mail.com',
+      full_name: 'Fake Full_Name',
+      password: 'test_12345',
+    })
+
+    fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
+    const operator = container.get(CreateUserOperator)
+
+    const user = await operator.run(inputCreateUser)
+
+    expect(user.isLeft()).toBeTruthy()
+    expect(user.isRight()).toBeFalsy()
+
+    if (user.isLeft()) {
+      expect(user.value.body).toStrictEqual(userEmailAlreadyInUseError.body)
+    }
+
+    expect.assertions(3)
+  })
+
+  test('Should not create a user with an unexistent role', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fake@mail.com',
+      full_name: 'Fake Full_Name',
+      password: 'test_12345',
+    })
+
+    fakeUserRepositoryFindBy.mockImplementation(async () => void 0)
+    fakeRoleRepositoryFindBy.mockImplementation(async () => void 0)
+
+    const operator = container.get(CreateUserOperator)
+
+    const user = await operator.run(inputCreateUser)
+
+    expect(user.isLeft()).toBeTruthy()
+    expect(user.isRight()).toBeFalsy()
+
+    if (user.isLeft()) {
+      expect(user.value.body).toStrictEqual(roleNotFoundError.body)
+    }
+
+    expect.assertions(3)
+  })
+
+  test('Should not create a user if user repository create method throws', async () => {
+    const inputCreateUser = new InputCreateUser({
+      email: 'fake@mail.com',
+      full_name: 'Fake Full_Name',
+      password: 'test_12345',
+    })
+
+    fakeUserRepositoryCreate.mockImplementation(async () => {
+      throw new Error()
+    })
+    fakeUserRepositoryFindBy.mockImplementation(async () => void 0)
+    fakeRoleRepositoryFindBy.mockImplementation(async () => ({
+      id: 1,
+      profile: 'manager',
+      created_at: new Date(),
+      updated_at: new Date(),
+    }))
+
+    const operator = container.get(CreateUserOperator)
+
+    const user = await operator.run(inputCreateUser)
+
+    expect(user.isLeft()).toBeTruthy()
+    expect(user.isRight()).toBeFalsy()
+
+    if (user.isLeft()) {
+      expect(user.value.body).toStrictEqual(userEntityCreationError.body)
+    }
+
+    expect.assertions(3)
   })
 })

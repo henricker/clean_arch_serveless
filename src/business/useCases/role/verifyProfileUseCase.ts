@@ -45,7 +45,7 @@ export class VerifyProfileUseCase
     const allowedProfiles = [...input.allowedProfiles, 'admin']
 
     if (!allowedProfiles.includes(user.role.profile)) {
-      const lastChance = input.lastChance && input.lastChance(user)
+      const lastChance = input.lastChance ? await input.lastChance(user) : false
 
       return lastChance ? right(user) : left(RolesErrors.roleNotAllowed())
     }

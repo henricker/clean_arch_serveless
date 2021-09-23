@@ -20,7 +20,6 @@ export class SendMailUseCase
 
       return right(void 0)
     } catch (error) {
-      console.error(error)
       return left(UsersErrors.userEmailNotSent())
     }
   }
