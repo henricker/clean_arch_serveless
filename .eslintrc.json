@@ -22,6 +22,7 @@
     "import"
   ],
   "rules": {
+    "strict": "off",
     "no-void": "off",
     "import/extensions": "off",
     "camelcase": "off",
