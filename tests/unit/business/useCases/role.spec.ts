@@ -12,6 +12,7 @@ import {
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
+import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 
 describe('Roles use case', () => {
   const fakeRoleRepositoryFindBy = jest.spyOn(
@@ -182,7 +183,7 @@ describe('Roles use case', () => {
       const operator = container.get(UpdateRoleUseCase)
 
       fakeRoleRepositoryUpdate.mockImplementationOnce(
-        async ({ newData }) => newData
+        async (input) => input.newData
       )
 
       const updatedRole = await operator.exec(fakeRoleEntity)
@@ -196,6 +197,47 @@ describe('Roles use case', () => {
       }
 
       expect.assertions(2)
+    })
+
+    test('Should throws not found error if repo returns void', async () => {
+      const operator = container.get(UpdateRoleUseCase)
+      const updatedRole = await operator.exec(fakeRoleEntity)
+
+      expect(updatedRole.isRight()).toBeFalsy()
+
+      if (updatedRole.isLeft()) {
+        expect(updatedRole.value.statusCode).toBe(
+          RolesErrors.roleNotFound().statusCode
+        )
+        expect(updatedRole.value.body).toStrictEqual(
+          RolesErrors.roleNotFound().body
+        )
+      }
+
+      expect.assertions(3)
+    })
+
+    test('Should throws server error if repo throws error', async () => {
+      const operator = container.get(UpdateRoleUseCase)
+
+      fakeRoleRepositoryUpdate.mockImplementation(() => {
+        throw new Error()
+      })
+
+      const updatedRole = await operator.exec(fakeRoleEntity)
+
+      expect(updatedRole.isRight()).toBeFalsy()
+
+      if (updatedRole.isLeft()) {
+        expect(updatedRole.value.statusCode).toBe(
+          RolesErrors.roleFailedToUpdate().statusCode
+        )
+        expect(updatedRole.value.body).toStrictEqual(
+          RolesErrors.roleFailedToUpdate().body
+        )
+      }
+
+      expect.assertions(3)
     })
   })
 })
