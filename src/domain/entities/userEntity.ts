@@ -17,6 +17,7 @@ export interface IUserEntity
   email: string
   password: string
   forgot_password_token?: string
+  forgot_password_token_expires_in?: Date
 }
 
 export type InputUserEntity = Pick<

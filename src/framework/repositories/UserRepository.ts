@@ -38,9 +38,10 @@ export class UserRepository implements IUserRepository {
           })),
       })
 
-      return user.get({ plain: true })
-    } catch (error) {
-      console.error(error)
+      const plainUser = user.get({ plain: true })
+
+      return plainUser
+    } catch {
       return void 0
     }
   }

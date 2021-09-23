@@ -3,7 +3,7 @@ import { IError } from '@shared/IError'
 export class AuthenticationErrors extends IError {
   static invalidCredentials(): IError {
     const authenticationError = new AuthenticationErrors({
-      statusCode: 404,
+      statusCode: 401,
       body: {
         code: 'AE-001',
         message: 'Email or password wrong',
@@ -16,7 +16,7 @@ export class AuthenticationErrors extends IError {
 
   static tokenCreationError(): IError {
     const authenticationError = new AuthenticationErrors({
-      statusCode: 404,
+      statusCode: 500,
       body: {
         code: 'AE-002',
         message: 'Token creation error',

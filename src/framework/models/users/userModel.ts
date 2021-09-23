@@ -1,8 +1,12 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@framework/utility/database'
+import { IUserEntity } from '@domain/entities/userEntity'
 import { RoleModel } from '../roles/roleModel'
 
 export class UserModel extends Model {}
+
+// eslint-disable-next-line
+export interface UserModel extends IUserEntity {}
 
 UserModel.init(
   {
@@ -36,7 +40,7 @@ UserModel.init(
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
   },
   {

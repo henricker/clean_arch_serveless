@@ -1,4 +1,5 @@
 import { IOutputSendMailDto } from '@business/dto/user/sendMail'
+import { ITimeService, ITimeServiceToken } from '@business/services/time/iTime'
 import {
   IUniqueIdentifierService,
   IUniqueIdentifierServiceToken,
@@ -21,7 +22,8 @@ export class RecoverPasswordOperator extends AbstractOperator<
     @inject(SendMailUseCase) private sendMailuseCase: SendMailUseCase,
     @inject(UpdateUserUseCase) private updateUserUseCase: UpdateUserUseCase,
     @inject(IUniqueIdentifierServiceToken)
-    private uniqueIdentifier: IUniqueIdentifierService
+    private uniqueIdentifier: IUniqueIdentifierService,
+    @inject(ITimeServiceToken) private timeService: ITimeService
   ) {
     super()
   }
@@ -40,9 +42,14 @@ export class RecoverPasswordOperator extends AbstractOperator<
 
     const forgot_password_token = this.uniqueIdentifier.create()
 
+    const forgot_password_token_expires_in = this.timeService.add(
+      this.timeService.toMilliseconds('2h')
+    )
+
     const userIsUpdated = await this.updateUserUseCase.exec({
       ...userExists.value,
       forgot_password_token,
+      forgot_password_token_expires_in,
     })
 
     if (userIsUpdated.isLeft()) {

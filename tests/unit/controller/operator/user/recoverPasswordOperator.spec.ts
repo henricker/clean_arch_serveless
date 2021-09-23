@@ -12,6 +12,8 @@ import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifi
 import { InputRecoverPassword } from '@controller/serializers/user/inputRecoverPassword'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { ITimeServiceToken } from '@business/services/time/iTime'
+import { FakeTimeService } from '@tests/mock/fakes/services/fakeTimeService'
 
 describe('Recover password operator', () => {
   const fakeUserRepositoryFindBy = jest.spyOn(
@@ -38,6 +40,7 @@ describe('Recover password operator', () => {
     container
       .bind(IUniqueIdentifierServiceToken)
       .to(FakeUniqueIdentifierService)
+    container.bind(ITimeServiceToken).to(FakeTimeService)
   })
 
   afterAll(() => {
