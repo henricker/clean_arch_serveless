@@ -1,4 +1,4 @@
-import { Relation } from '@business/repositories/relation'
+import { IRelation } from '@business/repositories/relation'
 import {
   IInputUpdateUser,
   IUserRepository,
@@ -26,18 +26,24 @@ export class UserRepository implements IUserRepository {
   async findBy(
     type: UserEntityKeys,
     key: IUserEntity[UserEntityKeys],
-    relations?: Relation<string, UserEntityKeys>[]
+    relations?: IRelation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity> {
-    const user = await this.userModel.findOne({
-      where: { [type]: key },
-      include:
-        relations &&
-        relations.map((relation) => ({
-          association: relation.tableName,
-        })),
-    })
+    try {
+      const user = await this.userModel.findOne({
+        where: { [type]: key },
+        include:
+          relations &&
+          relations.map((relation) => ({
+            association: relation.tableName,
+          })),
+      })
 
-    return user.get({ plain: true })
+      const plainUser = user.get({ plain: true })
+
+      return plainUser
+    } catch {
+      return void 0
+    }
   }
   async update(input: IInputUpdateUser): Promise<IUserEntity | void> {
     await this.userModel.update(input.newData, {

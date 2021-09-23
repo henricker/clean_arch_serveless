@@ -44,6 +44,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      forgot_password_token_expires_in: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
       },

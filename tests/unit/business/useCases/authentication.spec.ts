@@ -1,7 +1,7 @@
 import { IAuthenticatorServiceToken } from '@business/services/authenticator/iAuthenticator'
 import { CreateTokenUseCase } from '@business/useCases/authentication/createToken'
 import { container } from '@shared/ioc/container'
-import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorServiceToken'
+import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorService'
 
 describe('Authentication use case', () => {
   const fakeAuthenticatorServiceSign = jest.spyOn(
