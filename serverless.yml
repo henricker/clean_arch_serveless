@@ -51,3 +51,10 @@ functions:
           path: /users/forgot-password
           method: post
           cors: true
+  updateRole:
+    handler: ${self:custom.functionsDir}/roles/update.handler
+    events:
+      - http:
+          path: /roles/{id}
+          method: put
+          cors: true

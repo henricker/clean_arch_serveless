@@ -3,6 +3,7 @@ import sequelizeConfig from '@root/sequelize.config.js'
 
 const connectionOptions: Options = {
   ...sequelizeConfig,
+  define: { underscored: true, omitNull: false },
   pool: {
     max: 5,
     min: 0,

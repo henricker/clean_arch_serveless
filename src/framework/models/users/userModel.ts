@@ -30,10 +30,18 @@ UserModel.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',
-    timestamps: true,
+    timestamps: false,
     underscored: true,
     sequelize,
   }

@@ -17,13 +17,18 @@ export class RoleRepository implements IRoleRepository {
   ): Promise<void | IRoleEntity> {
     const role = await this.roleModel.findOne({ where: { [key]: value } })
 
-    return role as unknown as IRoleEntity
+    return role.get({ plain: true })
   }
   async update(input: IInputUpdateRole): Promise<IRoleEntity | void> {
-    await this.roleModel.update(input.newData, {
-      where: { [input.updateWhere.type]: input.updateWhere.key },
-    })
+    try {
+      await this.roleModel.update(input.newData, {
+        where: { [input.updateWhere.type]: input.updateWhere.key },
+      })
 
-    return input.newData
+      return input.newData
+    } catch (error) {
+      console.error(error)
+      return void 0
+    }
   }
 }

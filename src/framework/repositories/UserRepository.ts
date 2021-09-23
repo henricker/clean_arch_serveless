@@ -28,16 +28,21 @@ export class UserRepository implements IUserRepository {
     key: IUserEntity[UserEntityKeys],
     relations?: IRelation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity> {
-    const user = await this.userModel.findOne({
-      where: { [type]: key },
-      include:
-        relations &&
-        relations.map((relation) => ({
-          association: relation.tableName,
-        })),
-    })
+    try {
+      const user = await this.userModel.findOne({
+        where: { [type]: key },
+        include:
+          relations &&
+          relations.map((relation) => ({
+            association: relation.tableName,
+          })),
+      })
 
-    return user.get({ plain: true })
+      return user.get({ plain: true })
+    } catch (error) {
+      console.error(error)
+      return void 0
+    }
   }
   async update(input: IInputUpdateUser): Promise<IUserEntity | void> {
     await this.userModel.update(input.newData, {
