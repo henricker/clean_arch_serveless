@@ -16,6 +16,14 @@ const config: Config.InitialOptions = {
     '<rootDir>/src/business/module/',
     '.d.ts',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 95,
+      functions: 95,
+      lines: 95,
+      statements: 95,
+    },
+  },
   testEnvironment: 'node',
   coverageProvider: 'v8',
   rootDir: './',
