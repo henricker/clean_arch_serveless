@@ -11,6 +11,7 @@ export const fakeUserEntity: Required<IUserEntity> = {
   id: 1,
   role_id: 1,
   forgot_password_token: '',
+  forgot_password_token_expires_in: undefined,
   uuid: '7b1f3001-6a4b-4bdd-90e9-8a280fff017d',
   role: {
     id: 1,
