@@ -23,7 +23,7 @@ export class UpdateRoleUseCase
     try {
       const newRoleEntity = RoleEntity.update(input)
 
-      const roleUpdate = await this.roleRepository.update({
+      const roleUpdated = await this.roleRepository.update({
         newData: newRoleEntity.value.export(),
         updateWhere: {
           type: 'id',
@@ -31,11 +31,11 @@ export class UpdateRoleUseCase
         },
       })
 
-      if (!roleUpdate) {
+      if (!roleUpdated) {
         return left(RolesErrors.roleNotFound())
       }
 
-      return right(roleUpdate)
+      return right(roleUpdated)
     } catch (error) {
       return left(RolesErrors.roleFailedToUpdate())
     }

@@ -59,8 +59,8 @@ describe('Create user operator', () => {
       password: 'test_12345',
     })
 
-    fakeUserRepositoryCreate.mockImplementation(async () => fakeUserEntity)
-    fakeRoleRepositoryFindBy.mockImplementation(async () => ({
+    fakeUserRepositoryCreate.mockImplementationOnce(async () => fakeUserEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => ({
       id: 1,
       profile: 'manager',
       created_at: new Date(),

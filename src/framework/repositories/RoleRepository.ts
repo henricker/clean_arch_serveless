@@ -1,5 +1,8 @@
 import { RoleEntityKeys } from '@business/dto/role/findBy'
-import { IRoleRepository } from '@business/repositories/role/iRoleRepository'
+import {
+  IInputUpdateRole,
+  IRoleRepository,
+} from '@business/repositories/role/iRoleRepository'
 import { IRoleEntity } from '@domain/entities/roleEntity'
 import { RoleModel } from '@framework/models/roles/roleModel'
 import { inject, injectable } from 'inversify'
@@ -14,6 +17,13 @@ export class RoleRepository implements IRoleRepository {
   ): Promise<void | IRoleEntity> {
     const role = await this.roleModel.findOne({ where: { [key]: value } })
 
-    return role
+    return role as unknown as IRoleEntity
+  }
+  async update(input: IInputUpdateRole): Promise<IRoleEntity | void> {
+    await this.roleModel.update(input.newData, {
+      where: { [input.updateWhere.type]: input.updateWhere.key },
+    })
+
+    return input.newData
   }
 }

@@ -1,11 +1,8 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@framework/utility/database'
 import { RoleModel } from '../roles/roleModel'
-import { IUserEntity } from '@domain/entities/userEntity'
 
 export class UserModel extends Model {}
-
-export interface UserModel extends IUserEntity {}
 
 UserModel.init(
   {

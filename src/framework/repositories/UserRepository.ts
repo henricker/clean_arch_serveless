@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
       role_id,
     })
 
-    return user
+    return user as unknown as IUserEntity
   }
   async findBy(
     type: UserEntityKeys,
