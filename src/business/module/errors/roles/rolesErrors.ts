@@ -38,4 +38,17 @@ export class RolesErrors extends IError {
 
     return roleError
   }
+
+  static roleFailedToCreate(): IError {
+    const roleError = new RolesErrors({
+      statusCode: 500,
+      body: {
+        code: 'RE-004',
+        message: 'Role could not be created',
+        shortMessage: 'roleNotCreated',
+      },
+    })
+
+    return roleError
+  }
 }

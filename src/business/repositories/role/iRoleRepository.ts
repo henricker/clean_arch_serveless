@@ -8,6 +8,7 @@ export interface IInputUpdateRole {
   newData: IRoleEntity
 }
 export interface IRoleRepository {
+  create(input: IRoleEntity): Promise<IRoleEntity>
   findBy(
     key: RoleEntityKeys,
     value: IRoleEntity[RoleEntityKeys]

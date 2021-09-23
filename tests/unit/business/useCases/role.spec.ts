@@ -13,11 +13,17 @@ import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepos
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
+import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
 
 describe('Roles use case', () => {
   const fakeRoleRepositoryFindBy = jest.spyOn(
     FakeRoleRepository.prototype,
     'findBy'
+  )
+
+  const fakeRoleRepositoryCreate = jest.spyOn(
+    FakeRoleRepository.prototype,
+    'create'
   )
 
   const fakeRoleRepositoryUpdate = jest.spyOn(
@@ -33,6 +39,7 @@ describe('Roles use case', () => {
   beforeAll(() => {
     container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
+    container.bind(CreateRoleUseCase).to(CreateRoleUseCase)
     container.bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
@@ -175,6 +182,39 @@ describe('Roles use case', () => {
 
       expect(userAuthorizerResult.isLeft()).toBeFalsy()
       expect(userAuthorizerResult.isRight()).toBeTruthy()
+    })
+  })
+
+  describe('Create use case', () => {
+    test('Should create role', async () => {
+      const operator = container.get(CreateRoleUseCase)
+
+      const newRoleEntity = await operator.exec(fakeRoleEntity)
+
+      expect(newRoleEntity.isLeft()).toBeFalsy()
+
+      if (newRoleEntity.isRight()) {
+        expect(newRoleEntity.value.profile).toBe(fakeRoleEntity.profile)
+      }
+    })
+
+    test('Should returns error if repository returns void', async () => {
+      const operator = container.get(CreateRoleUseCase)
+      fakeRoleRepositoryCreate.mockImplementationOnce(async () => {
+        throw new Error()
+      })
+      const newRoleEntity = await operator.exec(fakeRoleEntity)
+
+      expect(newRoleEntity.isRight()).toBeFalsy()
+
+      if (newRoleEntity.isLeft()) {
+        expect(newRoleEntity.value.statusCode).toBe(
+          RolesErrors.roleFailedToCreate().statusCode
+        )
+        expect(newRoleEntity.value.body).toStrictEqual(
+          RolesErrors.roleFailedToCreate().body
+        )
+      }
     })
   })
 

@@ -27,11 +27,16 @@ export class UpdateRoleOperator extends AbstractOperator<
     user_id: number
   ): Promise<OutputUpdateRoleDto> {
     await this.exec(input)
-    this.verifyProfileUseCase.exec({
+    const authUser = await this.verifyProfileUseCase.exec({
       authorizeBy: 'id',
       key: user_id,
       allowedProfiles: [],
     })
+
+    if (authUser.isLeft()) {
+      return left(authUser.value)
+    }
+
     const existentRole = await this.findRoleUseCase.exec({
       key: 'id',
       value: input.id,

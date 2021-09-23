@@ -1,4 +1,5 @@
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
+import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
@@ -8,6 +9,7 @@ import { UpdateRoleOperator } from '@controller/operations/roles/updateRole'
 import { InputUpdateRole } from '@controller/serializers/role/inputUpdateRole'
 import { container } from '@shared/ioc/container'
 import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
 
@@ -16,6 +18,10 @@ describe('Update role operator', () => {
     FakeRoleRepository.prototype,
     'findBy'
   )
+
+  const fakeUserRepositoryFindBy = jest
+    .spyOn(FakeUserRepository.prototype, 'findBy')
+    .mockImplementation(async () => fakeUserAdminEntity)
 
   const fakeRoleRepositoryUpdate = jest.spyOn(
     FakeRoleRepository.prototype,
@@ -54,6 +60,23 @@ describe('Update role operator', () => {
     }
 
     expect.assertions(2)
+  })
+
+  test('Should returns error if user not authenticate', async () => {
+    const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
+    const operator = container.get(UpdateRoleOperator)
+
+    fakeUserRepositoryFindBy.mockImplementationOnce(() => void 0)
+    const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
+
+    expect(role.isRight()).toBeFalsy()
+
+    if (role.isLeft()) {
+      expect(role.value.statusCode).toBe(UsersErrors.userNotFound().statusCode)
+      expect(role.value.body).toStrictEqual(UsersErrors.userNotFound().body)
+    }
+
+    expect.assertions(3)
   })
 
   test('Should returns error if role not found', async () => {

@@ -6,4 +6,4 @@ export interface IInputCreateRoleDto {
   profile: string
 }
 
-export type OutputCreateRoleDto = Either<IError, IRoleEntity>
+export type IOutputCreateRoleDto = Either<IError, IRoleEntity>
