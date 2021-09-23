@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path')
 const slsw = require('serverless-webpack')
 const nodeExternals = require('webpack-node-externals')
@@ -34,7 +35,7 @@ module.exports = {
   optimization: {
     concatenateModules: false,
   },
-  target: 'node',
+  target: 'node14.17',
   externals: [nodeExternals()],
   module: {
     rules: [
