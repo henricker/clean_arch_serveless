@@ -34,14 +34,18 @@ UserModel.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    forgot_password_token_expires_in: {
+    created_at: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   },
   {
     tableName: 'users',
-    timestamps: true,
+    timestamps: false,
     underscored: true,
     sequelize,
   }
