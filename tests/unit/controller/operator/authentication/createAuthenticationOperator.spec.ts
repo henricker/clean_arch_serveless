@@ -10,7 +10,7 @@ import { CreateAuthenticationOperator } from '@controller/operations/authenticat
 import { InputCreateAuthentication } from '@controller/serializers/authenticator/inputCreateAuthetication'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorServiceToken'
+import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorService'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 
 describe('Create authentication operator', () => {
