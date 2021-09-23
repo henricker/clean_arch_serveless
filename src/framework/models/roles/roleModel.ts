@@ -4,6 +4,7 @@ import { IRoleEntity } from '@domain/entities/roleEntity'
 
 export class RoleModel extends Model {}
 
+// eslint-disable-next-line
 export interface RoleModel extends IRoleEntity {}
 
 RoleModel.init(
