@@ -2,11 +2,12 @@ import type {
   IInputAuthenticateUseCase,
   IOutputAuthenticateUseCase,
 } from '@business/dto/authentication/authenticate'
+import { AuthenticationErrors } from '@business/module/errors/authentication/authenticationErrors'
 import {
   IAuthenticatorService,
   IAuthenticatorServiceToken,
 } from '@business/services/authenticator/iAuthenticator'
-import { right } from '@shared/either'
+import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
 import { IAbstractUseCase } from '../abstractUseCase'
 
@@ -23,8 +24,12 @@ export class CreateTokenUseCase
   async exec(
     input: IInputAuthenticateUseCase
   ): Promise<IOutputAuthenticateUseCase> {
-    const token = await this.authenticatorService.sing(input.payload)
+    try {
+      const token = await this.authenticatorService.sing(input.payload)
 
-    return right({ token })
+      return right({ token })
+    } catch (error) {
+      return left(AuthenticationErrors.tokenCreationError())
+    }
   }
 }
