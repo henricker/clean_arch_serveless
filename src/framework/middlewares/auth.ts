@@ -15,7 +15,7 @@ export const AuthMiddyMiddleware = (): middy.MiddlewareObject<
   IHandlerResult,
   Context
 > => ({
-  before: async ({ event }, next) => {
+  before: async ({ event }) => {
     const authHeader = event.headers.Authorization
 
     if (!authHeader) {
@@ -45,7 +45,5 @@ export const AuthMiddyMiddleware = (): middy.MiddlewareObject<
       value: tokenPayload,
       enumerable: true,
     })
-
-    next()
   },
 })
