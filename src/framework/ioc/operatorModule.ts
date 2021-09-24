@@ -1,4 +1,5 @@
 import { CreateAuthenticationOperator } from '@controller/operations/authentication/createAuthentication'
+import { CreateRoleOperator } from '@controller/operations/roles/createRole'
 import { UpdateRoleOperator } from '@controller/operations/roles/updateRole'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
 import { RecoverPasswordOperator } from '@controller/operations/user/recoverPassword'
@@ -10,5 +11,6 @@ export const operatorModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(CreateAuthenticationOperator).to(CreateAuthenticationOperator)
   bind(ShowUserOperator).to(ShowUserOperator)
   bind(RecoverPasswordOperator).to(RecoverPasswordOperator)
+  bind(CreateRoleOperator).to(CreateRoleOperator)
   bind(UpdateRoleOperator).to(UpdateRoleOperator)
 })

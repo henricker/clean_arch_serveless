@@ -7,6 +7,7 @@
     "prepare": "husky install",
     "test": "jest",
     "test:watch": "jest --watchAll --verbose",
+    "test:dev": "jest --watch --runInBand --no-cache --verbose",
     "test:staged": "jest --passWithNoTests --findRelatedTests --listTests",
     "sql": "sequelize-cli"
   },

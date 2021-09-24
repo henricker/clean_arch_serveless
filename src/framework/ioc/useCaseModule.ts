@@ -7,6 +7,7 @@ import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
 import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
 import { ContainerModule, interfaces } from 'inversify'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
+import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
 
 export const useCaseModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(CreateUserUseCase).to(CreateUserUseCase)
@@ -16,5 +17,6 @@ export const useCaseModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
   bind(SendMailUseCase).to(SendMailUseCase)
   bind(UpdateUserUseCase).to(UpdateUserUseCase)
+  bind(CreateRoleUseCase).to(CreateRoleUseCase)
   bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
 })

@@ -3,13 +3,23 @@ import {
   IInputUpdateRole,
   IRoleRepository,
 } from '@business/repositories/role/iRoleRepository'
-import { IRoleEntity } from '@domain/entities/roleEntity'
+import { InputCreateRoleEntity, IRoleEntity } from '@domain/entities/roleEntity'
 import { RoleModel } from '@framework/models/roles/roleModel'
 import { inject, injectable } from 'inversify'
 
 @injectable()
 export class RoleRepository implements IRoleRepository {
   constructor(@inject(RoleModel) private roleModel: typeof RoleModel) {}
+  async create(input: InputCreateRoleEntity): Promise<IRoleEntity> {
+    try {
+      const role = await this.roleModel.create(input)
+
+      return role.get({ plain: true })
+    } catch (error) {
+      console.error(error)
+      return void 0
+    }
+  }
 
   async findBy(
     key: RoleEntityKeys,
@@ -19,6 +29,7 @@ export class RoleRepository implements IRoleRepository {
 
     return role.get({ plain: true })
   }
+
   async update(input: IInputUpdateRole): Promise<IRoleEntity | void> {
     try {
       await this.roleModel.update(input.newData, {

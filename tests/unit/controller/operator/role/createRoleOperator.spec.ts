@@ -2,6 +2,7 @@ import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
+import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { CreateRoleOperator } from '@controller/operations/roles/createRole'
 import { InputCreateRole } from '@controller/serializers/role/inputCreateRole'
@@ -20,6 +21,7 @@ describe('CreateRoleOperator', () => {
     container.bind(CreateRoleOperator).to(CreateRoleOperator)
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
     container.bind(CreateRoleUseCase).to(CreateRoleUseCase)
+    container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
   })
@@ -44,7 +46,7 @@ describe('CreateRoleOperator', () => {
     expect(roleResult.isRight()).toBeTruthy()
   })
 
-  test('Should create a role', async () => {
+  test('Should returns error if auth user not found', async () => {
     const operator = container.get(CreateRoleOperator)
 
     const inputRole = new InputCreateRole({

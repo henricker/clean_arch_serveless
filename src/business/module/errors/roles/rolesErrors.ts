@@ -51,4 +51,17 @@ export class RolesErrors extends IError {
 
     return roleError
   }
+
+  static roleAlreadyExists(): IError {
+    const roleError = new RolesErrors({
+      statusCode: 400,
+      body: {
+        code: 'RE-005',
+        message: 'Role already exists',
+        shortMessage: 'roleAlreadyExists',
+      },
+    })
+
+    return roleError
+  }
 }

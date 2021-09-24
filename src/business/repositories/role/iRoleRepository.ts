@@ -1,5 +1,5 @@
 import { RoleEntityKeys } from '@business/dto/role/findBy'
-import { IRoleEntity } from '@domain/entities/roleEntity'
+import { InputCreateRoleEntity, IRoleEntity } from '@domain/entities/roleEntity'
 
 export const IRoleRepositoryToken = Symbol.for('IRoleRepositoryToken')
 
@@ -8,7 +8,7 @@ export interface IInputUpdateRole {
   newData: IRoleEntity
 }
 export interface IRoleRepository {
-  create(input: IRoleEntity): Promise<IRoleEntity>
+  create(input: InputCreateRoleEntity): Promise<IRoleEntity>
   findBy(
     key: RoleEntityKeys,
     value: IRoleEntity[RoleEntityKeys]
