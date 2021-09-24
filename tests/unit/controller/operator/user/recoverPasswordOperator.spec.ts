@@ -1,6 +1,10 @@
 import { container } from '@shared/ioc/container'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+  fakeUserRepositoryUpdate,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
 import { IMailServiceToken } from '@business/services/mail/iMail'
@@ -16,14 +20,6 @@ import { ITimeServiceToken } from '@business/services/time/iTime'
 import { FakeTimeService } from '@tests/mock/fakes/services/fakeTimeService'
 
 describe('Recover password operator', () => {
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-  const fakeUserRepositoryUpdate = jest.spyOn(
-    FakeUserRepository.prototype,
-    'update'
-  )
   const fakeMailServiceSend = jest.spyOn(FakeMailService.prototype, 'send')
 
   const usetNotFoundError = UsersErrors.userNotFound()

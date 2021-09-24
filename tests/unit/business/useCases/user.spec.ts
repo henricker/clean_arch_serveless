@@ -2,14 +2,19 @@
 import { container } from '@shared/ioc/container'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { IHasherServiceToken } from '@business/services/hasher/iHasher'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
-import { IInputCreateUserDto } from '@business/dto/user/create'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
-import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
+import {
+  fakeNewUser,
+  fakeUserEntity,
+} from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
 import { IMailServiceToken } from '@business/services/mail/iMail'
@@ -17,18 +22,6 @@ import { FakeMailService } from '@tests/mock/fakes/services/fakeMailService'
 import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
 
 describe('User use cases', () => {
-  const fakeNewUser: IInputCreateUserDto = {
-    email: 'fake@email',
-    full_name: 'fake full name',
-    password: 'fake_password',
-    role_id: 0,
-  }
-
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-
   jest.spyOn(console, 'error').mockImplementation(() => ({}))
 
   const createUserError = UsersErrors.entityCreationError()

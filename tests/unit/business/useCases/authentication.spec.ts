@@ -1,14 +1,12 @@
 import { IAuthenticatorServiceToken } from '@business/services/authenticator/iAuthenticator'
 import { CreateTokenUseCase } from '@business/useCases/authentication/createToken'
 import { container } from '@shared/ioc/container'
-import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorService'
+import {
+  FakeAuthenticatorService,
+  fakeAuthenticatorServiceSign,
+} from '@tests/mock/fakes/services/fakeAuthenticatorService'
 
 describe('Authentication use case', () => {
-  const fakeAuthenticatorServiceSign = jest.spyOn(
-    FakeAuthenticatorService.prototype,
-    'sing'
-  )
-
   beforeAll(() => {
     container.bind(CreateTokenUseCase).to(CreateTokenUseCase)
     container.bind(IAuthenticatorServiceToken).to(FakeAuthenticatorService)

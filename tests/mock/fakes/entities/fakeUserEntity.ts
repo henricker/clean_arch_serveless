@@ -1,9 +1,17 @@
+import { IInputCreateUserDto } from '@business/dto/user/create'
 import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
 
 export const fakeCreatedUserEntity: InputUserEntity = {
   full_name: 'João Pedro',
   email: 'pedrobarros2010@gmail.com',
   password: 'fake_password',
+}
+
+export const fakeNewUser: IInputCreateUserDto = {
+  email: 'fake@email',
+  full_name: 'fake full name',
+  password: 'fake_password',
+  role_id: 0,
 }
 
 export const fakeUserEntity: Required<IUserEntity> = {

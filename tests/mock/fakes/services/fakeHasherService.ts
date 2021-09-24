@@ -11,3 +11,8 @@ export class FakeHasherService implements IHasherService {
     return s
   }
 }
+
+export const fakeHasherServiceCompare = jest.spyOn(
+  FakeHasherService.prototype,
+  'compare'
+)

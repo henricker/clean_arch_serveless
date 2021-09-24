@@ -34,3 +34,13 @@ export const fakeUserRepositoryFindBy = jest.spyOn(
   FakeUserRepository.prototype,
   'findBy'
 )
+
+export const fakeUserRepositoryCreate = jest.spyOn(
+  FakeUserRepository.prototype,
+  'create'
+)
+
+export const fakeUserRepositoryUpdate = jest.spyOn(
+  FakeUserRepository.prototype,
+  'update'
+)

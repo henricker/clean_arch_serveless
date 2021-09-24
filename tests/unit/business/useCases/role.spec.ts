@@ -11,35 +11,21 @@ import {
 } from '@tests/mock/fakes/entities/fakeUserEntity'
 import {
   FakeRoleRepository,
+  fakeRoleRepositoryCreate,
   fakeRoleRepositoryDelete,
+  fakeRoleRepositoryFindBy,
+  fakeRoleRepositoryUpdate,
 } from '@tests/mock/fakes/repositories/fakeRoleRepository'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
 import { DeleteRoleUseCase } from '@business/useCases/role/deleteRoleUseCase'
 
 describe('Roles use case', () => {
-  const fakeRoleRepositoryFindBy = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'findBy'
-  )
-
-  const fakeRoleRepositoryCreate = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'create'
-  )
-
-  const fakeRoleRepositoryUpdate = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'update'
-  )
-
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-
   beforeAll(() => {
     container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)

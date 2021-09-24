@@ -9,24 +9,20 @@ import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { CreateAuthenticationOperator } from '@controller/operations/authentication/createAuthentication'
 import { InputCreateAuthentication } from '@controller/serializers/authenticator/inputCreateAuthetication'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { FakeAuthenticatorService } from '@tests/mock/fakes/services/fakeAuthenticatorService'
-import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeAuthenticatorService,
+  fakeAuthenticatorServiceSign,
+} from '@tests/mock/fakes/services/fakeAuthenticatorService'
+import {
+  FakeHasherService,
+  fakeHasherServiceCompare,
+} from '@tests/mock/fakes/services/fakeHasherService'
 
 describe('Create authentication operator', () => {
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-  const fakeHasherServiceCompare = jest.spyOn(
-    FakeHasherService.prototype,
-    'compare'
-  )
-  const fakeAuthenticatorServiceSing = jest.spyOn(
-    FakeAuthenticatorService.prototype,
-    'sing'
-  )
-
   const userNotFoundError = UsersErrors.userNotFound()
   const authenticationInvalidCredentialsError =
     AuthenticationErrors.invalidCredentials()
@@ -121,7 +117,7 @@ describe('Create authentication operator', () => {
 
     fakeUserRepositoryFindBy.mockImplementation(async () => fakeUserEntity)
     fakeHasherServiceCompare.mockImplementation(async () => true)
-    fakeAuthenticatorServiceSing.mockImplementation(async () => {
+    fakeAuthenticatorServiceSign.mockImplementation(async () => {
       throw new Error()
     })
 

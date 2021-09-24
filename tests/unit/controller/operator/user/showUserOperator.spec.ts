@@ -2,7 +2,10 @@ import { container } from '@shared/ioc/container'
 import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { InputShowUser } from '@controller/serializers/user/inputShowUser'
 import {
   fakeUserAdminEntity,
@@ -14,11 +17,6 @@ import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 
 describe('Show user operator', () => {
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-
   const roleNotAllowedError = RolesErrors.roleNotAllowed()
   const userNotFoundError = UsersErrors.userNotFound()
 

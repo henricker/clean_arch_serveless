@@ -25,7 +25,7 @@ export class CreateTokenUseCase
     input: IInputAuthenticateUseCase
   ): Promise<IOutputAuthenticateUseCase> {
     try {
-      const token = await this.authenticatorService.sing(input.payload)
+      const token = await this.authenticatorService.sign(input.payload)
 
       return right({ token })
     } catch (error) {

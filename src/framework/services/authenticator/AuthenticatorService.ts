@@ -15,7 +15,7 @@ if (!secret) {
 
 @injectable()
 export class AuthenticatorService implements IAuthenticatorService {
-  async sing(payload: { [k: string]: string | number }): Promise<string> {
+  async sign(payload: { [k: string]: string | number }): Promise<string> {
     const token = JWT.sign(payload, secret, {
       expiresIn: '1d',
       algorithm: 'HS256',

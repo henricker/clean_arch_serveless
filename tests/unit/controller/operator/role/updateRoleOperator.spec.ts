@@ -10,24 +10,17 @@ import { InputUpdateRole } from '@controller/serializers/role/inputUpdateRole'
 import { container } from '@shared/ioc/container'
 import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeRoleRepository,
+  fakeRoleRepositoryFindBy,
+  fakeRoleRepositoryUpdate,
+} from '@tests/mock/fakes/repositories/fakeRoleRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 
 describe('Update role operator', () => {
-  const fakeRoleRepositoryFindBy = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'findBy'
-  )
-
-  const fakeUserRepositoryFindBy = jest
-    .spyOn(FakeUserRepository.prototype, 'findBy')
-    .mockImplementation(async () => fakeUserAdminEntity)
-
-  const fakeRoleRepositoryUpdate = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'update'
-  )
-
   beforeAll(() => {
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
@@ -44,7 +37,9 @@ describe('Update role operator', () => {
   test('Should update a role', async () => {
     const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
     const operator = container.get(UpdateRoleOperator)
-
+    fakeUserRepositoryFindBy.mockImplementationOnce(
+      async () => fakeUserAdminEntity
+    )
     fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
     fakeRoleRepositoryUpdate.mockImplementationOnce(async () => ({
       ...fakeRoleEntity,
@@ -82,7 +77,9 @@ describe('Update role operator', () => {
   test('Should returns error if role not found', async () => {
     const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
     const operator = container.get(UpdateRoleOperator)
-
+    fakeUserRepositoryFindBy.mockImplementationOnce(
+      async () => fakeUserAdminEntity
+    )
     const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
 
     expect(role.isRight()).toBeFalsy()
@@ -98,7 +95,9 @@ describe('Update role operator', () => {
   test('Should returns error if role not found', async () => {
     const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
     const operator = container.get(UpdateRoleOperator)
-
+    fakeUserRepositoryFindBy.mockImplementationOnce(
+      async () => fakeUserAdminEntity
+    )
     fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
     fakeRoleRepositoryUpdate.mockImplementationOnce(() => {
       throw new Error()

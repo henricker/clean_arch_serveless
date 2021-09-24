@@ -35,6 +35,16 @@ export const fakeRoleRepositoryFindBy = jest.spyOn(
   'findBy'
 )
 
+export const fakeRoleRepositoryCreate = jest.spyOn(
+  FakeRoleRepository.prototype,
+  'create'
+)
+
+export const fakeRoleRepositoryUpdate = jest.spyOn(
+  FakeRoleRepository.prototype,
+  'update'
+)
+
 export const fakeRoleRepositoryDelete = jest.spyOn(
   FakeRoleRepository.prototype,
   'delete'

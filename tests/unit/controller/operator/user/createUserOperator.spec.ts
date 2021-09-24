@@ -4,33 +4,27 @@ import { IHasherServiceToken } from '@business/services/hasher/iHasher'
 import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryCreate,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
 import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
 import { CreateUserOperator } from '@controller/operations/user/createUser'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
-import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
+import {
+  FakeRoleRepository,
+  fakeRoleRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { IError } from '@shared/IError'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 
 describe('Create user operator', () => {
-  const fakeUserRepositoryCreate = jest.spyOn(
-    FakeUserRepository.prototype,
-    'create'
-  )
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-  const fakeRoleRepositoryFindBy = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'findBy'
-  )
-
   const userEmailAlreadyInUseError = UsersErrors.userEmailAlreadyInUse()
   const roleNotFoundError = RolesErrors.roleNotFound()
   const userEntityCreationError = UsersErrors.entityCreationError()

@@ -10,20 +10,16 @@ import { InputCreateRole } from '@controller/serializers/role/inputCreateRole'
 import { container } from '@shared/ioc/container'
 import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
-import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
+import {
+  FakeRoleRepository,
+  fakeRoleRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeRoleRepository'
+import {
+  FakeUserRepository,
+  fakeUserRepositoryFindBy,
+} from '@tests/mock/fakes/repositories/fakeUserRepository'
 
 describe('CreateRoleOperator', () => {
-  const fakeUserRepositoryFindBy = jest.spyOn(
-    FakeUserRepository.prototype,
-    'findBy'
-  )
-
-  const fakeRoleRepositoryFindBy = jest.spyOn(
-    FakeRoleRepository.prototype,
-    'findBy'
-  )
-
   beforeAll(() => {
     container.bind(CreateRoleOperator).to(CreateRoleOperator)
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
