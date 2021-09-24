@@ -22,6 +22,8 @@ plugins:
   - serverless-webpack
   - serverless-offline
 
+# For more legible yml, try to spread the routes in different files
+# https://www.serverless.com/framework/docs/providers/aws/guide/variables#reference-properties-in-other-files
 functions:
   createUser:
     handler: ${self:custom.functionsDir}/users/create.handler
