@@ -8,6 +8,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll --verbose",
     "test:dev": "jest --watch --runInBand --no-cache --verbose",
+    "test:cov": "jest --no-cache --coverage",
     "test:staged": "jest --passWithNoTests --findRelatedTests --listTests",
     "sql": "sequelize-cli"
   },

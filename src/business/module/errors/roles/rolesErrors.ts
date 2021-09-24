@@ -64,4 +64,17 @@ export class RolesErrors extends IError {
 
     return roleError
   }
+
+  static roleFailedToDelete(): IError {
+    const roleError = new RolesErrors({
+      statusCode: 500,
+      body: {
+        code: 'RE-006',
+        message: 'Role could not be deleted',
+        shortMessage: 'roleNotDeleted',
+      },
+    })
+
+    return roleError
+  }
 }

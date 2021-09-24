@@ -29,3 +29,8 @@ export class FakeUserRepository implements IUserRepository {
     return void 0
   }
 }
+
+export const fakeUserRepositoryFindBy = jest.spyOn(
+  FakeUserRepository.prototype,
+  'findBy'
+)

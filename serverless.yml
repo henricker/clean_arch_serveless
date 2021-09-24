@@ -65,4 +65,11 @@ functions:
           path: /roles/{id}
           method: put
           cors: true
+  deleteRole:
+    handler: ${self:custom.functionsDir}/roles/delete.handler
+    events:
+      - http:
+          path: /roles/{id}
+          method: delete
+          cors: true
   

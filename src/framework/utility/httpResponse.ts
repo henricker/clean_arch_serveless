@@ -5,6 +5,9 @@ const types = {
   created: {
     statusCode: 201,
   },
+  noContent: {
+    statusCode: 204,
+  },
   badRequest: {
     statusCode: 400,
   },

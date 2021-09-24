@@ -7,6 +7,11 @@ export interface IInputUpdateRole {
   updateWhere: { type: RoleEntityKeys; key: string | number }
   newData: IRoleEntity
 }
+
+export interface IInputDeleteRole {
+  key: RoleEntityKeys
+  value: string | number
+}
 export interface IRoleRepository {
   create(input: InputCreateRoleEntity): Promise<IRoleEntity>
   findBy(
@@ -14,4 +19,5 @@ export interface IRoleRepository {
     value: IRoleEntity[RoleEntityKeys]
   ): Promise<void | IRoleEntity>
   update(input: IInputUpdateRole): Promise<IRoleEntity | void>
+  delete(input: IInputDeleteRole): Promise<IRoleEntity | void>
 }

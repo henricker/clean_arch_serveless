@@ -9,11 +9,15 @@ import {
   fakeCreatedUserEntity,
   fakeUserEntity,
 } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
+import {
+  FakeRoleRepository,
+  fakeRoleRepositoryDelete,
+} from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
+import { DeleteRoleUseCase } from '@business/useCases/role/deleteRoleUseCase'
 
 describe('Roles use case', () => {
   const fakeRoleRepositoryFindBy = jest.spyOn(
@@ -41,6 +45,7 @@ describe('Roles use case', () => {
     container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
     container.bind(CreateRoleUseCase).to(CreateRoleUseCase)
     container.bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
+    container.bind(DeleteRoleUseCase).to(DeleteRoleUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
   })
@@ -239,7 +244,7 @@ describe('Roles use case', () => {
       expect.assertions(2)
     })
 
-    test('Should throws not found error if repo returns void', async () => {
+    test('Should throws not found error if repo return void', async () => {
       const operator = container.get(UpdateRoleUseCase)
       const updatedRole = await operator.exec(fakeRoleEntity)
 
@@ -274,6 +279,48 @@ describe('Roles use case', () => {
         )
         expect(updatedRole.value.body).toStrictEqual(
           RolesErrors.roleFailedToUpdate().body
+        )
+      }
+
+      expect.assertions(3)
+    })
+  })
+
+  describe('Delete role use case', () => {
+    test('Should delete a role', async () => {
+      const operator = container.get(DeleteRoleUseCase)
+      fakeRoleRepositoryDelete.mockImplementationOnce(
+        async () => fakeRoleEntity
+      )
+
+      const deletedRole = await operator.exec({
+        key: 'id',
+        value: fakeRoleEntity.id,
+      })
+
+      expect(deletedRole.isLeft()).toBeFalsy()
+      if (deletedRole.isRight()) {
+        expect(deletedRole.value).toStrictEqual(fakeRoleEntity)
+      }
+
+      expect.assertions(2)
+    })
+
+    test('Should returns error if repository return void', async () => {
+      const operator = container.get(DeleteRoleUseCase)
+
+      const deletedRole = await operator.exec({
+        key: 'id',
+        value: fakeRoleEntity.id,
+      })
+
+      expect(deletedRole.isRight()).toBeFalsy()
+      if (deletedRole.isLeft()) {
+        expect(deletedRole.value.statusCode).toBe(
+          RolesErrors.roleFailedToDelete().statusCode
+        )
+        expect(deletedRole.value.body).toStrictEqual(
+          RolesErrors.roleFailedToDelete().body
         )
       }
 

@@ -1,5 +1,6 @@
 import { RoleEntityKeys } from '@business/dto/role/findBy'
 import {
+  IInputDeleteRole,
   IInputUpdateRole,
   IRoleRepository,
 } from '@business/repositories/role/iRoleRepository'
@@ -41,6 +42,22 @@ export class RoleRepository implements IRoleRepository {
       })
 
       return input.newData
+    } catch (error) {
+      console.error(error)
+      return void 0
+    }
+  }
+
+  async delete(input: IInputDeleteRole): Promise<IRoleEntity | void> {
+    try {
+      console.log(input.key)
+      const role = await this.roleModel.findOne({
+        where: { [input.key]: input.value },
+      })
+
+      await role.destroy()
+
+      return role
     } catch (error) {
       console.error(error)
       return void 0

@@ -14,7 +14,7 @@ export class UpdateRoleOperator extends AbstractOperator<
   OutputUpdateRoleDto
 > {
   constructor(
-    @inject(FindRoleByUseCase) private findRoleUseCase: FindRoleByUseCase,
+    @inject(FindRoleByUseCase) private findRoleByUseCase: FindRoleByUseCase,
     @inject(UpdateRoleUseCase) private updateRoleUseCase: UpdateRoleUseCase,
     @inject(VerifyProfileUseCase)
     private verifyProfileUseCase: VerifyProfileUseCase
@@ -37,7 +37,7 @@ export class UpdateRoleOperator extends AbstractOperator<
       return left(authUser.value)
     }
 
-    const existentRole = await this.findRoleUseCase.exec({
+    const existentRole = await this.findRoleByUseCase.exec({
       key: 'id',
       value: input.id,
     })
