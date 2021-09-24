@@ -53,3 +53,4 @@ functions:
           path: /users/forgot-password
           method: post
           cors: true
+  createAdress: ${file(./src/framework/functions/adresses/adresses.yml):createAdress}

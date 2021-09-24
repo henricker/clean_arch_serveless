@@ -1,0 +1,7 @@
+createAdress:
+  handler: ${self:custom.functionsDir}/adresses/create.handler
+  events:
+    - http:
+        path: /adresses
+        method: post
+        cors: true
