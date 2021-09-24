@@ -1,3 +1,4 @@
+import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
 import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
@@ -7,6 +8,7 @@ import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCa
 import { CreateRoleOperator } from '@controller/operations/roles/createRole'
 import { InputCreateRole } from '@controller/serializers/role/inputCreateRole'
 import { container } from '@shared/ioc/container'
+import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { FakeRoleRepository } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
@@ -14,6 +16,11 @@ import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepos
 describe('CreateRoleOperator', () => {
   const fakeUserRepositoryFindBy = jest.spyOn(
     FakeUserRepository.prototype,
+    'findBy'
+  )
+
+  const fakeRoleRepositoryFindBy = jest.spyOn(
+    FakeRoleRepository.prototype,
     'findBy'
   )
 
@@ -63,6 +70,34 @@ describe('CreateRoleOperator', () => {
       )
       expect(roleResult.value.body).toStrictEqual(
         UsersErrors.userNotFound().body
+      )
+    }
+
+    expect.assertions(3)
+  })
+
+  test('Should returns error if auth user not found', async () => {
+    const operator = container.get(CreateRoleOperator)
+
+    fakeUserRepositoryFindBy.mockImplementationOnce(
+      async () => fakeUserAdminEntity
+    )
+    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+
+    const inputRole = new InputCreateRole({
+      profile: 'newProfile',
+    })
+
+    const roleResult = await operator.run(inputRole, 1)
+
+    expect(roleResult.isRight()).toBeFalsy()
+
+    if (roleResult.isLeft()) {
+      expect(roleResult.value.statusCode).toBe(
+        RolesErrors.roleAlreadyExists().statusCode
+      )
+      expect(roleResult.value.body).toStrictEqual(
+        RolesErrors.roleAlreadyExists().body
       )
     }
 

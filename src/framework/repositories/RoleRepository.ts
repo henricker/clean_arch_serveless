@@ -25,9 +25,13 @@ export class RoleRepository implements IRoleRepository {
     key: RoleEntityKeys,
     value: IRoleEntity[RoleEntityKeys]
   ): Promise<void | IRoleEntity> {
-    const role = await this.roleModel.findOne({ where: { [key]: value } })
+    try {
+      const role = await this.roleModel.findOne({ where: { [key]: value } })
 
-    return role.get({ plain: true })
+      return role.get({ plain: true })
+    } catch (error) {
+      return void 0
+    }
   }
 
   async update(input: IInputUpdateRole): Promise<IRoleEntity | void> {
