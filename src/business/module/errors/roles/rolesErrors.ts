@@ -77,4 +77,17 @@ export class RolesErrors extends IError {
 
     return roleError
   }
+
+  static rolesFailedToLoad(): IError {
+    const roleError = new RolesErrors({
+      statusCode: 500,
+      body: {
+        code: 'RE-007',
+        message: 'Roles could not be load',
+        shortMessage: 'rolesNotLoaded',
+      },
+    })
+
+    return roleError
+  }
 }

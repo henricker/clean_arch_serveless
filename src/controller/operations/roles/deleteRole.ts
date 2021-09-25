@@ -24,12 +24,12 @@ export class DeleteRoleOperator extends AbstractOperator<
 
   async run(
     input: InputDeleteRole,
-    user_id: number
+    userId: number
   ): Promise<IOutputDeleteRoleDto> {
     await this.exec(input)
     const authUser = await this.verifyProfileUseCase.exec({
       authorizeBy: 'id',
-      key: user_id,
+      key: userId,
       allowedProfiles: [],
     })
     if (authUser.isLeft()) {

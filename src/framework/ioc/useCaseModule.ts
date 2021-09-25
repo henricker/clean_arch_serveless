@@ -9,6 +9,7 @@ import { ContainerModule, interfaces } from 'inversify'
 import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
 import { DeleteRoleUseCase } from '@business/useCases/role/deleteRoleUseCase'
+import { FindAllRolesUseCase } from '@business/useCases/role/findAllRolesUseCase'
 
 export const useCaseModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(CreateUserUseCase).to(CreateUserUseCase)
@@ -21,4 +22,5 @@ export const useCaseModule = new ContainerModule((bind: interfaces.Bind) => {
   bind(CreateRoleUseCase).to(CreateRoleUseCase)
   bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
   bind(DeleteRoleUseCase).to(DeleteRoleUseCase)
+  bind(FindAllRolesUseCase).to(FindAllRolesUseCase)
 })

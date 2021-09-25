@@ -1,6 +1,8 @@
+import { IFindAllPaginated } from '@business/dto/role/findAll'
 import { RoleEntityKeys } from '@business/dto/role/findBy'
 import {
   IInputDeleteRole,
+  IInputFindAllRole,
   IInputUpdateRole,
   IRoleRepository,
 } from '@business/repositories/role/iRoleRepository'
@@ -28,6 +30,10 @@ export class FakeRoleRepository implements IRoleRepository {
   async delete(_input: IInputDeleteRole): Promise<IRoleEntity | void> {
     return void 0
   }
+
+  async findAll(_input: IInputFindAllRole): Promise<IFindAllPaginated | void> {
+    return void 0
+  }
 }
 
 export const fakeRoleRepositoryFindBy = jest.spyOn(
@@ -48,4 +54,9 @@ export const fakeRoleRepositoryUpdate = jest.spyOn(
 export const fakeRoleRepositoryDelete = jest.spyOn(
   FakeRoleRepository.prototype,
   'delete'
+)
+
+export const fakeRoleRepositoryFindAll = jest.spyOn(
+  FakeRoleRepository.prototype,
+  'findAll'
 )

@@ -1,10 +1,16 @@
 import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
+import {
+  IInputFindAllRole,
+  IRoleRepositoryToken,
+} from '@business/repositories/role/iRoleRepository'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
 import { container } from '@shared/ioc/container'
-import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import {
+  fakeRoleEntity,
+  fakeRolesList,
+} from '@tests/mock/fakes/entities/fakeRoleEntity'
 import {
   fakeCreatedUserEntity,
   fakeUserEntity,
@@ -13,6 +19,7 @@ import {
   FakeRoleRepository,
   fakeRoleRepositoryCreate,
   fakeRoleRepositoryDelete,
+  fakeRoleRepositoryFindAll,
   fakeRoleRepositoryFindBy,
   fakeRoleRepositoryUpdate,
 } from '@tests/mock/fakes/repositories/fakeRoleRepository'
@@ -24,14 +31,16 @@ import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
 import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
 import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
 import { DeleteRoleUseCase } from '@business/useCases/role/deleteRoleUseCase'
+import { FindAllRolesUseCase } from '@business/useCases/role/findAllRolesUseCase'
 
 describe('Roles use case', () => {
   beforeAll(() => {
     container.bind(FindRoleByUseCase).to(FindRoleByUseCase)
-    container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
     container.bind(CreateRoleUseCase).to(CreateRoleUseCase)
     container.bind(UpdateRoleUseCase).to(UpdateRoleUseCase)
     container.bind(DeleteRoleUseCase).to(DeleteRoleUseCase)
+    container.bind(FindAllRolesUseCase).to(FindAllRolesUseCase)
+    container.bind(VerifyProfileUseCase).to(VerifyProfileUseCase)
     container.bind(IUserRepositoryToken).to(FakeUserRepository)
     container.bind(IRoleRepositoryToken).to(FakeRoleRepository)
   })
@@ -310,6 +319,43 @@ describe('Roles use case', () => {
         )
       }
 
+      expect.assertions(3)
+    })
+  })
+
+  describe('Find all roles use case', () => {
+    const fakePaginate: IInputFindAllRole = { page: 1, limit: 10 }
+
+    test('Should returns all roles', async () => {
+      const useCase = container.get(FindAllRolesUseCase)
+      fakeRoleRepositoryFindAll.mockImplementationOnce(async () => ({
+        count: 4,
+        page: 1,
+        roles: fakeRolesList,
+      }))
+      const rolesFound = await useCase.exec(fakePaginate)
+
+      expect(rolesFound.isLeft()).toBeFalsy()
+      if (rolesFound.isRight()) {
+        expect(rolesFound.value.roles.length).toBe(4)
+      }
+      expect.assertions(2)
+    })
+
+    test('Should returns error if repository return void', async () => {
+      const useCase = container.get(FindAllRolesUseCase)
+
+      const rolesFound = await useCase.exec(fakePaginate)
+
+      expect(rolesFound.isRight()).toBeFalsy()
+      if (rolesFound.isLeft()) {
+        expect(rolesFound.value.statusCode).toBe(
+          RolesErrors.rolesFailedToLoad().statusCode
+        )
+        expect(rolesFound.value.body).toStrictEqual(
+          RolesErrors.rolesFailedToLoad().body
+        )
+      }
       expect.assertions(3)
     })
   })

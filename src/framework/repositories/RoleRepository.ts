@@ -1,6 +1,8 @@
+import { IFindAllPaginated } from '@business/dto/role/findAll'
 import { RoleEntityKeys } from '@business/dto/role/findBy'
 import {
   IInputDeleteRole,
+  IInputFindAllRole,
   IInputUpdateRole,
   IRoleRepository,
 } from '@business/repositories/role/iRoleRepository'
@@ -50,7 +52,6 @@ export class RoleRepository implements IRoleRepository {
 
   async delete(input: IInputDeleteRole): Promise<IRoleEntity | void> {
     try {
-      console.log(input.key)
       const role = await this.roleModel.findOne({
         where: { [input.key]: input.value },
       })
@@ -58,6 +59,23 @@ export class RoleRepository implements IRoleRepository {
       await role.destroy()
 
       return role
+    } catch (error) {
+      console.error(error)
+      return void 0
+    }
+  }
+
+  async findAll(input: IInputFindAllRole): Promise<IFindAllPaginated | void> {
+    try {
+      const rolesResult = await this.roleModel.findAndCountAll({
+        limit: input.limit,
+        offset: (input.page - 1) * input.limit,
+      })
+      return {
+        count: rolesResult.count,
+        page: input.page,
+        roles: rolesResult.rows,
+      }
     } catch (error) {
       console.error(error)
       return void 0

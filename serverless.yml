@@ -74,4 +74,10 @@ functions:
           path: /roles/{id}
           method: delete
           cors: true
-  
+  findAllRoles:
+    handler: ${self:custom.functionsDir}/roles/findAll.handler
+    events:
+      - http: 
+          path: /roles
+          method: get
+          cors: true
