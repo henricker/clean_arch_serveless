@@ -178,8 +178,8 @@ describe('User use cases', () => {
       const updateRepository = container.get(UpdateUserUseCase)
       mockUserUpdate.mockImplementationOnce(async () => fakeUserEntity)
       const userUpdated = await updateRepository.exec(fakeUserEntity, {
-        type: 'id',
-        key: '',
+        column: 'id',
+        value: '',
       })
       expect(userUpdated.isLeft()).toBeFalsy()
 
@@ -193,8 +193,8 @@ describe('User use cases', () => {
     test('Should throws user not found error if repository.update returns void', async () => {
       const updateRepository = container.get(UpdateUserUseCase)
       const userUpdated = await updateRepository.exec(fakeUserEntity, {
-        type: 'id',
-        key: '',
+        column: 'id',
+        value: '',
       })
       expect(userUpdated.isRight()).toBeFalsy()
 
@@ -218,8 +218,8 @@ describe('User use cases', () => {
       })
 
       const userUpdated = await updateRepository.exec(fakeUserEntity, {
-        type: 'id',
-        key: '',
+        column: 'id',
+        value: '',
       })
       expect(userUpdated.isRight()).toBeFalsy()
 
@@ -246,8 +246,8 @@ describe('User use cases', () => {
       const userUpdated = await updateRepository.exec(
         { ...fakeUserEntity, password: undefined },
         {
-          type: 'id',
-          key: '',
+          column: 'id',
+          value: '',
         }
       )
       expect(userUpdated.isLeft()).toBeFalsy()
@@ -265,8 +265,8 @@ describe('User use cases', () => {
       const userUpdated = await updateRepository.exec(
         { ...fakeUserEntity, password: 'newPassword' },
         {
-          type: 'id',
-          key: '',
+          column: 'id',
+          value: '',
         }
       )
       expect(userUpdated.isLeft()).toBeFalsy()

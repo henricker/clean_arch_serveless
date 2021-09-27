@@ -57,7 +57,10 @@ describe('Roles use case', () => {
         async () => fakeCreatedRoleEntity
       )
 
-      const roleResult = await operator.exec({ key: 'profile', value: 'admin' })
+      const roleResult = await operator.exec({
+        column: 'profile',
+        value: 'admin',
+      })
 
       expect(roleResult.isLeft()).toBeFalsy()
       expect(roleResult.isRight()).toBeTruthy()
@@ -69,7 +72,7 @@ describe('Roles use case', () => {
       fakeRoleRepositoryFindBy.mockImplementation(() => void 0)
 
       const roleResult = await operator.exec({
-        key: 'profile',
+        column: 'profile',
         value: 'intern',
       })
 
@@ -228,7 +231,10 @@ describe('Roles use case', () => {
         async (input) => input.newData
       )
 
-      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity, {
+        column: 'id',
+        value: fakeCreatedRoleEntity.id,
+      })
 
       expect(updatedRole.isLeft()).toBeFalsy()
 
@@ -243,7 +249,10 @@ describe('Roles use case', () => {
 
     test('Should throws not found error if repo return void', async () => {
       const operator = container.get(UpdateRoleUseCase)
-      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity, {
+        column: 'id',
+        value: fakeCreatedRoleEntity.id,
+      })
 
       expect(updatedRole.isRight()).toBeFalsy()
 
@@ -266,7 +275,10 @@ describe('Roles use case', () => {
         throw new Error()
       })
 
-      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity, {
+        column: 'id',
+        value: fakeCreatedRoleEntity.id,
+      })
 
       expect(updatedRole.isRight()).toBeFalsy()
 
