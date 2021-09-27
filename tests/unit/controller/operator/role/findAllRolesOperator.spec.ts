@@ -5,6 +5,7 @@ import { IUserRepositoryToken } from '@business/repositories/user/iUserRepositor
 import { FindAllRolesUseCase } from '@business/useCases/role/findAllRolesUseCase'
 import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
 import { FindAllRolesOperator } from '@controller/operations/roles/findAllRoles'
+import { InputFindAllRole } from '@controller/serializers/role/inputFindAllRole'
 import { container } from '@shared/ioc/container'
 import { fakeRolesList } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
@@ -40,7 +41,10 @@ describe('Find all roles operator', () => {
       page: 1,
       roles: fakeRolesList,
     }))
-    const roles = await operator.run(void 0, fakeUserAdminEntity.id)
+    const fakePaginate = { limit: 10, page: 1 }
+    const inputFindAllRole = new InputFindAllRole(fakePaginate)
+
+    const roles = await operator.run(inputFindAllRole, fakeUserAdminEntity.id)
 
     expect(roles.isLeft()).toBeFalsy()
 
