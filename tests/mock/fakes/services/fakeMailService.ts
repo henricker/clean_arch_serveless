@@ -1,6 +1,6 @@
-import { IMailService } from '@business/services/mail/iMail'
+import { IMailService } from '@root/src/2-business/services/mail/iMail'
 import { injectable } from 'inversify'
-import { IInputSendMailDto } from '@business/dto/user/sendMail'
+import { IInputSendMailDto } from '@root/src/2-business/dto/user/sendMail'
 
 @injectable()
 export class FakeMailService implements IMailService {

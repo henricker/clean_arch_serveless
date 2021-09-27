@@ -1,5 +1,5 @@
-import { IAuthenticatorServiceToken } from '@business/services/authenticator/iAuthenticator'
-import { CreateTokenUseCase } from '@business/useCases/authentication/createToken'
+import { IAuthenticatorServiceToken } from '@root/src/2-business/services/authenticator/iAuthenticator'
+import { CreateTokenUseCase } from '@root/src/2-business/useCases/authentication/createToken'
 import { container } from '@shared/ioc/container'
 import {
   FakeAuthenticatorService,
@@ -31,8 +31,11 @@ describe('Authentication use case', () => {
 
       const tokenResult = await operator.exec({ payload: { working: true } })
 
-      expect(tokenResult.isLeft()).toBeTruthy()
       expect(tokenResult.isRight()).toBeFalsy()
+
+      if (tokenResult.isLeft()) {
+        expect(tokenResult.value.statusCode).toBe(500)
+      }
     })
   })
 })

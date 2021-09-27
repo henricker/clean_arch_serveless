@@ -64,7 +64,7 @@ module.exports = {
           from: path.resolve(
             __dirname,
             'src',
-            'framework',
+            '4-framework',
             'services',
             'mail',
             'views'
@@ -74,7 +74,7 @@ module.exports = {
             '.webpack',
             'service',
             'src',
-            'framework',
+            '4-framework',
             'services',
             'mail',
             'views'

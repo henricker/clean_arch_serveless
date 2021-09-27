@@ -1,11 +1,11 @@
-import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
 import {
   IInputFindAllRole,
   IRoleRepositoryToken,
-} from '@business/repositories/role/iRoleRepository'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
-import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
+} from '@root/src/2-business/repositories/role/iRoleRepository'
+import { IUserRepositoryToken } from '@root/src/2-business/repositories/user/iUserRepository'
+import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyProfileUseCase'
+import { FindRoleByUseCase } from '@root/src/2-business/useCases/role/findRoleByUseCase'
 import { container } from '@shared/ioc/container'
 import {
   fakeRoleEntity,
@@ -27,11 +27,11 @@ import {
   FakeUserRepository,
   fakeUserRepositoryFindBy,
 } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { UpdateRoleUseCase } from '@business/useCases/role/updateRoleUseCase'
-import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
-import { CreateRoleUseCase } from '@business/useCases/role/createRoleUseCase'
-import { DeleteRoleUseCase } from '@business/useCases/role/deleteRoleUseCase'
-import { FindAllRolesUseCase } from '@business/useCases/role/findAllRolesUseCase'
+import { UpdateRoleUseCase } from '@root/src/2-business/useCases/role/updateRoleUseCase'
+import { RolesErrors } from '@root/src/2-business/module/errors/roles/rolesErrors'
+import { CreateRoleUseCase } from '@root/src/2-business/useCases/role/createRoleUseCase'
+import { DeleteRoleUseCase } from '@root/src/2-business/useCases/role/deleteRoleUseCase'
+import { FindAllRolesUseCase } from '@root/src/2-business/useCases/role/findAllRolesUseCase'
 
 describe('Roles use case', () => {
   beforeAll(() => {

@@ -1,4 +1,4 @@
-import { UserEntity } from '@domain/entities/userEntity'
+import { UserEntity } from '@root/src/1-domain/entities/userEntity'
 import { fakeCreatedUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 
 describe('User entity', () => {

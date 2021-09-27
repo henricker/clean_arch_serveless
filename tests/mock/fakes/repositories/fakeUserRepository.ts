@@ -2,8 +2,11 @@ import {
   IInputUpdateUser,
   IUserRepository,
   UserEntityKeys,
-} from '@business/repositories/user/iUserRepository'
-import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
+} from '@root/src/2-business/repositories/user/iUserRepository'
+import {
+  InputUserEntity,
+  IUserEntity,
+} from '@root/src/1-domain/entities/userEntity'
 import { injectable } from 'inversify'
 
 @injectable()

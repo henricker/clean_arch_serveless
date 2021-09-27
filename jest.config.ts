@@ -7,9 +7,9 @@ const config: Config.InitialOptions = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.ts',
-    '!src/framework/**/*.ts',
-    '!src/business/dto/**/*.ts',
-    '!src/business/useCases/*.ts',
+    '!src/4-framework/**/*.ts',
+    '!src/2-business/dto/**/*.ts',
+    '!src/2-business/useCases/*.ts',
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/',
@@ -30,10 +30,10 @@ const config: Config.InitialOptions = {
   testMatch: ['**/tests/**/*.(spec|test).[jt]s'],
   setupFiles: ['./jest-setup-file.ts'],
   moduleNameMapper: {
-    '@domain/(.*)': '<rootDir>/src/domain/$1',
-    '@business/(.*)': '<rootDir>/src/business/$1',
-    '@controller/(.*)': '<rootDir>/src/controller/$1',
-    '@framework/(.*)': '<rootDir>/src/framework/$1',
+    '@domain/(.*)': '<rootDir>/src/1-domain/$1',
+    '@business/(.*)': '<rootDir>/src/2-business/$1',
+    '@controller/(.*)': '<rootDir>/src/3-controller/$1',
+    '@framework/(.*)': '<rootDir>/src/4-framework/$1',
     '@shared/(.*)': '<rootDir>/src/shared/$1',
     '@tests/(.*)': '<rootDir>/tests/$1',
     '@root/(.*)': '<rootDir>/$1',

@@ -1,4 +1,4 @@
-import { RoleEntity } from '@domain/entities/roleEntity'
+import { RoleEntity } from '@root/src/1-domain/entities/roleEntity'
 import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 
 describe('Role entity', () => {

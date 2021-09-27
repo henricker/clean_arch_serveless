@@ -1,0 +1,7 @@
+createSession:
+  handler: ${self:custom.functionsDir}/authentication/create.handler
+  events:
+    - http:
+        path: /sessions
+        method: post
+        cors: true

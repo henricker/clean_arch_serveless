@@ -1,22 +1,22 @@
 import { container } from '@shared/ioc/container'
-import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
+import { FindUserByUseCase } from '@root/src/2-business/useCases/user/findUserByUseCase'
 import {
   FakeUserRepository,
   fakeUserRepositoryFindBy,
   fakeUserRepositoryUpdate,
 } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
-import { IMailServiceToken } from '@business/services/mail/iMail'
+import { IUserRepositoryToken } from '@root/src/2-business/repositories/user/iUserRepository'
+import { SendMailUseCase } from '@root/src/2-business/useCases/user/sendMailUseCase'
+import { IMailServiceToken } from '@root/src/2-business/services/mail/iMail'
 import { FakeMailService } from '@tests/mock/fakes/services/fakeMailService'
-import { RecoverPasswordOperator } from '@controller/operations/user/recoverPassword'
-import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
+import { RecoverPasswordOperator } from '@root/src/3-controller/operations/user/recoverPassword'
+import { UpdateUserUseCase } from '@root/src/2-business/useCases/user/updateUserUseCase'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
-import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
-import { InputRecoverPassword } from '@controller/serializers/user/inputRecoverPassword'
+import { IUniqueIdentifierServiceToken } from '@root/src/2-business/services/uniqueIdentifier/iUniqueIdentifier'
+import { InputRecoverPassword } from '@root/src/3-controller/serializers/user/inputRecoverPassword'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { ITimeServiceToken } from '@business/services/time/iTime'
+import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
+import { ITimeServiceToken } from '@root/src/2-business/services/time/iTime'
 import { FakeTimeService } from '@tests/mock/fakes/services/fakeTimeService'
 
 describe('Recover password operator', () => {
