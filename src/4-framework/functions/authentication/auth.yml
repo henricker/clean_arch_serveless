@@ -5,3 +5,11 @@ createSession:
         path: /sessions
         method: post
         cors: true
+
+forgotPassword:
+  handler: ${self:custom.functionsDir}/users/forgotPassword.handler
+  events:
+    - http:
+        path: /users/forgot-password
+        method: post
+        cors: true
