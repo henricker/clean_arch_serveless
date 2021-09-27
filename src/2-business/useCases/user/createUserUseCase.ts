@@ -38,15 +38,12 @@ export class CreateUserUseCase
       ...input,
       password: hashPassword,
     })
-
+    const user = {
+      ...createUser.value.export(),
+      uuid: this.uniqueIdentifierService.create(),
+    }
     try {
-      const userEntity = await this.userRepository.create(
-        {
-          ...createUser.value.export(),
-          uuid: this.uniqueIdentifierService.create(),
-        },
-        input.role_id
-      )
+      const userEntity = await this.userRepository.create(user, input.role_id)
 
       return right(userEntity)
     } catch (error) {
