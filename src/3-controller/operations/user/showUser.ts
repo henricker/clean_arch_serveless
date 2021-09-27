@@ -25,7 +25,7 @@ export class ShowUserOperator extends AbstractOperator<
     input: InputShowUser,
     user_id: number
   ): Promise<Either<IError, IUserEntity>> {
-    await this.exec(input)
+    this.exec(input)
 
     const allowedResult = await this.verifyProfileUseCase.exec({
       authorizeBy: 'id',

@@ -32,7 +32,7 @@ export class RecoverPasswordOperator extends AbstractOperator<
   }
 
   async run(input: InputRecoverPassword): Promise<IOutputSendMailDto> {
-    await this.exec(input)
+    this.exec(input)
 
     const userExists = await this.findUserByUseCase.exec({
       key: 'email',
@@ -51,12 +51,10 @@ export class RecoverPasswordOperator extends AbstractOperator<
 
     const userIsUpdated = await this.updateUserUseCase.exec(
       {
-        ...userExists.value,
-        password: undefined,
         forgot_password_token,
         forgot_password_token_expires_in,
       },
-      { type: 'id', key: userExists.value.id }
+      { column: 'id', value: userExists.value.id }
     )
 
     if (userIsUpdated.isLeft()) {

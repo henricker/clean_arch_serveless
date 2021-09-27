@@ -23,7 +23,7 @@ export class CreateUserOperator extends AbstractOperator<
   }
 
   async run(input: InputCreateUser): Promise<IOutputCreateUserDto> {
-    await this.exec(input)
+    this.exec(input)
 
     const isUserAlreadyRegistered = await this.findUserUseCase.exec({
       key: 'email',
@@ -35,7 +35,7 @@ export class CreateUserOperator extends AbstractOperator<
     }
 
     const role = await this.findRoleUseCase.exec({
-      key: 'profile',
+      column: 'profile',
       value: 'manager',
     })
 
