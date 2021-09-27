@@ -54,3 +54,5 @@ functions:
           method: post
           cors: true
   createAdress: ${file(./src/framework/functions/adresses/adresses.yml):createAdress}
+  updateAdress: ${file(./src/framework/functions/adresses/adresses.yml):updateAdress}
+  deleteAdress: ${file(./src/framework/functions/adresses/adresses.yml):deleteAdress}

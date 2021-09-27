@@ -10,7 +10,8 @@ This line is only required if you are specifying `TS_NODE_PROJECT` for whatever 
  */
 // delete process.env.TS_NODE_PROJECT;
 
-module.exports = {
+/** @type {import ('@types/webpack').Configuration} */
+const config = {
   context: __dirname,
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   entry: slsw.lib.entries,
@@ -83,4 +84,9 @@ module.exports = {
       ],
     }),
   ],
+  stats: {
+    warningsFilter: /export .* was not found in/,
+  },
 }
+
+module.exports = config

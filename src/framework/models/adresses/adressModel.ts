@@ -1,42 +1,37 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@framework/utility/database'
-import { IUserEntity } from '@domain/entities/userEntity'
-import { RoleModel } from '../roles/roleModel'
+import { IAdressEntity } from '@domain/entities/adressEntity'
 
-export class UserModel extends Model {}
+export class AdressModel extends Model {}
 
 // eslint-disable-next-line
-export interface UserModel extends IUserEntity {}
+export interface AdressModel extends IAdressEntity {}
 
-UserModel.init(
+AdressModel.init(
   {
     uuid: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    full_name: {
+    street: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    role_id: {
+    city: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    email: {
+    state: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING,
+    postal_code: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    forgot_password_token: {
+    country: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    forgot_password_token_expires_in: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -46,17 +41,15 @@ UserModel.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
-    tableName: 'users',
+    tableName: 'adresses',
     timestamps: false,
     underscored: true,
     sequelize,
   }
 )
-
-UserModel.hasOne(RoleModel, {
-  foreignKey: 'id',
-  sourceKey: 'role_id',
-  as: 'role',
-})
