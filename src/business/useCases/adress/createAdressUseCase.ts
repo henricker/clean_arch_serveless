@@ -8,6 +8,10 @@ import {
   IAdressRepository,
   IAdressRepositoryToken,
 } from '@business/repositories/adress/iAdressRepository'
+import {
+  IUniqueIdentifierService,
+  IUniqueIdentifierServiceToken,
+} from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { AdressEntity } from '@domain/entities/adressEntity'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
@@ -18,24 +22,29 @@ export class CreateAdressUseCase
   implements IAbstractUseCase<IInputCreateAdress, IOutputCreateAdress>
 {
   constructor(
-    @inject(IAdressRepositoryToken) private adressRepository: IAdressRepository
+    @inject(IAdressRepositoryToken) private adressRepository: IAdressRepository,
+    @inject(IUniqueIdentifierServiceToken)
+    private uniqueIdentifierService: IUniqueIdentifierService
   ) {}
 
   async exec(
     input: IInputCreateAdress,
     options: IUseCaseOptions = {}
   ): Promise<IOutputCreateAdress> {
-    const userEntity = AdressEntity.create(input)
+    const adressEntity = AdressEntity.create(input)
 
     try {
-      const user = await this.adressRepository.create(
-        userEntity.value.export(),
+      const adress = await this.adressRepository.create(
+        {
+          ...adressEntity.value.export(),
+          uuid: this.uniqueIdentifierService.create(),
+        },
         {
           transaction: options.transaction,
         }
       )
 
-      return right(user)
+      return right(adress)
     } catch (error) {
       return left(AdressesError.adressFailedToCreate())
     }

@@ -3,7 +3,10 @@ import { container } from '@shared/ioc/container'
 import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
 import { IHasherServiceToken } from '@business/services/hasher/iHasher'
 import { FakeUserRepository } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
+import {
+  FakeHasherService,
+  fakeHasherServiceCreate,
+} from '@tests/mock/fakes/services/fakeHasherService'
 import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
 import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
@@ -181,11 +184,14 @@ describe('User use cases', () => {
     test('Should return user updated if repository.update returns user', async () => {
       const updateRepository = container.get(UpdateUserUseCase)
       mockUserUpdate.mockImplementationOnce(async () => fakeUserEntity)
-      const userUpdated = await updateRepository.exec(fakeUserEntity)
+      const userUpdated = await updateRepository.exec(fakeUserEntity, {
+        type: 'id',
+        key: '',
+      })
       expect(userUpdated.isLeft()).toBeFalsy()
 
       if (userUpdated.isRight()) {
-        expect(userUpdated.value).toBe(fakeUserEntity)
+        expect(userUpdated.value.updated_at).not.toBe(fakeUserEntity.updated_at)
       }
 
       expect.assertions(2)
@@ -193,7 +199,10 @@ describe('User use cases', () => {
 
     test('Should throws user not found error if repository.update returns void', async () => {
       const updateRepository = container.get(UpdateUserUseCase)
-      const userUpdated = await updateRepository.exec(fakeUserEntity)
+      const userUpdated = await updateRepository.exec(fakeUserEntity, {
+        type: 'id',
+        key: '',
+      })
       expect(userUpdated.isRight()).toBeFalsy()
 
       if (userUpdated.isLeft()) {
@@ -215,7 +224,10 @@ describe('User use cases', () => {
         throw new Error()
       })
 
-      const userUpdated = await updateRepository.exec(fakeUserEntity)
+      const userUpdated = await updateRepository.exec(fakeUserEntity, {
+        type: 'id',
+        key: '',
+      })
       expect(userUpdated.isRight()).toBeFalsy()
 
       if (userUpdated.isLeft()) {
@@ -228,6 +240,44 @@ describe('User use cases', () => {
       }
 
       expect.assertions(3)
+    })
+
+    test('Should not update user password if its undefined', async () => {
+      const updateRepository = container.get(UpdateUserUseCase)
+      mockUserUpdate.mockImplementationOnce(async () => fakeUserEntity)
+
+      const createHash = jest.fn()
+
+      fakeHasherServiceCreate.mockImplementation(createHash)
+
+      const userUpdated = await updateRepository.exec(
+        { ...fakeUserEntity, password: undefined },
+        {
+          type: 'id',
+          key: '',
+        }
+      )
+      expect(userUpdated.isLeft()).toBeFalsy()
+      expect(createHash).not.toHaveBeenCalled()
+    })
+
+    test('Should hash user password if its truthy', async () => {
+      const updateRepository = container.get(UpdateUserUseCase)
+      mockUserUpdate.mockImplementationOnce(async () => fakeUserEntity)
+
+      const createHash = jest.fn()
+
+      fakeHasherServiceCreate.mockImplementation(createHash)
+
+      const userUpdated = await updateRepository.exec(
+        { ...fakeUserEntity, password: 'newPassword' },
+        {
+          type: 'id',
+          key: '',
+        }
+      )
+      expect(userUpdated.isLeft()).toBeFalsy()
+      expect(createHash).toHaveBeenCalled()
     })
   })
 })

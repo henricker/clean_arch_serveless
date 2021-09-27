@@ -7,9 +7,9 @@ import { AbstractSerializer } from '../serializers/abstractSerializer'
 export abstract class AbstractOperator<I, O> {
   abstract run(input: I, ...args: unknown[]): Promise<O>
 
-  protected async exec(input: AbstractSerializer<I>): Promise<void> {
+  protected exec(input: AbstractSerializer<I>): void {
     try {
-      await input.validate()
+      input.validate()
     } catch (error) {
       if (
         error instanceof Array &&

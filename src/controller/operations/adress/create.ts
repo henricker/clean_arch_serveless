@@ -1,4 +1,4 @@
-import { CreateAdressUseCase } from '@business/useCases/adress/create'
+import { CreateAdressUseCase } from '@business/useCases/adress/createAdressUseCase'
 import { InputCreateAdress } from '@controller/serializers/adresses/createAdress'
 import { IAdressEntity } from '@domain/entities/adressEntity'
 import { Either, left, right } from '@shared/either'
@@ -19,7 +19,7 @@ export class CreateAdressOperator extends AbstractOperator<
   }
 
   async run(input: InputCreateAdress): Promise<Either<IError, IAdressEntity>> {
-    await this.exec(input)
+    this.exec(input)
 
     const adressResult = await this.createAdressUseCase.exec(input)
 

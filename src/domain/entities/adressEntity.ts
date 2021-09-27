@@ -33,4 +33,13 @@ export class AdressEntity extends AbstractEntity<IAdressEntity> {
 
     return right(adressEntity)
   }
+
+  static update(prop: Partial<IAdressEntity>): Right<void, AdressEntity> {
+    const updatedAdressEntity = new AdressEntity({
+      ...prop,
+      updated_at: new Date(),
+    } as IAdressEntity)
+
+    return right(updatedAdressEntity)
+  }
 }

@@ -1,6 +1,7 @@
 import { AdressesError } from '@business/module/errors/adresses/adressesErrors'
 import { IAdressRepositoryToken } from '@business/repositories/adress/iAdressRepository'
-import { CreateAdressUseCase } from '@business/useCases/adress/create'
+import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
+import { CreateAdressUseCase } from '@business/useCases/adress/createAdressUseCase'
 import { CreateAdressOperator } from '@controller/operations/adress/create'
 import { InputCreateAdress } from '@controller/serializers/adresses/createAdress'
 import { IError } from '@shared/IError'
@@ -13,6 +14,7 @@ import {
   fakeAdressRepositoryCreate,
   FakeAdressRepositoy,
 } from '@tests/mock/fakes/repositories/fakeAdressRepository'
+import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
 
 describe('Create adress operator', () => {
   const addresFailedToCreateError = AdressesError.adressFailedToCreate()
@@ -21,6 +23,9 @@ describe('Create adress operator', () => {
     container.bind(CreateAdressOperator).to(CreateAdressOperator)
     container.bind(CreateAdressUseCase).to(CreateAdressUseCase)
     container.bind(IAdressRepositoryToken).to(FakeAdressRepositoy)
+    container
+      .bind(IUniqueIdentifierServiceToken)
+      .to(FakeUniqueIdentifierService)
   })
 
   test('Should create a adress entity', async () => {
