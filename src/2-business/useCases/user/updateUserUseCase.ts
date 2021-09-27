@@ -49,6 +49,7 @@ export class UpdateUserUseCase
           forgot_password_token: user.forgot_password_token,
           forgot_password_token_expires_in:
             user.forgot_password_token_expires_in,
+          updated_at: user.updated_at,
         },
         updateWhere,
       })
