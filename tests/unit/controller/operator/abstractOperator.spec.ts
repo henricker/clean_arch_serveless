@@ -1,5 +1,5 @@
-import { AbstractOperator } from '@controller/operations/abstractOperator'
-import { AbstractSerializer } from '@controller/serializers/abstractSerializer'
+import { AbstractOperator } from '@root/src/3-controller/operations/abstractOperator'
+import { AbstractSerializer } from '@root/src/3-controller/serializers/abstractSerializer'
 import { IsEmail, IsString, MinLength } from 'class-validator'
 import { IError } from '@shared/IError'
 

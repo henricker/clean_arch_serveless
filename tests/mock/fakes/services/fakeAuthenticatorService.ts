@@ -1,7 +1,7 @@
 import {
   IAuthenticatorService,
   ITokenVerifyFormat,
-} from '@business/services/authenticator/iAuthenticator'
+} from '@root/src/2-business/services/authenticator/iAuthenticator'
 import { IError } from '@shared/IError'
 import { injectable } from 'inversify'
 

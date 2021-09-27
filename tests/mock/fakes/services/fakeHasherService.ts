@@ -1,4 +1,4 @@
-import { IHasherService } from '@business/services/hasher/iHasher'
+import { IHasherService } from '@root/src/2-business/services/hasher/iHasher'
 import { injectable } from 'inversify'
 
 @injectable()

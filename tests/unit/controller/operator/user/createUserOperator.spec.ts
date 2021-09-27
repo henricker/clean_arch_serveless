@@ -1,9 +1,9 @@
 import { container } from '@shared/ioc/container'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { IHasherServiceToken } from '@business/services/hasher/iHasher'
-import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
-import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
-import { InputCreateUser } from '@controller/serializers/user/inputCreateUser'
+import { IUserRepositoryToken } from '@root/src/2-business/repositories/user/iUserRepository'
+import { IHasherServiceToken } from '@root/src/2-business/services/hasher/iHasher'
+import { IUniqueIdentifierServiceToken } from '@root/src/2-business/services/uniqueIdentifier/iUniqueIdentifier'
+import { CreateUserUseCase } from '@root/src/2-business/useCases/user/createUserUseCase'
+import { InputCreateUser } from '@root/src/3-controller/serializers/user/inputCreateUser'
 import {
   FakeUserRepository,
   fakeUserRepositoryCreate,
@@ -11,18 +11,18 @@ import {
 } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
-import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
-import { CreateUserOperator } from '@controller/operations/user/createUser'
-import { FindRoleByUseCase } from '@business/useCases/role/findRoleByUseCase'
-import { IRoleRepositoryToken } from '@business/repositories/role/iRoleRepository'
+import { FindUserByUseCase } from '@root/src/2-business/useCases/user/findUserByUseCase'
+import { CreateUserOperator } from '@root/src/3-controller/operations/user/createUser'
+import { FindRoleByUseCase } from '@root/src/2-business/useCases/role/findRoleByUseCase'
+import { IRoleRepositoryToken } from '@root/src/2-business/repositories/role/iRoleRepository'
 import {
   FakeRoleRepository,
   fakeRoleRepositoryFindBy,
 } from '@tests/mock/fakes/repositories/fakeRoleRepository'
 import { IError } from '@shared/IError'
 import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
+import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
+import { RolesErrors } from '@root/src/2-business/module/errors/roles/rolesErrors'
 
 describe('Create user operator', () => {
   const userEmailAlreadyInUseError = UsersErrors.userEmailAlreadyInUse()

@@ -1,4 +1,4 @@
-import { ITimeService } from '@business/services/time/iTime'
+import { ITimeService } from '@root/src/2-business/services/time/iTime'
 import { injectable } from 'inversify'
 
 @injectable()

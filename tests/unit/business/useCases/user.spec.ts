@@ -1,25 +1,25 @@
 // Make sure that container is first called, reflect-metada is important for decorators which are used in subsequent imports
 import { container } from '@shared/ioc/container'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
-import { IHasherServiceToken } from '@business/services/hasher/iHasher'
+import { IUserRepositoryToken } from '@root/src/2-business/repositories/user/iUserRepository'
+import { IHasherServiceToken } from '@root/src/2-business/services/hasher/iHasher'
 import {
   FakeUserRepository,
   fakeUserRepositoryFindBy,
 } from '@tests/mock/fakes/repositories/fakeUserRepository'
 import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
-import { CreateUserUseCase } from '@business/useCases/user/createUserUseCase'
-import { IUniqueIdentifierServiceToken } from '@business/services/uniqueIdentifier/iUniqueIdentifier'
+import { CreateUserUseCase } from '@root/src/2-business/useCases/user/createUserUseCase'
+import { IUniqueIdentifierServiceToken } from '@root/src/2-business/services/uniqueIdentifier/iUniqueIdentifier'
 import { FakeUniqueIdentifierService } from '@tests/mock/fakes/services/fakeUniqueIdentifierService'
-import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
+import { FindUserByUseCase } from '@root/src/2-business/useCases/user/findUserByUseCase'
 import {
   fakeNewUser,
   fakeUserEntity,
 } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { UsersErrors } from '@business/module/errors/users/usersErrors'
-import { SendMailUseCase } from '@business/useCases/user/sendMailUseCase'
-import { IMailServiceToken } from '@business/services/mail/iMail'
+import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
+import { SendMailUseCase } from '@root/src/2-business/useCases/user/sendMailUseCase'
+import { IMailServiceToken } from '@root/src/2-business/services/mail/iMail'
 import { FakeMailService } from '@tests/mock/fakes/services/fakeMailService'
-import { UpdateUserUseCase } from '@business/useCases/user/updateUserUseCase'
+import { UpdateUserUseCase } from '@root/src/2-business/useCases/user/updateUserUseCase'
 
 describe('User use cases', () => {
   jest.spyOn(console, 'error').mockImplementation(() => ({}))

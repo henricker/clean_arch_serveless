@@ -1,12 +1,12 @@
-import { IFindAllPaginated } from '@business/dto/role/findAll'
-import { RoleEntityKeys } from '@business/dto/role/findBy'
+import { IFindAllPaginated } from '@root/src/2-business/dto/role/findAll'
+import { RoleEntityKeys } from '@root/src/2-business/dto/role/findBy'
 import {
   IInputDeleteRole,
   IInputFindAllRole,
   IInputUpdateRole,
   IRoleRepository,
-} from '@business/repositories/role/iRoleRepository'
-import { IRoleEntity } from '@domain/entities/roleEntity'
+} from '@root/src/2-business/repositories/role/iRoleRepository'
+import { IRoleEntity } from '@root/src/1-domain/entities/roleEntity'
 import { injectable } from 'inversify'
 import { fakeRoleEntity } from '../entities/fakeRoleEntity'
 

@@ -1,20 +1,20 @@
 import { container } from '@shared/ioc/container'
-import { VerifyProfileUseCase } from '@business/useCases/role/verifyProfileUseCase'
-import { FindUserByUseCase } from '@business/useCases/user/findUserByUseCase'
-import { IUserRepositoryToken } from '@business/repositories/user/iUserRepository'
+import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyProfileUseCase'
+import { FindUserByUseCase } from '@root/src/2-business/useCases/user/findUserByUseCase'
+import { IUserRepositoryToken } from '@root/src/2-business/repositories/user/iUserRepository'
 import {
   FakeUserRepository,
   fakeUserRepositoryFindBy,
 } from '@tests/mock/fakes/repositories/fakeUserRepository'
-import { InputShowUser } from '@controller/serializers/user/inputShowUser'
+import { InputShowUser } from '@root/src/3-controller/serializers/user/inputShowUser'
 import {
   fakeUserAdminEntity,
   fakeUserEntity,
 } from '@tests/mock/fakes/entities/fakeUserEntity'
-import { ShowUserOperator } from '@controller/operations/user/showUser'
+import { ShowUserOperator } from '@root/src/3-controller/operations/user/showUser'
 import { IError } from '@shared/IError'
-import { RolesErrors } from '@business/module/errors/roles/rolesErrors'
-import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { RolesErrors } from '@root/src/2-business/module/errors/roles/rolesErrors'
+import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
 
 describe('Show user operator', () => {
   const roleNotAllowedError = RolesErrors.roleNotAllowed()

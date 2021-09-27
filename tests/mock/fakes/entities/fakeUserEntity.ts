@@ -1,5 +1,8 @@
-import { IInputCreateUserDto } from '@business/dto/user/create'
-import { InputUserEntity, IUserEntity } from '@domain/entities/userEntity'
+import { IInputCreateUserDto } from '@root/src/2-business/dto/user/create'
+import {
+  InputUserEntity,
+  IUserEntity,
+} from '@root/src/1-domain/entities/userEntity'
 
 export const fakeCreatedUserEntity: InputUserEntity = {
   full_name: 'João Pedro',

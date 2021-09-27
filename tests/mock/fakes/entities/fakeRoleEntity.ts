@@ -1,4 +1,4 @@
-import { IRoleEntity } from '@domain/entities/roleEntity'
+import { IRoleEntity } from '@root/src/1-domain/entities/roleEntity'
 
 export const fakeRoleEntity: IRoleEntity = {
   id: 1,
