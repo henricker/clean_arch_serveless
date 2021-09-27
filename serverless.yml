@@ -25,59 +25,7 @@ plugins:
 # For more legible yml, try to spread the routes in different files
 # https://www.serverless.com/framework/docs/providers/aws/guide/variables#reference-properties-in-other-files
 functions:
-  createUser:
-    handler: ${self:custom.functionsDir}/users/create.handler
-    events:
-      - http:
-          path: /users
-          method: post
-          cors: true
-  createSession:
-    handler: ${self:custom.functionsDir}/authentication/create.handler
-    events:
-      - http:
-          path: /sessions
-          method: post
-          cors: true
-  showUser:
-    handler: ${self:custom.functionsDir}/users/show.handler
-    events:
-      - http:
-          path: /users/{uuid}
-          method: get
-          cors: true
-  forgotPassword:
-    handler: ${self:custom.functionsDir}/users/forgotPassword.handler
-    events:
-      - http:
-          path: /users/forgot-password
-          method: post
-          cors: true
-  createRole:
-    handler: ${self:custom.functionsDir}/roles/create.handler
-    events:
-      - http:
-          path: /roles
-          method: post
-          cors: true
-  updateRole:
-    handler: ${self:custom.functionsDir}/roles/update.handler
-    events:
-      - http:
-          path: /roles/{id}
-          method: put
-          cors: true
-  deleteRole:
-    handler: ${self:custom.functionsDir}/roles/delete.handler
-    events:
-      - http:
-          path: /roles/{id}
-          method: delete
-          cors: true
-  findAllRoles:
-    handler: ${self:custom.functionsDir}/roles/findAll.handler
-    events:
-      - http: 
-          path: /roles
-          method: get
-          cors: true
+  - ${file(${self:custom.functionsDir}/users/users.yml)}
+  - ${file(${self:custom.functionsDir}/authentication/auth.yml)}
+  - ${file(${self:custom.functionsDir}/roles/roles.yml)}
+  - ${file(${self:custom.functionsDir}/hello/hello.yml)}

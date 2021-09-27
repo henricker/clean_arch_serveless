@@ -1,0 +1,28 @@
+createRole:
+  handler: ${self:custom.functionsDir}/roles/create.handler
+  events:
+    - http:
+        path: /roles
+        method: post
+        cors: true
+updateRole:
+  handler: ${self:custom.functionsDir}/roles/update.handler
+  events:
+    - http:
+        path: /roles/{id}
+        method: put
+        cors: true
+deleteRole:
+  handler: ${self:custom.functionsDir}/roles/delete.handler
+  events:
+    - http:
+        path: /roles/{id}
+        method: delete
+        cors: true
+findAllRoles:
+  handler: ${self:custom.functionsDir}/roles/findAll.handler
+  events:
+    - http: 
+        path: /roles
+        method: get
+        cors: true
