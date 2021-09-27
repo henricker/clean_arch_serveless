@@ -8,12 +8,12 @@ import {
 } from '@root/src/2-business/repositories/role/iRoleRepository'
 import { IRoleEntity } from '@root/src/1-domain/entities/roleEntity'
 import { injectable } from 'inversify'
-import { fakeRoleEntity } from '../entities/fakeRoleEntity'
+import { fakeCreatedRoleEntity } from '../entities/fakeRoleEntity'
 
 @injectable()
 export class FakeRoleRepository implements IRoleRepository {
   async create(_input: IRoleEntity): Promise<IRoleEntity> {
-    return fakeRoleEntity
+    return fakeCreatedRoleEntity
   }
 
   async findBy(

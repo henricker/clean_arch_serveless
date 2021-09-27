@@ -8,7 +8,7 @@ import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyP
 import { CreateRoleOperator } from '@root/src/3-controller/operations/roles/createRole'
 import { InputCreateRole } from '@root/src/3-controller/serializers/role/inputCreateRole'
 import { container } from '@shared/ioc/container'
-import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import {
   FakeRoleRepository,
@@ -78,7 +78,9 @@ describe('CreateRoleOperator', () => {
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
 
     const inputRole = new InputCreateRole({
       profile: 'newProfile',

@@ -1,5 +1,6 @@
 import { IUserEntity } from '@root/src/1-domain/entities/userEntity'
 import { IRelation } from '../relation'
+import { IWhere } from '../where'
 
 export const IUserRepositoryToken = Symbol.for('IUserRepositoryToken')
 
@@ -9,8 +10,8 @@ export type UserEntityKeys = keyof Omit<
 >
 
 export interface IInputUpdateUser {
-  updateWhere: { type: UserEntityKeys; key: string | number }
-  newData: IUserEntity
+  updateWhere: IWhere<UserEntityKeys, string | number>
+  newData: Partial<IUserEntity>
 }
 
 export interface IUserRepository {
@@ -23,5 +24,5 @@ export interface IUserRepository {
     key: IUserEntity[UserEntityKeys],
     relations?: IRelation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity>
-  update(input: IInputUpdateUser): Promise<IUserEntity | void>
+  update(input: IInputUpdateUser): Promise<Partial<IUserEntity> | void>
 }

@@ -49,11 +49,15 @@ export class RecoverPasswordOperator extends AbstractOperator<
       this.timeService.toMilliseconds('2h')
     )
 
-    const userIsUpdated = await this.updateUserUseCase.exec({
-      ...userExists.value,
-      forgot_password_token,
-      forgot_password_token_expires_in,
-    })
+    const userIsUpdated = await this.updateUserUseCase.exec(
+      {
+        ...userExists.value,
+        password: undefined,
+        forgot_password_token,
+        forgot_password_token_expires_in,
+      },
+      { type: 'id', key: userExists.value.id }
+    )
 
     if (userIsUpdated.isLeft()) {
       return left(userIsUpdated.value)

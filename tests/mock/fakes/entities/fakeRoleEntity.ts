@@ -1,10 +1,10 @@
 import { IRoleEntity } from '@root/src/1-domain/entities/roleEntity'
 
-export const fakeRoleEntity: IRoleEntity = {
+export const fakeCreatedRoleEntity: IRoleEntity = {
   id: 1,
   profile: 'admin',
-  created_at: new Date('2021-09-21T10:00:00.000Z'),
-  updated_at: new Date('2021-09-21T10:00:00.000Z'),
+  created_at: new Date(),
+  updated_at: new Date(),
 }
 
 export const fakeRolesList: IRoleEntity[] = [

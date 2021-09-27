@@ -16,3 +16,8 @@ export const fakeHasherServiceCompare = jest.spyOn(
   FakeHasherService.prototype,
   'compare'
 )
+
+export const fakeHasherServiceCreate = jest.spyOn(
+  FakeHasherService.prototype,
+  'create'
+)

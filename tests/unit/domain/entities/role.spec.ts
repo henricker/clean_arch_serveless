@@ -1,5 +1,5 @@
 import { RoleEntity } from '@root/src/1-domain/entities/roleEntity'
-import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 
 describe('Role entity', () => {
   describe('Create method', () => {
@@ -14,7 +14,7 @@ describe('Role entity', () => {
   describe('Update method', () => {
     test('Should update role and change update_at', () => {
       const mockDate = new Date(1632252193072)
-      const fakeRole = { ...fakeRoleEntity, updated_at: mockDate }
+      const fakeRole = { ...fakeCreatedRoleEntity, updated_at: mockDate }
 
       const updatedRole = RoleEntity.update(fakeRole)
 

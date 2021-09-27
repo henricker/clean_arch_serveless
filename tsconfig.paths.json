@@ -1,15 +1,15 @@
 {
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@business/*": ["src/business/*"],
-			"@controller/*": ["src/controller/*"],
-			"@domain/*": ["src/domain/*"],
-			"@framework/*": ["src/framework/*"],
-			"@shared/*": ["src/shared/*"],
-			"@tests/*": ["tests/*"],
-			"@utility/*": ["src/utility/*"],
-			"@root/*": ["./*"]
-		}
-	}
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@business/*": ["src/2-business/*"],
+      "@controller/*": ["src/3-controller/*"],
+      "@domain/*": ["src/1-domain/*"],
+      "@framework/*": ["src/4-framework/*"],
+      "@shared/*": ["src/shared/*"],
+      "@tests/*": ["tests/*"],
+      "@utility/*": ["src/utility/*"],
+      "@root/*": ["./*"]
+    }
+  }
 }

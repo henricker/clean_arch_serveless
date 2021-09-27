@@ -8,7 +8,7 @@ import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyP
 import { DeleteRoleOperator } from '@root/src/3-controller/operations/roles/deleteRole'
 import { InputDeleteRole } from '@root/src/3-controller/serializers/role/inputDeleteRole'
 import { container } from '@shared/ioc/container'
-import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import {
   FakeRoleRepository,
@@ -39,9 +39,13 @@ describe('Delete role operator', () => {
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
 
-    fakeRoleRepositoryDelete.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryDelete.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
 
     const operator = container.get(DeleteRoleOperator)
     const roleId = await operator.run(inputDeleteRole, fakeUserAdminEntity.id)
@@ -49,7 +53,7 @@ describe('Delete role operator', () => {
     expect(roleId.isLeft()).toBeFalsy()
 
     if (roleId.isRight()) {
-      expect(roleId.value).toStrictEqual(fakeRoleEntity)
+      expect(roleId.value).toStrictEqual(fakeCreatedRoleEntity)
     }
 
     expect.assertions(2)
@@ -78,7 +82,9 @@ describe('Delete role operator', () => {
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
 
     const operator = container.get(DeleteRoleOperator)
     const roleId = await operator.run(inputDeleteRole, fakeUserAdminEntity.id)
@@ -97,7 +103,9 @@ describe('Delete role operator', () => {
 
   test('Should returns error if findBy of auth user returns void', async () => {
     const inputDeleteRole = new InputDeleteRole({ id: 1 })
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
 
     const operator = container.get(DeleteRoleOperator)
     const roleId = await operator.run(inputDeleteRole, fakeUserAdminEntity.id)

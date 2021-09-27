@@ -45,9 +45,11 @@ export class UserRepository implements IUserRepository {
       return void 0
     }
   }
-  async update(input: IInputUpdateUser): Promise<IUserEntity | void> {
-    await this.userModel.update(input.newData, {
-      where: { [input.updateWhere.type]: input.updateWhere.key },
+  async update(input: IInputUpdateUser): Promise<Partial<IUserEntity> | void> {
+    const { newData, updateWhere } = input
+
+    await this.userModel.update(newData, {
+      where: { [updateWhere.type]: updateWhere.key },
     })
 
     return input.newData

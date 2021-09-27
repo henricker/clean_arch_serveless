@@ -8,10 +8,6 @@ import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyP
 import { FindRoleByUseCase } from '@root/src/2-business/useCases/role/findRoleByUseCase'
 import { container } from '@shared/ioc/container'
 import {
-  fakeRoleEntity,
-  fakeRolesList,
-} from '@tests/mock/fakes/entities/fakeRoleEntity'
-import {
   fakeCreatedUserEntity,
   fakeUserEntity,
 } from '@tests/mock/fakes/entities/fakeUserEntity'
@@ -32,6 +28,10 @@ import { RolesErrors } from '@root/src/2-business/module/errors/roles/rolesError
 import { CreateRoleUseCase } from '@root/src/2-business/useCases/role/createRoleUseCase'
 import { DeleteRoleUseCase } from '@root/src/2-business/useCases/role/deleteRoleUseCase'
 import { FindAllRolesUseCase } from '@root/src/2-business/useCases/role/findAllRolesUseCase'
+import {
+  fakeCreatedRoleEntity,
+  fakeRolesList,
+} from '@tests/mock/fakes/entities/fakeRoleEntity'
 
 describe('Roles use case', () => {
   beforeAll(() => {
@@ -53,7 +53,9 @@ describe('Roles use case', () => {
     test('Should find a existent role', async () => {
       const operator = container.get(FindRoleByUseCase)
 
-      fakeRoleRepositoryFindBy.mockImplementation(async () => fakeRoleEntity)
+      fakeRoleRepositoryFindBy.mockImplementation(
+        async () => fakeCreatedRoleEntity
+      )
 
       const roleResult = await operator.exec({ key: 'profile', value: 'admin' })
 
@@ -189,12 +191,12 @@ describe('Roles use case', () => {
     test('Should create role', async () => {
       const operator = container.get(CreateRoleUseCase)
 
-      const newRoleEntity = await operator.exec(fakeRoleEntity)
+      const newRoleEntity = await operator.exec(fakeCreatedRoleEntity)
 
       expect(newRoleEntity.isLeft()).toBeFalsy()
 
       if (newRoleEntity.isRight()) {
-        expect(newRoleEntity.value.profile).toBe(fakeRoleEntity.profile)
+        expect(newRoleEntity.value.profile).toBe(fakeCreatedRoleEntity.profile)
       }
     })
 
@@ -203,7 +205,7 @@ describe('Roles use case', () => {
       fakeRoleRepositoryCreate.mockImplementationOnce(async () => {
         throw new Error()
       })
-      const newRoleEntity = await operator.exec(fakeRoleEntity)
+      const newRoleEntity = await operator.exec(fakeCreatedRoleEntity)
 
       expect(newRoleEntity.isRight()).toBeFalsy()
 
@@ -226,13 +228,13 @@ describe('Roles use case', () => {
         async (input) => input.newData
       )
 
-      const updatedRole = await operator.exec(fakeRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
 
       expect(updatedRole.isLeft()).toBeFalsy()
 
       if (updatedRole.isRight()) {
         expect(updatedRole.value.updated_at).not.toStrictEqual(
-          fakeRoleEntity.updated_at
+          fakeCreatedRoleEntity.updated_at
         )
       }
 
@@ -241,7 +243,7 @@ describe('Roles use case', () => {
 
     test('Should throws not found error if repo return void', async () => {
       const operator = container.get(UpdateRoleUseCase)
-      const updatedRole = await operator.exec(fakeRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
 
       expect(updatedRole.isRight()).toBeFalsy()
 
@@ -264,7 +266,7 @@ describe('Roles use case', () => {
         throw new Error()
       })
 
-      const updatedRole = await operator.exec(fakeRoleEntity)
+      const updatedRole = await operator.exec(fakeCreatedRoleEntity)
 
       expect(updatedRole.isRight()).toBeFalsy()
 
@@ -285,17 +287,17 @@ describe('Roles use case', () => {
     test('Should delete a role', async () => {
       const operator = container.get(DeleteRoleUseCase)
       fakeRoleRepositoryDelete.mockImplementationOnce(
-        async () => fakeRoleEntity
+        async () => fakeCreatedRoleEntity
       )
 
       const deletedRole = await operator.exec({
         key: 'id',
-        value: fakeRoleEntity.id,
+        value: fakeCreatedRoleEntity.id,
       })
 
       expect(deletedRole.isLeft()).toBeFalsy()
       if (deletedRole.isRight()) {
-        expect(deletedRole.value).toStrictEqual(fakeRoleEntity)
+        expect(deletedRole.value).toStrictEqual(fakeCreatedRoleEntity)
       }
 
       expect.assertions(2)
@@ -306,7 +308,7 @@ describe('Roles use case', () => {
 
       const deletedRole = await operator.exec({
         key: 'id',
-        value: fakeRoleEntity.id,
+        value: fakeCreatedRoleEntity.id,
       })
 
       expect(deletedRole.isRight()).toBeFalsy()

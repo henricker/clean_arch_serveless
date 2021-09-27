@@ -8,7 +8,7 @@ import { VerifyProfileUseCase } from '@root/src/2-business/useCases/role/verifyP
 import { UpdateRoleOperator } from '@root/src/3-controller/operations/roles/updateRole'
 import { InputUpdateRole } from '@root/src/3-controller/serializers/role/inputUpdateRole'
 import { container } from '@shared/ioc/container'
-import { fakeRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
+import { fakeCreatedRoleEntity } from '@tests/mock/fakes/entities/fakeRoleEntity'
 import { fakeUserAdminEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import {
   FakeRoleRepository,
@@ -35,18 +35,20 @@ describe('Update role operator', () => {
   })
 
   test('Should update a role', async () => {
-    const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
+    const inputUpdateRole = new InputUpdateRole(fakeCreatedRoleEntity)
     const operator = container.get(UpdateRoleOperator)
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
     fakeRoleRepositoryUpdate.mockImplementationOnce(async () => ({
-      ...fakeRoleEntity,
+      ...fakeCreatedRoleEntity,
       profile: 'dev',
     }))
 
-    const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
+    const role = await operator.run(inputUpdateRole, fakeCreatedRoleEntity.id)
 
     expect(role.isLeft()).toBeFalsy()
 
@@ -58,11 +60,11 @@ describe('Update role operator', () => {
   })
 
   test('Should returns error if user not authenticate', async () => {
-    const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
+    const inputUpdateRole = new InputUpdateRole(fakeCreatedRoleEntity)
     const operator = container.get(UpdateRoleOperator)
 
     fakeUserRepositoryFindBy.mockImplementationOnce(() => void 0)
-    const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
+    const role = await operator.run(inputUpdateRole, fakeCreatedRoleEntity.id)
 
     expect(role.isRight()).toBeFalsy()
 
@@ -75,12 +77,12 @@ describe('Update role operator', () => {
   })
 
   test('Should returns error if role not found', async () => {
-    const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
+    const inputUpdateRole = new InputUpdateRole(fakeCreatedRoleEntity)
     const operator = container.get(UpdateRoleOperator)
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
+    const role = await operator.run(inputUpdateRole, fakeCreatedRoleEntity.id)
 
     expect(role.isRight()).toBeFalsy()
 
@@ -93,16 +95,18 @@ describe('Update role operator', () => {
   })
 
   test('Should returns error if role not found', async () => {
-    const inputUpdateRole = new InputUpdateRole(fakeRoleEntity)
+    const inputUpdateRole = new InputUpdateRole(fakeCreatedRoleEntity)
     const operator = container.get(UpdateRoleOperator)
     fakeUserRepositoryFindBy.mockImplementationOnce(
       async () => fakeUserAdminEntity
     )
-    fakeRoleRepositoryFindBy.mockImplementationOnce(async () => fakeRoleEntity)
+    fakeRoleRepositoryFindBy.mockImplementationOnce(
+      async () => fakeCreatedRoleEntity
+    )
     fakeRoleRepositoryUpdate.mockImplementationOnce(() => {
       throw new Error()
     })
-    const role = await operator.run(inputUpdateRole, fakeRoleEntity.id)
+    const role = await operator.run(inputUpdateRole, fakeCreatedRoleEntity.id)
 
     expect(role.isRight()).toBeFalsy()
 

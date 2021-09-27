@@ -1,42 +1,63 @@
 import {
   InputUpdateUserDto,
-  OutputUpdateUserDto,
-} from '@root/src/2-business/dto/user/update'
-import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
+  IOutputUpdateUserDto,
+} from '@business/dto/user/update'
+import { UsersErrors } from '@business/module/errors/users/usersErrors'
+import { IWhere } from '@business/repositories/where'
 import {
   IUserRepository,
   IUserRepositoryToken,
-} from '@root/src/2-business/repositories/user/iUserRepository'
-import { UserEntity } from '@root/src/1-domain/entities/userEntity'
+  UserEntityKeys,
+} from '@business/repositories/user/iUserRepository'
+import {
+  IHasherService,
+  IHasherServiceToken,
+} from '@business/services/hasher/iHasher'
+import { UserEntity } from '@domain/entities/userEntity'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
 import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
 export class UpdateUserUseCase
-  implements IAbstractUseCase<InputUpdateUserDto, OutputUpdateUserDto>
+  implements IAbstractUseCase<InputUpdateUserDto, IOutputUpdateUserDto>
 {
   constructor(
-    @inject(IUserRepositoryToken) private userRepository: IUserRepository
+    @inject(IUserRepositoryToken) private userRepository: IUserRepository,
+    @inject(IHasherServiceToken) private hasherService: IHasherService
   ) {}
 
-  async exec(input: InputUpdateUserDto): Promise<OutputUpdateUserDto> {
+  async exec(
+    input: InputUpdateUserDto,
+    updateWhere: IWhere<UserEntityKeys, string | number>
+  ): Promise<IOutputUpdateUserDto> {
     try {
       const newUserEntity = UserEntity.update(input)
 
+      const user = newUserEntity.value.export()
+
+      const userPassword = user.password
+        ? await this.hasherService.create(user.password)
+        : undefined
+
       const userUpdate = await this.userRepository.update({
-        newData: newUserEntity.value.export(),
-        updateWhere: {
-          type: 'id',
-          key: newUserEntity.value.export().id,
+        newData: {
+          email: user.email,
+          role_id: user.role_id,
+          full_name: user.full_name,
+          password: userPassword,
+          forgot_password_token: user.forgot_password_token,
+          forgot_password_token_expires_in:
+            user.forgot_password_token_expires_in,
         },
+        updateWhere,
       })
 
       if (!userUpdate) {
         return left(UsersErrors.userNotFound())
       }
 
-      return right(userUpdate)
+      return right(newUserEntity.value.export())
     } catch (error) {
       return left(UsersErrors.userFailedToUpdate())
     }

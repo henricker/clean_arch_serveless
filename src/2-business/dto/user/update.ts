@@ -4,4 +4,4 @@ import { IError } from '@shared/IError'
 
 export type InputUpdateUserDto = IUserEntity
 
-export type OutputUpdateUserDto = Either<IError, IUserEntity>
+export type IOutputUpdateUserDto = Either<IError, IUserEntity>

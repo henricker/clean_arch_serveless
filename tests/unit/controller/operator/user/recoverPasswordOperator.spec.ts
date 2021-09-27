@@ -18,6 +18,8 @@ import { fakeUserEntity } from '@tests/mock/fakes/entities/fakeUserEntity'
 import { UsersErrors } from '@root/src/2-business/module/errors/users/usersErrors'
 import { ITimeServiceToken } from '@root/src/2-business/services/time/iTime'
 import { FakeTimeService } from '@tests/mock/fakes/services/fakeTimeService'
+import { IHasherServiceToken } from '@business/services/hasher/iHasher'
+import { FakeHasherService } from '@tests/mock/fakes/services/fakeHasherService'
 
 describe('Recover password operator', () => {
   const fakeMailServiceSend = jest.spyOn(FakeMailService.prototype, 'send')
@@ -37,6 +39,7 @@ describe('Recover password operator', () => {
       .bind(IUniqueIdentifierServiceToken)
       .to(FakeUniqueIdentifierService)
     container.bind(ITimeServiceToken).to(FakeTimeService)
+    container.bind(IHasherServiceToken).to(FakeHasherService)
   })
 
   afterAll(() => {
