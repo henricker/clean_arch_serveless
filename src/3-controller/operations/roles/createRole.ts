@@ -38,7 +38,7 @@ export class CreateRoleOperator extends AbstractOperator<
     }
 
     const isAlreadyExistRole = await this.findRoleByUseCase.exec({
-      key: 'profile',
+      column: 'profile',
       value: input.profile,
     })
 

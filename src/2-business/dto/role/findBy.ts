@@ -4,7 +4,7 @@ import { Either } from '@shared/either'
 export type RoleEntityKeys = keyof Pick<IRoleEntity, 'id' | 'profile'>
 
 export interface IInputFindRoleBy {
-  key: RoleEntityKeys
+  column: RoleEntityKeys
   value: IRoleEntity[RoleEntityKeys]
 }
 

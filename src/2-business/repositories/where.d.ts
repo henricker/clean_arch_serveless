@@ -1,4 +1,4 @@
-export interface IWhere<T, K> {
-  type: T
-  key: K
+export interface IWhere<C, V> {
+  column: C
+  value: V
 }

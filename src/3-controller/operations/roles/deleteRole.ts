@@ -37,7 +37,7 @@ export class DeleteRoleOperator extends AbstractOperator<
     }
 
     const roleForDeletion = await this.findRoleByUseCase.exec({
-      key: 'id',
+      column: 'id',
       value: input.id,
     })
 

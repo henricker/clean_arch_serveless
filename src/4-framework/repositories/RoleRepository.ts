@@ -43,7 +43,7 @@ export class RoleRepository implements IRoleRepository {
   async update(input: IInputUpdateRole): Promise<IRoleEntity | void> {
     try {
       await this.roleModel.update(input.newData, {
-        where: { [input.updateWhere.type]: input.updateWhere.key },
+        where: { [input.updateWhere.column]: input.updateWhere.value },
       })
 
       return input.newData

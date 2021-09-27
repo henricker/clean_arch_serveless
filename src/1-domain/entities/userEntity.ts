@@ -41,13 +41,13 @@ export class UserEntity extends AbstractEntity<IUserEntity> {
     return right(user)
   }
 
-  static update(props: IUserEntity): Right<void, UserEntity> {
+  static update(props: Partial<IUserEntity>): Right<void, UserEntity> {
     const currentDate = new Date()
 
     const user = new UserEntity({
       ...props,
       updated_at: currentDate,
-    })
+    } as IUserEntity)
 
     return right(user)
   }

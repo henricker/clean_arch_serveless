@@ -4,11 +4,12 @@ import {
   InputCreateRoleEntity,
   IRoleEntity,
 } from '@root/src/1-domain/entities/roleEntity'
+import { IWhere } from '../where'
 
 export const IRoleRepositoryToken = Symbol.for('IRoleRepositoryToken')
 
 export interface IInputUpdateRole {
-  updateWhere: { type: RoleEntityKeys; key: string | number }
+  updateWhere: IWhere<RoleEntityKeys, string | number>
   newData: IRoleEntity
 }
 

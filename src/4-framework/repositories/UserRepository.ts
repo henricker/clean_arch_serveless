@@ -24,13 +24,13 @@ export class UserRepository implements IUserRepository {
     return user as unknown as IUserEntity
   }
   async findBy(
-    type: UserEntityKeys,
-    key: IUserEntity[UserEntityKeys],
+    column: UserEntityKeys,
+    value: IUserEntity[UserEntityKeys],
     relations?: IRelation<string, UserEntityKeys>[]
   ): Promise<void | IUserEntity> {
     try {
       const user = await this.userModel.findOne({
-        where: { [type]: key },
+        where: { [column]: value },
         include:
           relations &&
           relations.map((relation) => ({
@@ -49,7 +49,7 @@ export class UserRepository implements IUserRepository {
     const { newData, updateWhere } = input
 
     await this.userModel.update(newData, {
-      where: { [updateWhere.type]: updateWhere.key },
+      where: { [updateWhere.column]: updateWhere.value },
     })
 
     return input.newData

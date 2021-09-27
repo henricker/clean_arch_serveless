@@ -19,7 +19,7 @@ export class FindRoleByUseCase
   ) {}
 
   async exec(input: IInputFindRoleBy): Promise<IOutputFindRoleBy> {
-    const role = await this.roleRepository.findBy(input.key, input.value)
+    const role = await this.roleRepository.findBy(input.column, input.value)
 
     if (!role) {
       return left(void 0)

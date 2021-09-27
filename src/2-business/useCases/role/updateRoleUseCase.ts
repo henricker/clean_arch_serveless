@@ -10,6 +10,8 @@ import {
 import { RoleEntity } from '@root/src/1-domain/entities/roleEntity'
 import { left, right } from '@shared/either'
 import { inject, injectable } from 'inversify'
+import { IWhere } from '@business/repositories/where'
+import { RoleEntityKeys } from '@business/dto/role/findBy'
 import { IAbstractUseCase } from '../abstractUseCase'
 
 @injectable()
@@ -19,15 +21,18 @@ export class UpdateRoleUseCase
   constructor(
     @inject(IRoleRepositoryToken) private roleRepository: IRoleRepository
   ) {}
-  async exec(input: InputUpdateRoleDto): Promise<OutputUpdateRoleDto> {
+  async exec(
+    input: InputUpdateRoleDto,
+    updateWhere: IWhere<RoleEntityKeys, string | number>
+  ): Promise<OutputUpdateRoleDto> {
     try {
       const newRoleEntity = RoleEntity.update(input)
 
       const roleUpdated = await this.roleRepository.update({
         newData: newRoleEntity.value.export(),
         updateWhere: {
-          type: 'id',
-          key: newRoleEntity.value.export().id,
+          column: updateWhere.column,
+          value: updateWhere.value,
         },
       })
 
