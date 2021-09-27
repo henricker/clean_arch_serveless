@@ -24,7 +24,7 @@ export class FindAllRolesOperator extends AbstractOperator<
     input: InputFindAllRole,
     userId: number
   ): Promise<IOutputFindAllRoles> {
-    this.exec(input)
+    await this.exec(input)
     const authUser = await this.verifyProfileUseCase.exec({
       authorizeBy: 'id',
       key: userId,
