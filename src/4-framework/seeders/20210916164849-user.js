@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt')
 const { v4 } = require('uuid')
 
 module.exports = {
-  up: async (queryInterface, _Sequelize) => {
+  up: async (
+    /** @type {import('sequelize').QueryInterface} */ queryInterface,
+    _Sequelize
+  ) => {
     /**
      * Add seed commands here.
      *
@@ -34,24 +37,21 @@ module.exports = {
     ])
   },
 
-  down: async (queryInterface, _Sequelize) => {
+  down: async (
+    /** @type {import('sequelize').QueryInterface} */ queryInterface,
+    _Sequelize
+  ) => {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete(
-      'roles',
-      [
-        {
-          email: 'admin@admin.com',
-        },
-        {
-          email: 'intern@intern.com',
-        },
-      ],
-      {}
-    )
+    await queryInterface.bulkDelete('users', {
+      email: 'admin@admin.com',
+    })
+    await queryInterface.bulkDelete('users', {
+      email: 'intern@intern.com',
+    })
   },
 }
