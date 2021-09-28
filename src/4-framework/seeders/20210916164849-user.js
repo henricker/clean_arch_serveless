@@ -1,10 +1,10 @@
 'use strict'
 
 const bcrypt = require('bcrypt')
-const { randomUUID } = require('crypto')
+const { v4 } = require('uuid')
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface, _Sequelize) => {
     /**
      * Add seed commands here.
      *
@@ -19,14 +19,14 @@ module.exports = {
     await queryInterface.bulkInsert('users', [
       {
         full_name: 'AdminUser',
-        uuid: randomUUID(),
+        uuid: v4(),
         email: 'admin@admin.com',
         role_id: 1,
         password,
       },
       {
         full_name: 'InternUser',
-        uuid: randomUUID(),
+        uuid: v4(),
         email: 'intern@intern.com',
         role_id: 2,
         password,
@@ -34,7 +34,7 @@ module.exports = {
     ])
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, _Sequelize) => {
     /**
      * Add commands to revert seed here.
      *
