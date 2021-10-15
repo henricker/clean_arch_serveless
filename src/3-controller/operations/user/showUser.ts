@@ -40,7 +40,7 @@ export class ShowUserOperator extends AbstractOperator<
 
     const currentLoggedUser = allowedResult.value
 
-    if (currentLoggedUser.id === user_id) {
+    if (currentLoggedUser.uuid === input.user_uuid) {
       return right(currentLoggedUser)
     }
 
