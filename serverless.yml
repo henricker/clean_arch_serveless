@@ -13,9 +13,12 @@ custom:
   functionsDir: src/4-framework/functions
   serverless-offline:
     httpPort: 3333
-  serverless-webpack:
+  webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: false
+    includeModules:
+      forceInclude:
+        # force include of your db drivers here
+        - mysql2
     excludeFiles: tests/**
 
 plugins:
