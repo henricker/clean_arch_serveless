@@ -7,4 +7,11 @@ import { Context } from 'aws-lambda'
 export const middyfy = (
   handler: (e: unknown, contex?: Context) => unknown
 ): middy.Middy<unknown, unknown, Context> =>
-  middy(handler).use(jsonBodyParser()).use(httpErrorHandler()).use(httpCors())
+  middy((e: unknown, c: Context) => {
+    // eslint-disable-next-line no-param-reassign
+    c.callbackWaitsForEmptyEventLoop = false
+    handler(e, c)
+  })
+    .use(jsonBodyParser())
+    .use(httpErrorHandler())
+    .use(httpCors())
