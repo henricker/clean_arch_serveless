@@ -10,7 +10,7 @@ export const middyfy = (
   middy((e: unknown, c: Context) => {
     // eslint-disable-next-line no-param-reassign
     c.callbackWaitsForEmptyEventLoop = false
-    handler(e, c)
+    return handler(e, c)
   })
     .use(jsonBodyParser())
     .use(httpErrorHandler())
