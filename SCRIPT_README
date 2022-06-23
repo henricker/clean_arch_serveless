@@ -32,7 +32,7 @@ Passo a Passo:
 5.  Caso selecionado a opção 5, voce deve informar:
 
     Nome para o objeto:
-    [?] Name in CamelCase (Ex: "UserDetails" or "User" only)
+    [?] Name in CamelCase (Ex: "UserDetails" or "Details" only)
 
     Nome para arquivos:
-    [?] Name in LowerCase (Ex: "userDetails" or "user" only)
+    [?] Name in LowerCase (Ex: "userDetails" or "details" only)
