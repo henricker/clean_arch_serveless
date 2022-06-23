@@ -82,7 +82,7 @@ def createObject(templ_json, selected, titleName, lowerName, stopIfExists, selet
                 optionName = item['name']
 
                 print(
-                    f'{G}[{options.index(item)}] {C}{optionName}{W} - {G}[{options.index(item)}]')
+                    f'{G}[{options.index(item)}] {C}{optionName}{W}')
 
             typeSelected = int(input(f'{G}[>] {W}'))
             optionSelectedTitle = options[typeSelected]['name']
@@ -163,7 +163,7 @@ def createAllObjects(templ_json, titleName, lowerName):
     for item in optionsLength:
         optionName = item['value']
         print(
-            f'{G}[{optionsLength.index(item)}] {C}{optionName}{W} - {G}[{optionsLength.index(item)}]')
+            f'{G}[{optionsLength.index(item)}] {C}{optionName}{W}')
 
     optionID = int(input(f'{G}[>] {W}'))
 
