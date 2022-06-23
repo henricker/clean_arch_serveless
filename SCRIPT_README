@@ -28,11 +28,12 @@ Passo a Passo:
     [3] Update - [3]
     [4] Delete - [4]
     [5] Custom - [5] - (Personalizado)
+    [6] CRUD - [6] - (Create, FindAll, FindBy, Update Delete)
 
 5.  Caso selecionado a opção 5, voce deve informar:
 
     Nome para o objeto:
-    [?] Name in CamelCase (Ex: "UserDetails" or "Details" only)
+    [?] Name in CamelCase (Ex: "UserDetails" or "User" only)
 
     Nome para arquivos:
-    [?] Name in LowerCase (Ex: "userDetails" or "details" only)
+    [?] Name in LowerCase (Ex: "userDetails" or "user" only)
