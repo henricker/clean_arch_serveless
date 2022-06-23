@@ -1,0 +1,38 @@
+Passo a Passo:
+
+1.  Execute: python3 ./script.py
+
+2.  Selecione uma das opções:
+    [!] Select a option :
+
+        [0] Entity - [Domain] - [0]
+        [1] DTO - [Business] - [1]
+        [2] Module - [Business] - [2]
+        [3] Repository - [Business] - [3]
+        [4] UseCase - [Business] - [4]
+        [5] Operation - [Controller] - [5]
+        [6] Serializer - [Controller] - [6]
+        [7] Model - [Framework] - [7]
+        [8] Repository - [Framework] - [8]
+        [9] Functions - [Framework] - [9]
+        [10] All Objects - [ALL] - [10]
+
+3.  Informe o nome do objeto
+    [!] What's object name?
+
+4.  Escolha uma opção para criar DTO, UseCase, Serializers e outros...
+    [!] Choose a option: (Esta )
+    [0] Create - [0]
+    [1] FindAll - [1]
+    [2] FindBy - [2]
+    [3] Update - [3]
+    [4] Delete - [4]
+    [5] Custom - [5] - (Personalizado)
+
+5.  Caso selecionado a opção 5, voce deve informar:
+
+    Nome para o objeto:
+    [?] Name in CamelCase (Ex: "UserDetails" or "User" only)
+
+    Nome para arquivos:
+    [?] Name in LowerCase (Ex: "userDetails" or "user" only)

@@ -1,0 +1,228 @@
+{
+    "templates": [
+        {
+            "type": "Entity - [Domain]",
+            "body": "import { AbstractEntity } from '@root/src/1-domain/abstractEntity'\nimport { ITimestamps } from '@root/src/1-domain/timestamps'\nimport { Right, right } from '@shared/either'\n\nexport interface I{titleName}Entity extends ITimestamps {\n  id: number\n  test: string\n}\n\nexport type InputCreate{titleName}Entity = Pick<I{titleName}Entity, 'test'>\n\nexport class {titleName}Entity extends AbstractEntity<I{titleName}Entity>{\nstatic create(input: InputCreate{titleName}Entity): Right<void, {titleName}Entity> {\n\n const object = new {titleName}Entity({\n ...input,\n  id: undefined,\n  created_at: new Date(),\n  updated_at: new Date()\n\n })\n\n return right(object)\n }  \n}",
+            "path": "/src/1-domain/entities/{lowerName}Entity.ts",
+            "pathDir": "",
+            "pathIsFile": true,
+            "isObject": true,
+            "options": []
+        },
+        {
+            "type": "DTO - [Business]",
+            "body": "import { I{titleName}Entity } from '@root/src/1-domain/entities/{lowerName}Entity'\nimport { Either } from '@shared/either'\nimport { IError } from '@shared/IError'\n\nexport interface IInput{type_chosen_title}{titleName}Dto {\n  test: string\n}\nexport type IOutput{type_chosen_title}{titleName}Dto = Either<IError, I{titleName}Entity>",
+            "path": "/src/2-business/dto/{lowerName}/{type_chosen_lower}.ts",
+            "pathDir": "/src/2-business/dto/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": [
+                {
+                    "name": "Create",
+                    "value": "create"
+                },
+                {
+                    "name": "FindAll",
+                    "value": "findAll"
+                },
+                {
+                    "name": "FindBy",
+                    "value": "findBy"
+                },
+                {
+                    "name": "Update",
+                    "value": "update"
+                },
+                {
+                    "name": "Delete",
+                    "value": "delete"
+                },
+                {
+                    "name": "Custom",
+                    "value": "custom"
+                }
+            ]
+        },
+        {
+            "type": "Module - [Business]",
+            "body": "import { IError } from '@shared/IError'\n\nexport class {titleName}Errors extends IError {\n  static {lowerName}NotFound(): IError {\n\nconst {lowerName}Error = new {titleName}Errors({ statusCode: 404, body: { code: 'RE-001', message: 'The {lowerName} access that you were searching was not found', shortMessage: '{lowerName}NotFound', }, })\nreturn {lowerName}Error}\nstatic {lowerName}CreationError(): IError{\nconst {lowerName}Error = new {titleName}Errors({ statusCode: 404, body: { code: 'RE-001', message: 'Error during creation of the user entity, please try again later', shortMessage: '{lowerName}CreationFailed', }})\nreturn {lowerName}Error\n}\n}",
+            "path": "/src/2-business/module/errors/{lowerName}/{lowerName}Errors.ts",
+            "pathDir": "/src/2-business/module/errors/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": []
+        },
+        {
+            "type": "Repository - [Business]",
+            "body": "// import { IFindAllPaginated } from '@root/src/2-business/dto/{lowerName}/findAll'\n\nimport {\n  InputCreate{titleName}Entity,\n  I{titleName}Entity,\n} from '@root/src/1-domain/entities/{lowerName}Entity'\n\nexport const I{titleName}RepositoryToken = Symbol.for('I{titleName}RepositoryToken')\n\nexport interface IInputFindAll{titleName} {\n  page: number\n  limit: number\n}\nexport interface I{titleName}Repository {\n  create(input: InputCreate{titleName}Entity): Promise<I{titleName}Entity>\n  // findAll(input: IInputFindAll{titleName}): Promise<IFindAllPaginated | void>\n}",
+            "path": "/src/2-business/repositories/{lowerName}/i{titleName}Repository.ts",
+            "pathDir": "/src/2-business/repositories/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": []
+        },
+        {
+            "type": "UseCase - [Business]",
+            "body": "import { inject, injectable } from 'inversify'\n\nimport type {\n  IInput{type_chosen_title}{titleName}Dto,\n  IOutput{type_chosen_title}{titleName}Dto,\n} from '@root/src/2-business/dto/{lowerName}/{type_chosen_lower}'\nimport {\n  I{titleName}Repository,\n  I{titleName}RepositoryToken,\n} from '@root/src/2-business/repositories/{lowerName}/i{titleName}Repository'\nimport {\n  IUniqueIdentifierService,\n  IUniqueIdentifierServiceToken,\n} from '@root/src/2-business/services/uniqueIdentifier/iUniqueIdentifier'\nimport { {titleName}Entity } from '@root/src/1-domain/entities/{lowerName}Entity'\nimport { left, right } from '@shared/either'\nimport { {titleName}Errors } from '@root/src/2-business/module/errors/{lowerName}/{lowerName}Errors'\nimport { IAbstractUseCase } from '../abstractUseCase'\n\n@injectable()\nexport class {type_chosen_title}{titleName}UseCase implements IAbstractUseCase<IInput{type_chosen_title}{titleName}Dto, IOutput{type_chosen_title}{titleName}Dto>{\nconstructor(\n@inject(I{titleName}RepositoryToken) private {lowerName}Repository: I{titleName}Repository,\n@inject(IUniqueIdentifierServiceToken)\nprivate uniqueIdentifierService: IUniqueIdentifierService ) {}\n\nasync exec(input: IInput{type_chosen_title}{titleName}Dto): Promise<IOutput{type_chosen_title}{titleName}Dto>{\n // Remova itens desnecessários! \n const {type_chosen_lower}{titleName} = {titleName}Entity.{type_chosen_lower}({...input})\n  const {lowerName} = {...{type_chosen_lower}{titleName}.value.export(), uuid: this.uniqueIdentifierService.{type_chosen_lower}(),}\n  try {\n   const objectRepo = await this.{lowerName}Repository.{type_chosen_lower}({lowerName})\n  return right(objectRepo)\n   } catch (error) {\n   return left({titleName}Errors.{lowerName}CreationError())\n   }\n }\n}",
+            "path": "/src/2-business/useCases/{lowerName}/{type_chosen_lower}{titleName}UseCase.ts",
+            "pathDir": "/src/2-business/useCases/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": [
+                {
+                    "name": "Create",
+                    "value": "create"
+                },
+                {
+                    "name": "FindAll",
+                    "value": "findAll"
+                },
+                {
+                    "name": "FindBy",
+                    "value": "findBy"
+                },
+                {
+                    "name": "Update",
+                    "value": "update"
+                },
+                {
+                    "name": "Delete",
+                    "value": "delete"
+                },
+                {
+                    "name": "Custom",
+                    "value": "custom"
+                }
+            ]
+        },
+        {
+            "type": "Operation - [Controller]",
+            "body": "import { IOutput{type_chosen_title}{titleName}Dto } from '@root/src/2-business/dto/{lowerName}/{type_chosen_lower}'\n\nimport { {titleName}Errors } from '@root/src/2-business/module/errors/{lowerName}/{lowerName}Errors'\nimport { {type_chosen_title}{titleName}UseCase } from '@root/src/2-business/useCases/{lowerName}/{type_chosen_lower}{titleName}UseCase'\nimport { Input{type_chosen_title}{titleName} } from '@root/src/3-controller/serializers/{lowerName}/input{type_chosen_title}{titleName}'\nimport { left } from '@shared/either'\nimport { inject, injectable } from 'inversify'\nimport { AbstractOperator } from '../abstractOperator'\n\nexport const I{titleName}RepositoryToken = Symbol.for('I{titleName}RepositoryToken')\n@injectable()\nexport class {type_chosen_title}{titleName}Operator extends AbstractOperator<Input{type_chosen_title}{titleName},IOutput{type_chosen_title}{titleName}Dto>{\nconstructor( @inject({type_chosen_title}{titleName}UseCase) private {type_chosen_lower}{titleName}UseCase: {type_chosen_title}{titleName}UseCase, ) {super()}\nasync run( input: Input{type_chosen_title}{titleName} ): Promise<IOutput{type_chosen_title}{titleName}Dto> {\n this.exec(input)\n const objectResult = await this.{type_chosen_lower}{titleName}UseCase.exec({ test: input.test,})\n return objectResult\n }\n}",
+            "path": "/src/3-controller/operations/{lowerName}/{type_chosen_lower}{titleName}.ts",
+            "pathDir": "/src/3-controller/operations/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": [
+                {
+                    "name": "Create",
+                    "value": "create"
+                },
+                {
+                    "name": "FindAll",
+                    "value": "findAll"
+                },
+                {
+                    "name": "FindBy",
+                    "value": "findBy"
+                },
+                {
+                    "name": "Update",
+                    "value": "update"
+                },
+                {
+                    "name": "Delete",
+                    "value": "delete"
+                },
+                {
+                    "name": "Custom",
+                    "value": "custom"
+                }
+            ]
+        },
+        {
+            "type": "Serializer - [Controller]",
+            "body": "import { IInput{type_chosen_title}{titleName}Dto } from '@root/src/2-business/dto/{lowerName}/{type_chosen_lower}'\nimport { IsString, MinLength } from 'class-validator'\nimport { AbstractSerializer } from '../abstractSerializer'\n\nexport class Input{type_chosen_title}{titleName} extends AbstractSerializer<IInput{type_chosen_title}{titleName}Dto> {\n@IsString()\n@MinLength(3)\ntest: string}",
+            "path": "/src/3-controller/serializers/{lowerName}/input{type_chosen_title}{titleName}.ts",
+            "pathDir": "/src/3-controller/serializers/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": [
+                {
+                    "name": "Create",
+                    "value": "create"
+                },
+                {
+                    "name": "FindAll",
+                    "value": "findAll"
+                },
+                {
+                    "name": "FindBy",
+                    "value": "findBy"
+                },
+                {
+                    "name": "Update",
+                    "value": "update"
+                },
+                {
+                    "name": "Delete",
+                    "value": "delete"
+                },
+                {
+                    "name": "Custom",
+                    "value": "custom"
+                }
+            ]
+        },
+        {
+            "type": "Model - [Framework]",
+            "body": "import { Model, DataTypes } from 'sequelize'\nimport { sequelize } from '@root/src/4-framework/utility/database'\nimport { I{titleName}Entity } from '@root/src/1-domain/entities/{lowerName}Entity'\n\nexport class {titleName}Model extends Model {}\n\n// eslint-disable-next-line\nexport interface {titleName}Model extends I{titleName}Entity{}\n{titleName}Model.init({\ntest: {\ntype: DataTypes.STRING, allowNull: false,},\ncreated_at: {\ntype: DataTypes.DATE, allowNull: false, },\nupdated_at: {\ntype: DataTypes.DATE, allowNull: true,},\n},\n{\ntableName: '{lowerName}s', timestamps: false, underscored: true, sequelize,\n})",
+            "path": "/src/4-framework/models/{lowerName}/{lowerName}Model.ts",
+            "pathDir": "/src/4-framework/models/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": []
+        },
+        {
+            "type": "Repository - [Framework]",
+            "body": "import { I{titleName}Repository, } from '@root/src/2-business/repositories/{lowerName}/i{titleName}Repository'\nimport { InputCreate{titleName}Entity, I{titleName}Entity,  } from '@root/src/1-domain/entities/{lowerName}Entity'\nimport { {titleName}Model } from '@root/src/4-framework/models/{lowerName}/{lowerName}Model'\nimport { inject, injectable } from 'inversify'\n\n@injectable()\nexport class {titleName}Repository implements I{titleName}Repository {\n constructor(@inject({titleName}Model) private {lowerName}Model: typeof {titleName}Model) {}\n async create(input: InputCreate{titleName}Entity): Promise<I{titleName}Entity> {\ntry {\nconst {lowerName} = await this.{lowerName}Model.create(input)\nreturn {lowerName}.get({ plain: true })\n} catch (error) {\nconsole.error(error)\nreturn void 0\n}\n }\n}",
+            "path": "/src/4-framework/repositories/{titleName}Repository.ts",
+            "pathDir": "",
+            "pathIsFile": true,
+            "isObject": true,
+            "options": []
+            
+        },
+        {
+            "type": "Functions - [Framework]",
+            "body": "import { container } from '@shared/ioc/container'\nimport '@root/src/4-framework/ioc/inversify.config'\nimport { Input{type_chosen_title}{titleName} } from '@root/src/3-controller/serializers/{lowerName}/input{type_chosen_title}{titleName}'\nimport { IHandlerInput } from '@root/src/4-framework/utility/types'\nimport { Context } from 'aws-lambda'\nimport { {type_chosen_title}{titleName}Operator } from '@root/src/3-controller/operations/{lowerName}/{type_chosen_lower}{titleName}'\nimport { httpResponse } from '@root/src/4-framework/utility/httpResponse'\nimport { IError } from '@shared/IError'\nimport { middyfy } from '@root/src/4-framework/utility/lamba'\nimport { AuthMiddyMiddleware } from '@root/src/4-framework/middlewares/auth'\n\nconst {type_chosen_lower}{titleName} = async (event: IHandlerInput, _context: Context) => {\ntry {\nconst input{type_chosen_title}{titleName} = new Input{type_chosen_title}{titleName}({\n\ntest: event.body.test,})\nconst operator = container.get({type_chosen_title}{titleName}Operator)\n\nconst {lowerName}Result = await operator.run(input{type_chosen_title}{titleName},\n // event.auth.user_id\n)\n\n if ({lowerName}Result.isLeft()){throw {lowerName}Result.value}\nreturn httpResponse('ok', {lowerName}Result.value)\n}catch (error) {\nconsole.error(error)\n if (error instanceof IError) {\n  return httpResponse(error.statusCode, error.body)\n}\nreturn httpResponse('internalError', 'Internal server error in {lowerName} {type_chosen_lower}')\n  }\n }\nexport const handler = middyfy({type_chosen_lower}{titleName}).use(AuthMiddyMiddleware())",
+            "path": "/src/4-framework/functions/{lowerName}/{type_chosen_lower}.ts",
+            "pathDir": "/src/4-framework/functions/{lowerName}",
+            "pathIsFile": false,
+            "isObject": true,
+            "options": [
+                {
+                    "name": "Create",
+                    "value": "create"
+                },
+                {
+                    "name": "FindAll",
+                    "value": "findAll"
+                },
+                {
+                    "name": "FindBy",
+                    "value": "findBy"
+                },
+                {
+                    "name": "Update",
+                    "value": "update"
+                },
+                {
+                    "name": "Delete",
+                    "value": "delete"
+                },
+                {
+                    "name": "Custom",
+                    "value": "custom"
+                }
+            ]
+        },
+        {
+            "type": "All Objects - [ALL]",
+            "body": "",
+            "path": "",
+            "pathDir": "",
+            "pathIsFile": false,
+            "isObject": false
+        }
+    ]
+}
