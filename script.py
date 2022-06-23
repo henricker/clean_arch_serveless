@@ -88,7 +88,8 @@ def createObject(templ_json, selected, titleName, lowerName, stopIfExists, selet
 
         if (seletectedAutomatic == True):
             typeSelected = optionID
-            if (optionID == 5):
+
+            if (optionID == 5 or optionID == 6):
                 optionSelectedTitle = nameCustomCamelCase
                 optionSelectedLower = nameCustomLowerCase
             else:
@@ -155,7 +156,7 @@ def createAllObjects(templ_json, titleName, lowerName):
     global nameCustomLowerCase
 
     optionsLength = [{"value": "Create"}, {"value": "FindAll"}, {"value": "FindBy"}, {
-        "value": "Update"}, {"value": "Delete"}, {"value": "Custom"}]
+        "value": "Update"}, {"value": "Delete"}, {"value": "Custom"}, {"value": "CRUD"}]
     print(f'\n{Y}[!] Choose a option:{W}')
     for item in optionsLength:
         optionName = item['value']
@@ -177,8 +178,23 @@ def createAllObjects(templ_json, titleName, lowerName):
         selected = templ_json["templates"].index(item)
 
         if (templ_json['templates'][selected]['isObject'] == True):
-            createObject(templ_json, selected, titleName,
-                         lowerName, stopIfExists, seletectedAutomatic, optionID)
+
+            if (optionID == 6):
+                nameCustomCamelCase = "Create"
+                nameCustomLowerCase = "create"
+                createObject(templ_json, selected, titleName,
+                             lowerName, stopIfExists, seletectedAutomatic, optionID)
+                options = templ_json['templates'][selected]['options']
+
+                for option in options:
+                    sleep(1)
+                    if (option['value'] != 'custom' and option['value'] != 'create'):
+                        optionIDAutomatic = options.index(option)
+                        createObject(templ_json, selected, titleName,
+                                     lowerName, stopIfExists, seletectedAutomatic, optionIDAutomatic)
+            else:
+                createObject(templ_json, selected, titleName,
+                             lowerName, stopIfExists, seletectedAutomatic, optionID)
 
 
 try:
