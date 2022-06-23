@@ -20,12 +20,12 @@ nameCustomCamelCase = ""
 nameCustomLowerCase = ""
 
 
-def convertToSingular():
-    global argName
-    findS = argName[-1]
-    if (findS == 's' or findS == 'S'):
-        print(f'{R}[-] {R}O nome precisa estar no singular!{W}')
-        sys.exit()
+# def convertToSingular():
+#     global argName
+#     findS = argName[-1]
+#     if (findS == 's' or findS == 'S'):
+#         print(f'{R}[-] {R}O nome precisa estar no singular!{W}')
+#         sys.exit()
 
 
 def main():
@@ -45,7 +45,7 @@ def main():
 
     try:
         selected = int(input(f'{G}[>] {W}'))
-        print(f"\n{Y}[!] What's object name?{W}")
+        print(f"\n{Y}[!] What's object name?{C} (Ex: User){W}")
         name = str(input(f'{G}[>] {W}'))
 
         argName = name
