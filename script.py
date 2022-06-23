@@ -1,12 +1,9 @@
 
 
 import os
-from signal import SIGTERM
-import argparse
-from os import path, kill
+from os import path
 import sys
-import string
-from json import loads, decoder
+from json import loads
 from time import sleep
 
 
