@@ -44,7 +44,7 @@ def main():
     templ_json = loads(templ_info)
     for item in templ_json['templates']:
         optionName = item['type']
-        print(f'{G}[{templ_json["templates"].index(item)}] {C}{optionName}{W} - {G}[{templ_json["templates"].index(item)}]')
+        print(f'{G}[{templ_json["templates"].index(item)}] {C}{optionName}{W}')
 
     try:
         selected = int(input(f'{G}[>] {W}'))
