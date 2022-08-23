@@ -1,5 +1,6 @@
 import { Sequelize, Options } from 'sequelize'
 import sequelizeConfig from '@root/sequelize.config.js'
+import { ICustomSequelize } from '@framework/repositories/@types/sequelize'
 
 const connectionOptions: Options = {
   ...sequelizeConfig,
@@ -13,4 +14,4 @@ const connectionOptions: Options = {
   },
 }
 
-export const sequelize = new Sequelize(connectionOptions)
+export const sequelize: ICustomSequelize = new Sequelize(connectionOptions)
